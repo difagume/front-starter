@@ -10,16 +10,17 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 export class SigninComponent implements OnInit {
 
   public form: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router) {}
+  constructor(private fb: FormBuilder, private router: Router) { }
 
   ngOnInit() {
-    this.form = this.fb.group ( {
-      uname: [null , Validators.compose ( [ Validators.required ] )] , password: [null , Validators.compose ( [ Validators.required ] )]
-    } );
+    this.form = this.fb.group({
+      uname: [null, Validators.compose([Validators.required])],
+      password: [null, Validators.compose([Validators.required])]
+    });
   }
 
   onSubmit() {
-    this.router.navigate ( [ '/' ] );
+    this.router.navigate(['/']);
   }
 
 }
