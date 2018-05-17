@@ -25,7 +25,7 @@ const MENUITEMS = [
     state: '/',
     name: 'HOME',
     type: 'link',
-    icon: 'basic-accelerator'
+    icon: 'basic-home'
   },
   {
     state: 'authentication',
@@ -50,6 +50,12 @@ const MENUITEMS = [
         name: 'LOCKSCREEN'
       },
     ]
+  },
+  {
+    state: 'about',
+    name: 'ABOUT',
+    type: 'link',
+    icon: 'basic-info'
   },
   {
     state: 'docs',

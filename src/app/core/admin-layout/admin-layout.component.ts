@@ -1,6 +1,7 @@
 import {
   Component, OnInit, ElementRef, OnDestroy,
-  ViewChild, HostListener, AnimationTransitionEvent, NgZone, AfterViewInit } from '@angular/core';
+  ViewChild, HostListener, AnimationTransitionEvent, NgZone, AfterViewInit
+} from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
@@ -46,7 +47,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('sidebar') sidebar;
 
-  constructor (
+  constructor(
     private _element: ElementRef,
     private router: Router,
     private route: ActivatedRoute,
@@ -54,9 +55,9 @@ export class AdminLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     private modalService: NgbModal,
     private titleService: Title,
     private zone: NgZone) {
-      const browserLang: string = translate.getBrowserLang();
-      translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
-      this.mediaMatcher.addListener(mql => zone.run(() => this.mediaMatcher = mql));
+    const browserLang: string = translate.getBrowserLang();
+    translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+    this.mediaMatcher.addListener(mql => zone.run(() => this.mediaMatcher = mql));
   }
 
   ngOnInit(): void {
@@ -75,7 +76,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     this.runOnRouteChange();
   }
 
-  ngAfterViewInit(): void  {
+  ngAfterViewInit(): void {
     setTimeout(_ => this.runOnRouteChange());
   }
 
@@ -103,8 +104,8 @@ export class AdminLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  setTitle( newTitle: string) {
-    this.titleService.setTitle( 'Decima - Bootstrap 4 Angular Admin Template | ' + newTitle );
+  setTitle(newTitle: string) {
+    this.titleService.setTitle('frontApp | ' + newTitle);
   }
 
   isOver(): boolean {
