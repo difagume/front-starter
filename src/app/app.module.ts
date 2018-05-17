@@ -4,7 +4,9 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
+import { environment } from '../environments/environment';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -25,7 +27,8 @@ import {
   AuthLayoutComponent,
   AccordionAnchorDirective,
   AccordionLinkDirective,
-  AccordionDirective } from './core';
+  AccordionDirective
+} from './core';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -46,6 +49,7 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes),
     FormsModule,
@@ -60,7 +64,7 @@ export function createTranslateLoader(http: HttpClient) {
     LoadingBarRouterModule,
     NgbModule.forRoot(),
     SidebarModule.forRoot(),
-    AgmCoreModule.forRoot({apiKey: 'YOURAPIKEY'})
+    AgmCoreModule.forRoot({ apiKey: 'YOURAPIKEY' })
   ],
   providers: [],
   bootstrap: [AppComponent]

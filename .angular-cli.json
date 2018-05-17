@@ -9,7 +9,9 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "manifest.json",
+        "robots.txt"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -18,6 +20,7 @@
       "tsconfig": "tsconfig.app.json",
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
+      "serviceWorker": true,
       "styles": [
         "assets/fonts/linea/styles.css",
         "assets/fonts/header/_flaticon.scss",
