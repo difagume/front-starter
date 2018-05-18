@@ -4,14 +4,14 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { finalize } from 'rxjs/operators';
 import { Logger, AuthenticationService } from '../../core';
 
-const log = new Logger('SignIn');
+const log = new Logger('LogIn');
 
 @Component({
-  selector: 'app-signin',
-  templateUrl: './signin.component.html',
-  styleUrls: ['./signin.component.scss']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
-export class SigninComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
   error: string;
   form: FormGroup;
@@ -38,16 +38,11 @@ export class SigninComponent implements OnInit {
         this.isLoading = false;
       }))
       .subscribe(credentials => {
-        log.debug(`${credentials.username} successfully logged in`);
+        log.debug(`${credentials.username} inició sesión exitosamente`);
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
         log.debug(`Login error: ${error}`);
         this.error = error;
       });
   }
-
-  /* onSubmit() {
-    this.router.navigate(['/']);
-  } */
-
 }

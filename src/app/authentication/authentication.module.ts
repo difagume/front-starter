@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthenticationRoutes } from './authentication.routing';
-import { SigninComponent } from './signin/signin.component';
+import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
@@ -18,7 +18,7 @@ import { AuthenticationService } from '../core';
     ReactiveFormsModule
   ],
   declarations: [
-    SigninComponent,
+    LoginComponent,
     SignupComponent,
     ForgotComponent,
     LockscreenComponent

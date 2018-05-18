@@ -34,8 +34,8 @@ const MENUITEMS = [
     icon: 'basic-lock-open',
     children: [
       {
-        state: 'signin',
-        name: 'SIGNIN'
+        state: 'login',
+        name: 'LOGIN'
       },
       {
         state: 'signup',

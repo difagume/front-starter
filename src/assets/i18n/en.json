@@ -61,7 +61,7 @@
   "BLANK": "Blank",
   "LANDING": "Landing",
   "AUTHENTICATION": "Authentication",
-  "SIGNIN": "Signin",
+  "LOGIN": "Login",
   "SIGNUP": "Signup",
   "FORGOT": "Forgot",
   "LOCKSCREEN": "Lockscreen",

@@ -10,21 +10,24 @@
         <label for="username">
           Choose a username
         </label>
-        <input type="text" class="form-control" placeholder="username" [formControl]="form.controls['uname']" [ngClass]="{'is-invalid': form.controls['uname'].hasError('required') && form.controls['uname'].touched}"/>
+        <input type="text" class="form-control" placeholder="username" [formControl]="form.controls['uname']" [ngClass]="{'is-invalid': form.controls['uname'].hasError('required') && form.controls['uname'].touched}"
+        />
         <div class="invalid-feedback" *ngIf="form.controls['uname'].hasError('required') && form.controls['uname'].touched">Username is required.</div>
       </fieldset>
       <fieldset class="form-group">
         <label for="password">
           Enter your password
         </label>
-        <input type="password" class="form-control" placeholder="********" [formControl]="form.controls['password']" [ngClass]="{'is-invalid': form.controls['password'].hasError('required') && form.controls['password'].touched}"/>
+        <input type="password" class="form-control" placeholder="********" [formControl]="form.controls['password']" [ngClass]="{'is-invalid': form.controls['password'].hasError('required') && form.controls['password'].touched}"
+        />
         <div class="invalid-feedback" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched">Password is required.</div>
       </fieldset>
       <fieldset class="form-group">
         <label for="password">
           Confirm your password
         </label>
-        <input type="password" class="form-control" placeholder="********" [formControl]="form.controls['confirmPassword']" [ngClass]="{'is-invalid': form.controls['confirmPassword'].hasError('required') && form.controls['confirmPassword'].touched || form.controls['confirmPassword'].hasError('equalTo') && form.controls['confirmPassword'].touched}"/>
+        <input type="password" class="form-control" placeholder="********" [formControl]="form.controls['confirmPassword']" [ngClass]="{'is-invalid': form.controls['confirmPassword'].hasError('required') && form.controls['confirmPassword'].touched || form.controls['confirmPassword'].hasError('equalTo') && form.controls['confirmPassword'].touched}"
+        />
         <div class="invalid-feedback" *ngIf="form.controls['confirmPassword'].hasError('required') && form.controls['confirmPassword'].touched">Confirm your password.</div>
         <div class="invalid-feedback" *ngIf="form.controls['confirmPassword'].hasError('equalTo') && form.controls['confirmPassword'].touched">Password should match.</div>
       </fieldset>
@@ -34,7 +37,7 @@
       </div>
       <div class="block mb-3"></div>
       <button class="btn btn-primary" type="submit" [disabled]="!form.valid">Create</button>
-      <a class="btn btn-outline-primary btn-link" [routerLink]="['/authentication/signin']">Login!</a>
+      <a class="btn btn-outline-primary btn-link" [routerLink]="['/authentication/login']">Login!</a>
     </form>
   </div>
 </div>
