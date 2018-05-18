@@ -6,3 +6,5 @@ export * from './auth-layout/auth-layout.component';
 export * from './menu/menu.component';
 export * from './menu-accordion';
 export * from './helpers';
+export * from './logger.service';
+export * from './authentication/authentication.service';

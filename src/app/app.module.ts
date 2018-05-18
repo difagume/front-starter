@@ -27,8 +27,10 @@ import {
   AuthLayoutComponent,
   AccordionAnchorDirective,
   AccordionLinkDirective,
-  AccordionDirective
+  AccordionDirective,
+  AuthenticationService
 } from './core';
+import { AuthenticationGuard } from './core/authentication/authentication.guard';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -66,7 +68,10 @@ export function createTranslateLoader(http: HttpClient) {
     SidebarModule.forRoot(),
     AgmCoreModule.forRoot({ apiKey: 'YOURAPIKEY' })
   ],
-  providers: [],
+  providers: [
+    AuthenticationService,
+    AuthenticationGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

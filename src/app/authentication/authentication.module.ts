@@ -8,6 +8,7 @@ import { SigninComponent } from './signin/signin.component';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
+import { AuthenticationService } from '../core';
 
 @NgModule({
   imports: [
@@ -16,7 +17,15 @@ import { LockscreenComponent } from './lockscreen/lockscreen.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [SigninComponent, SignupComponent, ForgotComponent, LockscreenComponent]
+  declarations: [
+    SigninComponent,
+    SignupComponent,
+    ForgotComponent,
+    LockscreenComponent
+  ],
+  providers: [
+    AuthenticationService
+  ]
 })
 
-export class AuthenticationModule {}
+export class AuthenticationModule { }

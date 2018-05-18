@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { finalize } from 'rxjs/operators';
+import { Logger, AuthenticationService } from '../../core';
+
+const log = new Logger('SignIn');
 
 @Component({
   selector: 'app-signin',
@@ -9,18 +13,41 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 })
 export class SigninComponent implements OnInit {
 
-  public form: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router) { }
+  error: string;
+  form: FormGroup;
+  isLoading = false;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) { }
 
   ngOnInit() {
-    this.form = this.fb.group({
-      uname: [null, Validators.compose([Validators.required])],
+    this.form = this.formBuilder.group({
+      username: [null, Validators.compose([Validators.required])],
       password: [null, Validators.compose([Validators.required])]
     });
   }
 
-  onSubmit() {
-    this.router.navigate(['/']);
+  login() {
+    this.isLoading = true;
+    this.authenticationService.login(this.form.value)
+      .pipe(finalize(() => {
+        this.form.markAsPristine();
+        this.isLoading = false;
+      }))
+      .subscribe(credentials => {
+        log.debug(`${credentials.username} successfully logged in`);
+        this.router.navigate(['/'], { replaceUrl: true });
+      }, error => {
+        log.debug(`Login error: ${error}`);
+        this.error = error;
+      });
   }
+
+  /* onSubmit() {
+    this.router.navigate(['/']);
+  } */
 
 }
