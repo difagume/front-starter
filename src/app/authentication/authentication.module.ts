@@ -8,7 +8,6 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
-import { AuthenticationService } from '../core';
 
 @NgModule({
   imports: [
@@ -24,7 +23,6 @@ import { AuthenticationService } from '../core';
     LockscreenComponent
   ],
   providers: [
-    AuthenticationService
   ]
 })
 

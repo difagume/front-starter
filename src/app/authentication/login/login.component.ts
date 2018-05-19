@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { finalize } from 'rxjs/operators';
 import { Logger, AuthenticationService } from '../../core';
 
-const log = new Logger('LogIn');
+const log = new Logger('Login');
 
 @Component({
   selector: 'app-login',
@@ -21,13 +21,13 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authenticationService: AuthenticationService
-  ) { }
+  ) { this.createForm(); }
 
   ngOnInit() {
-    this.form = this.formBuilder.group({
-      username: [null, Validators.compose([Validators.required])],
-      password: [null, Validators.compose([Validators.required])]
-    });
+    /*     this.form = this.formBuilder.group({
+          username: [null, Validators.compose([Validators.required])],
+          password: [null, Validators.compose([Validators.required])]
+        }); */
   }
 
   login() {
@@ -44,5 +44,13 @@ export class LoginComponent implements OnInit {
         log.debug(`Login error: ${error}`);
         this.error = error;
       });
+  }
+
+  private createForm() {
+    this.form = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+      remember: true
+    });
   }
 }

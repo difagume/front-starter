@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import { Logger } from '../logger.service';
+
+const log = new Logger('AuthenticationService');
 
 export interface Credentials {
   // Customize received credentials here
@@ -26,6 +29,7 @@ export class AuthenticationService {
   private _credentials: Credentials | null;
 
   constructor() {
+    console.log('***inicia Auth Service*** ', this.isAuthenticated());
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
