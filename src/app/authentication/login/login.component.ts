@@ -23,12 +23,7 @@ export class LoginComponent implements OnInit {
     private authenticationService: AuthenticationService
   ) { this.createForm(); }
 
-  ngOnInit() {
-    /*     this.form = this.formBuilder.group({
-          username: [null, Validators.compose([Validators.required])],
-          password: [null, Validators.compose([Validators.required])]
-        }); */
-  }
+  ngOnInit() { }
 
   login() {
     this.isLoading = true;
@@ -42,6 +37,8 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
         log.debug(`Login error: ${error}`);
+        console.log(error);
+
         this.error = error;
       });
   }

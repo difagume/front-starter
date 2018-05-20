@@ -1,13 +1,26 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/map';
 import { Logger } from '../logger.service';
+import { HttpClient } from '@angular/common/http';
+import { URL_SERVICIOS } from '../../config';
 
 const log = new Logger('AuthenticationService');
 
 export interface Credentials {
   // Customize received credentials here
+  id: string;
   username: string;
+  password: string;
+  email: string;
+  nombre: string;
+  apellido: string;
+  rol: string;
+  img: string;
+  social: boolean;
   token: string;
 }
 
@@ -28,8 +41,8 @@ export class AuthenticationService {
 
   private _credentials: Credentials | null;
 
-  constructor() {
-    console.log('***inicia Auth Service*** ', this.isAuthenticated());
+  constructor(private http: HttpClient) {
+    // console.log('***inicia Auth Service*** ', this.isAuthenticated());
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -42,13 +55,12 @@ export class AuthenticationService {
    * @return {Observable<Credentials>} The user credentials.
    */
   login(context: LoginContext): Observable<Credentials> {
-    // Replace by proper authentication call
-    const data = {
-      username: context.username,
-      token: '123456'
-    };
-    this.setCredentials(data, context.remember);
-    return of(data);
+    const url = URL_SERVICIOS + '/login';
+    return this.http.post(url, { username: context.username, password: context.password })
+      .map((resp: any) => {
+        this.setCredentials(resp.usuario, context.remember);
+        return (resp.usuario);
+      });
   }
 
   /**

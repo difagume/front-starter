@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+/* import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 
 import { Credentials, LoginContext } from './authentication.service';
@@ -6,13 +6,29 @@ import { Credentials, LoginContext } from './authentication.service';
 export class MockAuthenticationService {
 
   credentials: Credentials | null = {
+    id: null,
     username: 'test',
-    token: '123'
+    password: null,
+    email: null,
+    nombre: null,
+    apellido: null,
+    rol: null,
+    img: null,
+    social: false,
+    token: '123456'
   };
 
   login(context: LoginContext): Observable<Credentials> {
     return of({
+      id: null,
       username: context.username,
+      password: null,
+      email: null,
+      nombre: null,
+      apellido: null,
+      rol: null,
+      img: null,
+      social: false,
       token: '123456'
     });
   }
@@ -27,3 +43,4 @@ export class MockAuthenticationService {
   }
 
 }
+ */
