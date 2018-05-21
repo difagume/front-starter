@@ -31,6 +31,7 @@ import {
   AuthenticationService
 } from './core';
 import { AuthenticationGuard } from './core/authentication/authentication.guard';
+import { ErrorInterceptorProvider } from './core/helpers/error.interceptor';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -70,7 +71,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   providers: [
     AuthenticationService,
-    AuthenticationGuard
+    AuthenticationGuard,
+    ErrorInterceptorProvider
   ],
   bootstrap: [AppComponent]
 })

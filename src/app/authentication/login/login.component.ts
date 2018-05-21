@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { Logger, AuthenticationService } from '../../core';
 
@@ -36,10 +37,8 @@ export class LoginComponent implements OnInit {
         log.debug(`${credentials.username} inició sesión exitosamente`);
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
-        log.debug(`Login error: ${error}`);
-        console.log(error);
-
-        this.error = error;
+        // log.debug('Login error: ', error);
+        // error.interceptor actua
       });
   }
 
