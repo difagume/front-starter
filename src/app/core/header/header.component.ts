@@ -22,4 +22,14 @@ export class HeaderComponent {
     this.authenticationService.logout()
       .subscribe(() => this.router.navigate(['/authentication/login'], { replaceUrl: true }));
   }
+
+  get username(): string | null {
+    const credentials = this.authenticationService.credentials;
+    return credentials ? credentials.username : null;
+  }
+
+  get nombre(): string | null {
+    const credentials = this.authenticationService.credentials;
+    return credentials ? `${credentials.nombre} ${credentials.apellido}` : null;
+  }
 }
