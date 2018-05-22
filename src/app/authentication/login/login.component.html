@@ -7,12 +7,12 @@
         <p class="ff-headers text-uppercase">Inicia sesión en tu cuenta</p>
       </div>
       <fieldset class="form-group">
-        <label for="username" class="form-control-label">
+        <label for="usuario" class="form-control-label">
           Ingresa tu nombre de usuario
         </label>
-        <input type="text" class="form-control" formControlName="username" autocomplete="username" placeholder="nombre de usuario"
-          [ngClass]="{'is-invalid': form.controls['username'].hasError('required') && form.controls['username'].touched}" />
-        <div class="invalid-feedback" *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched">El nombre de usuario es requerido</div>
+        <input type="text" class="form-control" formControlName="usuario" autocomplete="usuario" placeholder="nombre de usuario"
+          [ngClass]="{'is-invalid': form.controls['usuario'].hasError('required') && form.controls['usuario'].touched}" />
+        <div class="invalid-feedback" *ngIf="form.controls['usuario'].hasError('required') && form.controls['usuario'].touched">El nombre de usuario es requerido</div>
       </fieldset>
       <fieldset class="form-group">
         <label for="password" class="form-control-label">

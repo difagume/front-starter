@@ -1,6 +1,6 @@
 import { TestBed, inject, fakeAsync, tick } from '@angular/core/testing';
 
-import { AuthenticationService, Credentials} from './authentication.service';
+import { AuthenticationService, Credentials } from './authentication.service';
 
 const credentialsKey = 'credentials';
 
@@ -29,7 +29,7 @@ describe('AuthenticationService', () => {
     it('should return credentials', fakeAsync(() => {
       // Act
       const request = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123'
       });
       tick();
@@ -46,7 +46,7 @@ describe('AuthenticationService', () => {
 
       // Act
       const request = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123'
       });
       tick();
@@ -64,7 +64,7 @@ describe('AuthenticationService', () => {
     it('should persist credentials for the session', fakeAsync(() => {
       // Act
       const request = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123'
       });
       tick();
@@ -78,7 +78,7 @@ describe('AuthenticationService', () => {
     it('should persist credentials across sessions', fakeAsync(() => {
       // Act
       const request = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123',
         remember: true
       });
@@ -95,7 +95,7 @@ describe('AuthenticationService', () => {
     it('should clear user authentication', fakeAsync(() => {
       // Arrange
       const loginRequest = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123'
       });
       tick();
@@ -119,7 +119,7 @@ describe('AuthenticationService', () => {
     it('should clear persisted user authentication', fakeAsync(() => {
       // Arrange
       const loginRequest = authenticationService.login({
-        username: 'toto',
+        usuario: 'toto',
         password: '123',
         remember: true
       });

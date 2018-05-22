@@ -24,7 +24,7 @@ export class PerfilComponent implements OnInit {
     // this.usuario = this.authenticationService._credentials;
     this.usuario = new Usuario(
       this.authenticationService.credentials.id,
-      this.authenticationService.credentials.username,
+      this.authenticationService.credentials.usuario,
       this.authenticationService.credentials.password,
       this.authenticationService.credentials.email,
       this.authenticationService.credentials.nombre,

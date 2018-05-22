@@ -13,7 +13,7 @@ const log = new Logger('AuthenticationService');
 export interface Credentials {
   // Customize received credentials here
   id: string;
-  username: string;
+  usuario: string;
   password: string;
   email: string;
   nombre: string;
@@ -25,7 +25,7 @@ export interface Credentials {
 }
 
 export interface LoginContext {
-  username: string;
+  usuario: string;
   password: string;
   remember?: boolean;
 }
@@ -55,7 +55,7 @@ export class AuthenticationService {
    */
   login(context: LoginContext): Observable<Credentials> {
     const url = URL_SERVICIOS + '/login';
-    return this.http.post(url, { username: context.username, password: context.password })
+    return this.http.post(url, { usuario: context.usuario, password: context.password })
       .map((resp: any) => {
         this.setCredentials(resp.usuario, context.remember);
         return (resp.usuario);

@@ -2,7 +2,7 @@ export class Usuario {
 
     constructor(
         public id: string,
-        public username: string,
+        public usuario: string,
         public password: string,
         public email: string,
         public nombre: string,

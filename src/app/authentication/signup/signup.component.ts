@@ -27,7 +27,7 @@ export class SignupComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.fb.group({
-      username: [null, Validators.compose([Validators.required])],
+      usuario: [null, Validators.compose([Validators.required])],
       nombre: [null, Validators.compose([Validators.required])],
       apellido: [null, Validators.compose([Validators.required])],
       email: [null, Validators.compose([Validators.required])],
@@ -43,7 +43,7 @@ export class SignupComponent implements OnInit {
   guardar() {
     this.usuario = new Usuario(
       null,
-      this.form.value.username,
+      this.form.value.usuario,
       this.form.value.password,
       this.form.value.email,
       this.form.value.nombre,

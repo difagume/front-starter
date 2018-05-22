@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
         this.isLoading = false;
       }))
       .subscribe(credentials => {
-        log.debug(`${credentials.username} inició sesión exitosamente`);
+        log.debug(`${credentials.usuario} inició sesión exitosamente`);
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
         // log.debug('Login error: ', error);
@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
 
   private createForm() {
     this.form = this.formBuilder.group({
-      username: ['', Validators.required],
+      usuario: ['', Validators.required],
       password: ['', Validators.required],
       remember: true
     });

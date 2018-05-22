@@ -23,9 +23,9 @@ export class HeaderComponent {
       .subscribe(() => this.router.navigate(['/authentication/login'], { replaceUrl: true }));
   }
 
-  get username(): string | null {
+  get usuario(): string | null {
     const credentials = this.authenticationService.credentials;
-    return credentials ? credentials.username : null;
+    return credentials ? credentials.usuario : null;
   }
 
   get nombre(): string | null {

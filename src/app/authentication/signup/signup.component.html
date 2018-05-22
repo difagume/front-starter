@@ -7,11 +7,11 @@
         <p class="ff-headers text-uppercase">Crea una cuenta</p>
       </div>
       <fieldset class="form-group">
-        <label for="username">
+        <label for="usuario">
           Elige un nombre de usuario
         </label>
-        <input type="text" class="form-control" placeholder="nombre de usuario" [formControl]="form.controls['username']" [ngClass]="{'is-invalid': form.controls['username'].hasError('required') && form.controls['username'].touched}">
-        <div class="invalid-feedback" *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched">Ingresa el nombre de usuario</div>
+        <input type="text" class="form-control" placeholder="nombre de usuario" [formControl]="form.controls['usuario']" [ngClass]="{'is-invalid': form.controls['usuario'].hasError('required') && form.controls['usuario'].touched}">
+        <div class="invalid-feedback" *ngIf="form.controls['usuario'].hasError('required') && form.controls['usuario'].touched">Ingresa el nombre de usuario</div>
       </fieldset>
 
       <fieldset class="form-group">
