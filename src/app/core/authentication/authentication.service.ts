@@ -42,7 +42,6 @@ export class AuthenticationService {
   private _credentials: Credentials | null;
 
   constructor(private http: HttpClient) {
-    // console.log('***inicia Auth Service*** ', this.isAuthenticated());
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -87,6 +86,19 @@ export class AuthenticationService {
    */
   get credentials(): Credentials | null {
     return this._credentials;
+  }
+
+  actualizarCredentials(credentials: Credentials) {
+    this._credentials = credentials || null;
+
+    if (credentials) {
+      if (localStorage.getItem('credentials')) {
+        localStorage.setItem(credentialsKey, JSON.stringify(credentials));
+      }
+      if (sessionStorage.getItem('credentials')) {
+        sessionStorage.setItem(credentialsKey, JSON.stringify(credentials));
+      }
+    }
   }
 
   /**

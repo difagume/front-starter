@@ -8,9 +8,9 @@ export const AppRoutes: Routes = [
   {
     path: '', component: AdminLayoutComponent, canActivate: [AuthenticationGuard],
     children: [
-      { path: '', loadChildren: './dashboard/dashboard.module#DashboardModule' },
-      { path: 'about', loadChildren: './about/about.module#AboutModule' },
-      { path: 'docs', loadChildren: './docs/docs.module#DocsModule' },
+      { path: '', loadChildren: './pages/dashboard/dashboard.module#DashboardModule' },
+      { path: 'about', loadChildren: './pages/about/about.module#AboutModule' },
+      { path: 'docs', loadChildren: './pages/docs/docs.module#DocsModule' },
       { path: 'perfil', loadChildren: './pages/perfil/perfil.module#PerfilModule' }
     ]
   },

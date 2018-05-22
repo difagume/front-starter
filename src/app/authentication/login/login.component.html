@@ -4,34 +4,34 @@
     <form [formGroup]="form" (ngSubmit)="login()" novalidate>
       <div class="mb-3">
         <img src="assets/images/logo.png" class="avatar-xs mb-1" alt="">
-        <p class="ff-headers text-uppercase">Sign in to your account</p>
+        <p class="ff-headers text-uppercase">Inicia sesión en tu cuenta</p>
       </div>
       <fieldset class="form-group">
         <label for="username" class="form-control-label">
-          Enter your username
+          Ingresa tu nombre de usuario
         </label>
-        <input type="text" class="form-control" formControlName="username" autocomplete="username" placeholder="Username" [ngClass]="{'is-invalid': form.controls['username'].hasError('required') && form.controls['username'].touched}"
-        />
-        <div class="invalid-feedback" *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched">Username is required.</div>
+        <input type="text" class="form-control" formControlName="username" autocomplete="username" placeholder="nombre de usuario"
+          [ngClass]="{'is-invalid': form.controls['username'].hasError('required') && form.controls['username'].touched}" />
+        <div class="invalid-feedback" *ngIf="form.controls['username'].hasError('required') && form.controls['username'].touched">El nombre de usuario es requerido</div>
       </fieldset>
       <fieldset class="form-group">
         <label for="password" class="form-control-label">
-          Enter your password
+          Ingresa tu contraseña
         </label>
-        <input type="password" class="form-control" formControlName="password" autocomplete="current-password" placeholder="Password"
+        <input type="password" class="form-control" formControlName="password" autocomplete="current-password" placeholder="contraseña"
           [ngClass]="{'is-invalid': form.controls['password'].hasError('required') && form.controls['password'].touched}" />
-        <div class="invalid-feedback" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched">Password is required.</div>
+        <div class="invalid-feedback" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched">La contraseña es requerida</div>
         <a [routerLink]="['/authentication/forgot']" class="form-text">
-          <small>Recover password</small>
+          <small>Recuperar contraseña</small>
         </a>
       </fieldset>
       <div class="custom-control custom-checkbox mb-3">
         <input type="checkbox" class="custom-control-input" formControlName="remember" id="customCheck1">
-        <label class="custom-control-label" for="customCheck1">Stay logged in</label>
+        <label class="custom-control-label" for="customCheck1">Permanecer conectado</label>
       </div>
       <div class="block"></div>
-      <button class="btn btn-primary waves-effect" type="submit" [disabled]="!form.valid">Login</button>
-      <a class="btn btn-outline-primary btn-link waves-effect" [routerLink]="['/authentication/signup']">Create an account!</a>
+      <button class="btn btn-primary waves-effect" type="submit" [disabled]="!form.valid">Iniciar sesión</button>
+      <a class="btn btn-outline-primary btn-link waves-effect" [routerLink]="['/authentication/signup']">Crear una cuenta!</a>
     </form>
   </div>
 </div>

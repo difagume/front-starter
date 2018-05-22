@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
+import { RouterModule } from '@angular/router';
+import { UsuarioService } from '../services/usuario.service';
 import { AuthenticationRoutes } from './authentication.routing';
-import { LoginComponent } from './login/login.component';
-import { SignupComponent } from './signup/signup.component';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
   imports: [
@@ -22,8 +22,7 @@ import { LockscreenComponent } from './lockscreen/lockscreen.component';
     ForgotComponent,
     LockscreenComponent
   ],
-  providers: [
-  ]
+  providers: [UsuarioService]
 })
 
 export class AuthenticationModule { }

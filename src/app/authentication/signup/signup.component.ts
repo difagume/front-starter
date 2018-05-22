@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CustomValidators } from 'ng2-validation';
+import { Logger } from '../../core';
+import { Usuario } from '../../models';
+import { UsuarioService } from '../../services/usuario.service';
+
+declare let swal: any;
+const log = new Logger('SignupComponent');
 
 const password = new FormControl('', Validators.required);
 const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
@@ -14,18 +20,44 @@ const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
 export class SignupComponent implements OnInit {
 
   public form: FormGroup;
-  constructor(private fb: FormBuilder, private router: Router) {}
+  usuario: Usuario;
+  constructor(private fb: FormBuilder,
+    private router: Router,
+    private usuarioService: UsuarioService) { }
 
   ngOnInit() {
-    this.form = this.fb.group( {
-      uname: [null , Validators.compose ( [ Validators.required ] )],
+    this.form = this.fb.group({
+      username: [null, Validators.compose([Validators.required])],
+      nombre: [null, Validators.compose([Validators.required])],
+      apellido: [null, Validators.compose([Validators.required])],
+      email: [null, Validators.compose([Validators.required])],
       password: password,
       confirmPassword: confirmPassword
-    } );
+    });
   }
 
   onSubmit() {
-    this.router.navigate( ['/'] );
+    this.router.navigate(['/']);
+  }
+
+  guardar() {
+    this.usuario = new Usuario(
+      null,
+      this.form.value.username,
+      this.form.value.password,
+      this.form.value.email,
+      this.form.value.nombre,
+      this.form.value.apellido,
+      null,
+      null,
+      false,
+      null);
+
+    this.usuarioService.crearUsuario(this.usuario)
+      .subscribe((data: any) => {
+        swal(data.name, data.message, 'success');
+        this.router.navigate(['/authentication/login']);
+      }, error => { });
   }
 
 }
