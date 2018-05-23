@@ -111,7 +111,7 @@
           <div class="form-group">
             <label for="txtEmail">email</label>
             <input [(ngModel)]="usuario.email" name="email" type="email" class="form-control" id="txtEmail" placeholder="Ingresa tu email"
-              #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}">
+              #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}" disabled>
             <div class="invalid-feedback" *ngIf="email?.errors?.email">email incorrecto</div>
           </div>
 

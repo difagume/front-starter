@@ -30,7 +30,7 @@ export class SignupComponent implements OnInit {
       usuario: [null, Validators.compose([Validators.required])],
       nombre: [null, Validators.compose([Validators.required])],
       apellido: [null, Validators.compose([Validators.required])],
-      email: [null, Validators.compose([Validators.required])],
+      email: [null, Validators.compose([Validators.required, Validators.email])],
       password: password,
       confirmPassword: confirmPassword
     });
@@ -53,7 +53,7 @@ export class SignupComponent implements OnInit {
       false,
       null);
 
-    this.usuarioService.crearUsuario(this.usuario)
+    this.usuarioService.registrarUsuario(this.usuario)
       .subscribe((data: any) => {
         swal(data.name, data.message, 'success');
         this.router.navigate(['/authentication/login']);

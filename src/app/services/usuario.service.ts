@@ -12,12 +12,12 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   actualizarUsuario(usuario: Usuario) {
-    const url = `${URL_SERVICIOS}/usuario/${usuario.id}`;
+    const url = `${URL_SERVICIOS}/usuario/${usuario.id}?token=${usuario.token}`;
     return this.http.put(url, usuario);
   }
 
-  crearUsuario(usuario: Usuario) {
-    const url = `${URL_SERVICIOS}/usuario`;
+  registrarUsuario(usuario: Usuario) {
+    const url = `${URL_SERVICIOS}/usuario/registrar`;
     return this.http.post(url, usuario);
   }
 }

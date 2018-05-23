@@ -37,7 +37,7 @@
         </label>
         <input type="email" class="form-control" placeholder="email" [formControl]="form.controls['email']" [ngClass]="{'is-invalid': (form.controls['email'].hasError('email') || form.controls['email'].hasError('required')) && form.controls['email'].touched}">
         <div class="invalid-feedback" *ngIf="form.controls['email'].hasError('required') && form.controls['email'].touched">Ingresa tu email</div>
-        <div class="invalid-feedback" *ngIf="form.controls['email'].hasError('email') && form.controls['email'].touched">email incorrecto</div>
+        <div class="invalid-feedback" *ngIf="form.controls['email'].hasError('email') && form.controls['email'].touched && !form.controls['email'].hasError('required')">email incorrecto</div>
       </fieldset>
 
       <fieldset class="form-group">
