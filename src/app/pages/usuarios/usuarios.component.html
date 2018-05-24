@@ -1,0 +1,5 @@
+<input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
+<ngx-datatable [columns]="columns" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'" [limit]="10"
+  [rows]='data' [messages]="{ emptyMessage: 'No hay usuarios', totalMessage: 'usuarios' }" [selectionType]="'single'" [selected]="usuarioSel"
+  (select)='onSelect($event)' [limit]="pageSize" [loadingIndicator]="cargando">
+</ngx-datatable>

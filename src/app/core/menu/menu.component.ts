@@ -35,7 +35,8 @@ import { TranslateService } from '@ngx-translate/core';
       </a>
       <ul class="navigation-submenu" *ngIf="menuitem.type === 'sub'">
         <li class="navigation-item" *ngFor="let childitem of menuitem.children" routerLinkActive="open">
-          <a [routerLink]="['/', menuitem.state, childitem.state ]" class="navigation-link relative">{{ childitem.name | translate }}</a>
+          <a *ngIf="menuitem.state" [routerLink]="['/', menuitem.state, childitem.state ]" class="navigation-link relative">{{ childitem.name | translate }}</a>
+          <a *ngIf="!menuitem.state" [routerLink]="['/', childitem.state ]" class="navigation-link relative">{{ childitem.name | translate }}</a>
         </li>
       </ul>
     </li>

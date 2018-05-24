@@ -28,6 +28,18 @@ const MENUITEMS = [
     icon: 'basic-home'
   },
   {
+    state: '',
+    name: 'ADMINISTRACION',
+    type: 'sub',
+    icon: 'basic-gear',
+    children: [
+      {
+        state: 'usuarios',
+        name: 'USUARIOS'
+      }
+    ]
+  },
+  {
     state: 'authentication',
     name: 'AUTHENTICATION',
     type: 'sub',

@@ -20,4 +20,12 @@ export class UsuarioService {
     const url = `${URL_SERVICIOS}/usuario/registrar`;
     return this.http.post(url, usuario);
   }
+
+  obtenerUsuarios() {
+    const url = `${URL_SERVICIOS}/usuario`;
+    return this.http.get(url)
+      .map((res: any) => {
+        return res.usuarios;
+      });
+  }
 }
