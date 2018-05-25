@@ -25,7 +25,7 @@ export class UsuariosComponent implements OnInit {
     { name: 'Rol' }
   ];
 
-  cargando: boolean = false;
+  cargando = false;
 
   constructor(private usuarioService: UsuarioService) {
 
