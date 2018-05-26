@@ -13,7 +13,7 @@ const log = new Logger('PerfilComponent');
 })
 export class PerfilComponent implements OnInit {
 
-  usuario: Credentials;
+  usuario: Usuario;
 
   constructor(
     private authenticationService: AuthenticationService,

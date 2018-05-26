@@ -86,7 +86,7 @@
         Datos personales
       </div>
       <div class="card-body">
-        <form ngNativeValidate name="form" (ngSubmit)="f.form.valid && guardar()" #f="ngForm">
+        <form ngNativeValidate (ngSubmit)="f.form.valid && guardar()" #f="ngForm">
 
           <div class="form-group">
             <label for="txtUsuario">Usuario</label>
@@ -111,7 +111,7 @@
           <div class="form-group">
             <label for="txtEmail">email</label>
             <input [(ngModel)]="usuario.email" name="email" type="email" class="form-control" id="txtEmail" placeholder="Ingresa tu email"
-              #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}" disabled>
+              #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}">
             <div class="invalid-feedback" *ngIf="email?.errors?.email">email incorrecto</div>
           </div>
 

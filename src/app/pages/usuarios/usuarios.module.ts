@@ -1,20 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { UsuarioService } from '../../services/usuario.service';
 import { UsuariosComponent } from './usuarios.component';
 import { UsuariosRoutes } from './usuarios.routing';
-import { UsuarioService } from '../../services/usuario.service';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild(UsuariosRoutes),
     NgbAccordionModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    NgbModule
   ],
   declarations: [UsuariosComponent],
   providers: [UsuarioService]

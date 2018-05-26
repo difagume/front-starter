@@ -29,6 +29,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 ## Fuentes
+# Actualizar paquetes npm
+https://docs.npmjs.com/getting-started/updating-local-packages
+
 # Botón flotante
 https://material.io/develop/web/components/buttons/floating-action-buttons/
 https://github.com/igghera/floating-action-menu
