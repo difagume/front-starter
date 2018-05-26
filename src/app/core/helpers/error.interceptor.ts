@@ -1,9 +1,12 @@
+
+import {throwError as observableThrowError,  Observable } from 'rxjs';
+
+import {catchError} from 'rxjs/operators';
 import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
+
+
 import { AuthenticationService, Logger } from '..';
 
 declare let swal: any;
@@ -19,7 +22,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // extract error message from http body if an error occurs
-        return next.handle(request).catch(errorResponse => {
+        return next.handle(request).pipe(catchError(errorResponse => {
             log.debug(errorResponse.error);
 
             if (!navigator.onLine) {
@@ -37,8 +40,8 @@ export class ErrorInterceptor implements HttpInterceptor {
                     }
             }
 
-            return Observable.throw(errorResponse.error);
-        });
+            return observableThrowError(errorResponse.error);
+        }));
     }
 
     logout() {

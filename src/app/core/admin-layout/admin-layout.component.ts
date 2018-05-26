@@ -1,14 +1,11 @@
-import {
-  Component, OnInit, ElementRef, OnDestroy,
-  ViewChild, HostListener, AnimationTransitionEvent, NgZone, AfterViewInit
-} from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/operator/filter';
+import { AfterViewInit, Component, ElementRef, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 
 const SMALL_WIDTH_BREAKPOINT = 991;
 
@@ -61,7 +58,7 @@ export class AdminLayoutComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
+    this._router = this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
       // Scroll to top on view load
       document.querySelector('.main-content').scrollTop = 0;
 

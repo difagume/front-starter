@@ -1,9 +1,10 @@
+
+import {map} from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/map';
+import { Observable ,  of } from 'rxjs';
+
+
+
 import { Logger } from '../logger.service';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from '../../config';
@@ -55,11 +56,11 @@ export class AuthenticationService {
    */
   login(context: LoginContext): Observable<Credentials> {
     const url = URL_SERVICIOS + '/login';
-    return this.http.post(url, { usuario: context.usuario, password: context.password })
-      .map((resp: any) => {
+    return this.http.post(url, { usuario: context.usuario, password: context.password }).pipe(
+      map((resp: any) => {
         this.setCredentials(resp.usuario, context.remember);
         return (resp.usuario);
-      });
+      }));
   }
 
   /**

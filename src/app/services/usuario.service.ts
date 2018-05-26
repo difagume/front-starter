@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { URL_SERVICIOS } from '../config';
 import { AuthenticationService, Logger } from '../core';
 import { Usuario } from '../models';
@@ -30,9 +31,9 @@ export class UsuarioService {
   obtenerUsuarios() {
     const url = `${URL_SERVICIOS}/usuario`;
     return this.http.get(url)
-      .map((res: any) => {
+      .pipe(map((res: any) => {
         return res.usuarios;
-      });
+      }));
   }
 
   get usuarioLogueadoId(): string | null {
