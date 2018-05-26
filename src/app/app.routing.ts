@@ -12,7 +12,7 @@ export const AppRoutes: Routes = [
   {
     path: '', component: AuthLayoutComponent,
     children: [
-      { path: 'authentication', loadChildren: './authentication/authentication.module#AuthenticationModule' },
+      { path: '', loadChildren: './authentication/authentication.module#AuthenticationModule' },
       { path: 'error', loadChildren: './error/error.module#ErrorModule' }
     ]
   },

@@ -1,13 +1,11 @@
 
-import {map} from 'rxjs/operators';
-import { Injectable } from '@angular/core';
-import { Observable ,  of } from 'rxjs';
-
-
-
-import { Logger } from '../logger.service';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { NgxPermissionsService } from 'ngx-permissions';
+import { Observable, of } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { URL_SERVICIOS } from '../../config';
+import { Logger } from '../logger.service';
 
 const log = new Logger('AuthenticationService');
 
@@ -42,7 +40,8 @@ export class AuthenticationService {
 
   private _credentials: Credentials | null;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+    private ngxPermissionsService: NgxPermissionsService) {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -70,6 +69,8 @@ export class AuthenticationService {
   logout(): Observable<boolean> {
     // Customize credentials invalidation here
     this.setCredentials();
+    // ngx-permissions
+    this.ngxPermissionsService.flushPermissions();
     return of(true);
   }
 
@@ -87,6 +88,10 @@ export class AuthenticationService {
    */
   get credentials(): Credentials | null {
     return this._credentials;
+  }
+
+  get roles(): string | null {
+    return this._credentials.rol;
   }
 
   actualizarCredentials(credentials: Credentials) {

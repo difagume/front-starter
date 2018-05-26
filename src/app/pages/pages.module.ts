@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { NgxPermissionsModule } from 'ngx-permissions';
 import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
@@ -12,6 +13,7 @@ import { PagesRoutes } from './pages.routing';
   imports: [
     CommonModule,
     FormsModule,
+    NgxPermissionsModule.forChild(),
     RouterModule.forChild(PagesRoutes),
     NgbModule,
     NgbAccordionModule,

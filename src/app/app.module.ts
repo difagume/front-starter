@@ -18,6 +18,8 @@ import { LoadingBarRouterModule } from '@ngx-loading-bar/router';
 import { AppRoutes } from './app.routing';
 import { AppComponent } from './app.component';
 
+import { NgxPermissionsModule } from 'ngx-permissions';
+
 import {
   MenuComponent,
   HeaderComponent,
@@ -53,6 +55,7 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     BrowserModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    NgxPermissionsModule.forRoot(),
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes),
     FormsModule,

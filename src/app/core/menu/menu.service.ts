@@ -40,7 +40,7 @@ const MENUITEMS = [
     ]
   },
   {
-    state: 'authentication',
+    state: '',
     name: 'AUTHENTICATION',
     type: 'sub',
     icon: 'basic-lock-open',

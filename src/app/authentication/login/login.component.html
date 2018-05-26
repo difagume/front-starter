@@ -21,7 +21,7 @@
         <input type="password" class="form-control" formControlName="password" autocomplete="current-password" placeholder="contraseña"
           [ngClass]="{'is-invalid': form.controls['password'].hasError('required') && form.controls['password'].touched}" />
         <div class="invalid-feedback" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched">La contraseña es requerida</div>
-        <a [routerLink]="['/authentication/forgot']" class="form-text">
+        <a [routerLink]="['/forgot']" class="form-text">
           <small>Recuperar contraseña</small>
         </a>
       </fieldset>
@@ -31,7 +31,7 @@
       </div>
       <div class="block"></div>
       <button class="btn btn-primary waves-effect" type="submit" [disabled]="!form.valid">Iniciar sesión</button>
-      <button class="btn btn-outline-primary btn-link waves-effect" type="button" style="margin-left: 4px" [routerLink]="['/authentication/signup']">Crear una cuenta!</button>
+      <button class="btn btn-outline-primary btn-link waves-effect" type="button" style="margin-left: 4px" [routerLink]="['/signup']">Crear una cuenta!</button>
     </form>
   </div>
 </div>

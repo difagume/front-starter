@@ -56,7 +56,7 @@ export class SignupComponent implements OnInit {
     this.usuarioService.registrarUsuario(this.usuario)
       .subscribe((data: any) => {
         swal(data.name, data.message, 'success');
-        this.router.navigate(['/authentication/login']);
+        this.router.navigate(['/login']);
       }, error => { });
   }
 

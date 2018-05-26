@@ -1,7 +1,7 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable } from 'rxjs';
 
-import {catchError} from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
@@ -46,7 +46,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     logout() {
         this.authenticationService.logout()
-            .subscribe(() => this.router.navigate(['/authentication/login'], { replaceUrl: true }));
+            .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -20,7 +20,7 @@ export class HeaderComponent {
 
   logout() {
     this.authenticationService.logout()
-      .subscribe(() => this.router.navigate(['/authentication/login'], { replaceUrl: true }));
+      .subscribe(() => this.router.navigate(['/login'], { replaceUrl: true }));
   }
 
   get usuario(): string | null {
