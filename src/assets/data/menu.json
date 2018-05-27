@@ -1,0 +1,50 @@
+[
+    {
+        "state": "/",
+        "name": "HOME",
+        "type": "link",
+        "icon": "basic-home",
+        "roles": [
+            "ADMIN",
+            "USUARIO"
+        ]
+    },
+    {
+        "state": "",
+        "name": "ADMINISTRACION",
+        "type": "sub",
+        "icon": "basic-gear",
+        "roles": [
+            "ADMIN"
+        ],
+        "children": [
+            {
+                "state": "usuarios",
+                "name": "USUARIOS",
+                "roles": [
+                    "ADMIN"
+                ]
+            }
+        ]
+    },
+    {
+        "state": "about",
+        "name": "ABOUT",
+        "type": "link",
+        "icon": "basic-info",
+        "roles": [
+            "ADMIN",
+            "USUARIO"
+        ]
+    },
+    {
+        "state": "docs",
+        "name": "DOCS",
+        "type": "link",
+        "icon": "basic-sheet-txt",
+        "roles": [
+            "ADMIN",
+            "USUARIO"
+        ]
+    }
+]

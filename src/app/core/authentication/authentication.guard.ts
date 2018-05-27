@@ -20,12 +20,6 @@ export class AuthenticationGuard implements CanActivate {
       const permisos = this.authenticationService.roles.split(',');
       this.permissionsService.loadPermissions(permisos);
       log.info('🔑', this.permissionsService.getPermissions());
-
-      /* this.permissionsService.hasPermission('DESA')
-        .then(t => {
-          log.info('tiene: ', t);
-        }); */
-
       return true;
     }
 

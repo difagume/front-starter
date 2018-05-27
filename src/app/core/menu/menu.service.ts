@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
 
 export interface BadgeItem {
   type: string;
@@ -23,7 +22,7 @@ export interface Menu {
   roles?: string[];
 }
 
-const MENUITEMS = [
+/* const MENUITEMS = [
   {
     state: '/',
     name: 'HOME',
@@ -59,15 +58,14 @@ const MENUITEMS = [
     icon: 'basic-sheet-txt',
     roles: ['ADMIN', 'USUARIO']
   }
-];
+]; */
 
 @Injectable()
 export class MenuService {
 
-  constructor(private permissionsService: NgxPermissionsService,
-    private rolesService: NgxRolesService) { }
+  constructor() { }
 
-  getAll(): Menu[] {
+  /* getAll(): Menu[] {
     return MENUITEMS;
-  }
+  } */
 }
