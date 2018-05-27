@@ -11,15 +11,8 @@
   'mode-slide': _mode == 'slide',
   'no-footer': routeOptions?.removeFooter,
   'map-header': routeOptions?.mapHeader}">
-  <ng-sidebar
-    [(opened)]="options.opened"
-    [(mode)]="_mode"
-    [position]="'left'"
-    [dockedSize]="'80px'"
-    [autoCollapseWidth]="'991'"
-    [closeOnClickOutside]="isOver()"
-    [showBackdrop]="isOver()"
-    [sidebarClass]="'sidebar-panel'" #sidebar>
+  <ng-sidebar [(opened)]="options.opened" [(mode)]="_mode" [position]="'left'" [dockedSize]="'80px'" [autoCollapseWidth]="'991'"
+    [closeOnClickOutside]="isOver()" [showBackdrop]="isOver()" [sidebarClass]="'sidebar-panel'" #sidebar>
     <app-sidebar (messageEvent)="receiveMessage($event)" (toggleSidebar)="toogleSidebar()" [mode]="options.mode"></app-sidebar>
   </ng-sidebar>
 
@@ -36,11 +29,18 @@
 
 <ng-template #search let-c="close" let-d="dismiss">
   <form class="search__form" action="">
-    <input class="search-input" name="search" type="search" placeholder="Search..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus="true" />
-    <p class="text-muted"><small><strong>Hit enter to search or ESC to close</strong></small></p>
+    <input class="search-input" name="search" type="search" placeholder="Buscar..." autocomplete="off" autocorrect="off" autocapitalize="off"
+      spellcheck="false" autofocus="true" />
+    <p class="text-muted">
+      <small>
+        <strong>Presiona Enter para buscar o ESC para cerrar</strong>
+      </small>
+    </p>
   </form>
   <div class="search-suggestions">
-    <h6 class="text-uppercase"><strong>Suggestions?</strong></h6>
+    <h6 class="text-uppercase">
+      <strong>Sugerencias?</strong>
+    </h6>
     <p class="text-primary">#medical #analytics #fitness #transport #ui #dashboard #admin #bootstrap #angular #typescript</p>
   </div>
   <button type="button" class="search-close" aria-label="Close search form" (click)="d('Cross click')">
@@ -55,68 +55,82 @@
   </div>
   <div class="card">
     <div class="card-header">
-      Template Options
+      Opciones de plantilla
     </div>
     <div class="card-body">
-      <small class="ff-headers text-uppercase mb-3"><strong>Explore Sidebar API</strong></small>
+      <small class="ff-headers text-uppercase mb-3">
+        <strong>Explorar Barra Lateral</strong>
+      </small>
       <div class="custom-controls-stacked mb-2">
 
         <div class="custom-control custom-radio">
-          <input name="radio-stacked" type="radio" value="push" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode" class="custom-control-input" id="pushMode">
-          <label class="custom-control-label" for="pushMode">Push mode</label>
+          <input name="radio-stacked" type="radio" value="push" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode"
+            class="custom-control-input" id="pushMode">
+          <label class="custom-control-label" for="pushMode">Modo Push</label>
         </div>
 
         <div class="custom-control custom-radio">
-          <input name="radio-stacked" type="radio" value="dock" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode" class="custom-control-input" id="dockedMode">
-          <label class="custom-control-label" for="dockedMode">Docked mode</label>
+          <input name="radio-stacked" type="radio" value="dock" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode"
+            class="custom-control-input" id="dockedMode">
+          <label class="custom-control-label" for="dockedMode">Modo acoplado</label>
         </div>
 
         <div class="custom-control custom-radio">
-          <input name="radio-stacked" type="radio" value="over" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode" class="custom-control-input" id="overMode">
-          <label class="custom-control-label" for="overMode">Over content mode</label>
+          <input name="radio-stacked" type="radio" value="over" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode"
+            class="custom-control-input" id="overMode">
+          <label class="custom-control-label" for="overMode">Sobre el contenido</label>
         </div>
 
         <div class="custom-control custom-radio">
-          <input name="radio-stacked" type="radio" value="slide" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode" class="custom-control-input" id="slideMode">
-          <label class="custom-control-label" for="slideMode">Slide mode</label>
+          <input name="radio-stacked" type="radio" value="slide" [(ngModel)]="_mode" (change)="options.opened = true; options.mode = _mode"
+            class="custom-control-input" id="slideMode">
+          <label class="custom-control-label" for="slideMode">Modo deslizable</label>
         </div>
 
       </div>
 
-      <small class="ff-headers text-uppercase mb-3"><strong>Select A Layout</strong></small>
+      <small class="ff-headers text-uppercase mb-3">
+        <strong>Seleccione un Diseño</strong>
+      </small>
       <div class="d-flex align-items-center mb-2">
         <div class="custom-control custom-checkbox">
           <input type="checkbox" class="custom-control-input" [(ngModel)]="options.boxed" id="boxed">
-          <label class="custom-control-label" for="boxed">Boxed</label>
+          <label class="custom-control-label" for="boxed">En caja</label>
         </div>
       </div>
       <div class="d-flex align-items-center mb-2">
         <div class="custom-control custom-checkbox">
-          <input type="checkbox" class="custom-control-input" [ngModel]="routeOptions?.removeFooter" (ngModelChange)="routeOptions.removeFooter=$event" id="rfooter">
-          <label class="custom-control-label" for="rfooter">Toggle footer</label>
+          <input type="checkbox" class="custom-control-input" [ngModel]="routeOptions?.removeFooter" (ngModelChange)="routeOptions.removeFooter=$event"
+            id="rfooter">
+          <label class="custom-control-label" for="rfooter">Alternar pie de página</label>
         </div>
       </div>
 
-      <small class="ff-headers text-uppercase mb-3"><strong>Select A Theme</strong></small>
+      <small class="ff-headers text-uppercase mb-3">
+        <strong>Selecciona un Tema</strong>
+      </small>
       <div class="custom-controls-stacked mb-2">
         <div class="custom-control custom-radio">
           <input type="radio" class="custom-control-input" value="light" [(ngModel)]="options.theme" id="lightTheme">
-          <label class="custom-control-label" for="lightTheme">Light theme</label>
+          <label class="custom-control-label" for="lightTheme">Tema claro</label>
         </div>
 
         <div class="custom-control custom-radio">
           <input type="radio" class="custom-control-input" value="dark" [(ngModel)]="options.theme" id="darkTheme">
-          <label class="custom-control-label" for="darkTheme">Dark theme</label>
+          <label class="custom-control-label" for="darkTheme">Tema oscuro</label>
         </div>
 
       </div>
 
-      <small class="ff-headers text-uppercase mb-3"><strong>Select A Language</strong></small>
+      <!-- <small class="ff-headers text-uppercase mb-3">
+        <strong>Select A Language</strong>
+      </small>
       <div class="d-flex align-items-center">
-        <select class="custom-select" [(ngModel)]="currentLang" #langSelect="ngModel" (ngModelChange)="translate.use(currentLang)" placeholder="Select language" style="min-width: 50%;">
+        <select class="custom-select" [(ngModel)]="currentLang" #langSelect="ngModel" (ngModelChange)="translate.use(currentLang)"
+          placeholder="Select language" style="min-width: 50%;">
           <option *ngFor="let lang of translate.getLangs()" [value]="lang">{{ lang }}</option>
         </select>
       </div>
+    </div> -->
     </div>
   </div>
-</div>
