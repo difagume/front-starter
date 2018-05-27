@@ -42,3 +42,6 @@ https://github.com/igghera/floating-action-menu
 
 # Material toasts
 https://www.tutorialspoint.com/angular_material/angular_material_toasts.htm
+
+# Roles
+https://github.com/AlexKhymenko/ngx-permissions

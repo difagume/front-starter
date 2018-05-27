@@ -1,0 +1,41 @@
+<ul class="navigation" appAccordion>
+    <li class="navigation-item" appAccordionLink *ngFor="let menuitem of menu" group="{{menuitem.state}}">
+
+        <ng-template [ngxPermissionsOnly]="menuitem.roles">
+            <a class="navigation-link" appAccordionToggle [routerLink]="['/', menuitem.state]" *ngIf="menuitem.type === 'link'">
+                <i class="icon icon-{{ menuitem.icon }}"></i>
+                <span>{{ menuitem.name | translate }}</span>
+                <span class="mr-auto"></span>
+                <span class="badge badge-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+            </a>
+            <a class="navigation-link" appAccordionToggle href="{{menuitem.state}}" *ngIf="menuitem.type === 'extLink'">
+                <i class="icon icon-{{ menuitem.icon }}"></i>
+                <span>{{ menuitem.name | translate }}</span>
+                <span class="mr-auto"></span>
+                <span class="badge badge-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+            </a>
+            <a class="navigation-link" appAccordionToggle href="{{menuitem.state}}" target="_blank" *ngIf="menuitem.type === 'extTabLink'">
+                <i class="icon icon-{{ menuitem.icon }}"></i>
+                <span>{{ menuitem.name | translate }}</span>
+                <span class="mr-auto"></span>
+                <span class="badge badge-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+            </a>
+            <a class="navigation-link" appAccordionToggle href="javascript:;" *ngIf="menuitem.type === 'sub'">
+                <i class="icon icon-{{ menuitem.icon }}"></i>
+                <span>{{ menuitem.name | translate }}</span>
+                <span class="mr-auto"></span>
+                <span class="badge badge-{{ badge.type }}" *ngFor="let badge of menuitem.badge">{{ badge.value }}</span>
+                <i class="menu-caret icon icon-arrows-right"></i>
+            </a>
+        </ng-template>
+
+        <ul class="navigation-submenu" *ngIf="menuitem.type === 'sub'">
+            <li class="navigation-item" *ngFor="let childitem of menuitem.children" routerLinkActive="open">
+                <ng-template [ngxPermissionsOnly]="childitem.roles">
+                    <a *ngIf="menuitem.state" [routerLink]="['/', menuitem.state, childitem.state ]" class="navigation-link relative">{{ childitem.name | translate }}</a>
+                    <a *ngIf="!menuitem.state" [routerLink]="['/', childitem.state ]" class="navigation-link relative">{{ childitem.name | translate }}</a>
+                </ng-template>
+            </li>
+        </ul>
+    </li>
+</ul>

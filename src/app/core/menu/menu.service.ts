@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { NgxPermissionsService, NgxRolesService } from 'ngx-permissions';
 
 export interface BadgeItem {
   type: string;
@@ -9,6 +10,7 @@ export interface ChildrenItems {
   state: string;
   name: string;
   type?: string;
+  roles?: string[];
 }
 
 export interface Menu {
@@ -18,6 +20,7 @@ export interface Menu {
   icon: string;
   badge?: BadgeItem[];
   children?: ChildrenItems[];
+  roles?: string[];
 }
 
 const MENUITEMS = [
@@ -25,60 +28,45 @@ const MENUITEMS = [
     state: '/',
     name: 'HOME',
     type: 'link',
-    icon: 'basic-home'
+    icon: 'basic-home',
+    roles: ['ADMIN', 'USUARIO']
   },
   {
     state: '',
     name: 'ADMINISTRACION',
     type: 'sub',
     icon: 'basic-gear',
+    roles: ['ADMIN'],
     children: [
       {
         state: 'usuarios',
-        name: 'USUARIOS'
+        name: 'USUARIOS',
+        roles: ['ADMIN']
       }
-    ]
-  },
-  {
-    state: '',
-    name: 'AUTHENTICATION',
-    type: 'sub',
-    icon: 'basic-lock-open',
-    children: [
-      {
-        state: 'login',
-        name: 'LOGIN'
-      },
-      {
-        state: 'signup',
-        name: 'SIGNUP'
-      },
-      {
-        state: 'forgot',
-        name: 'FORGOT'
-      },
-      {
-        state: 'lockscreen',
-        name: 'LOCKSCREEN'
-      },
     ]
   },
   {
     state: 'about',
     name: 'ABOUT',
     type: 'link',
-    icon: 'basic-info'
+    icon: 'basic-info',
+    roles: ['ADMIN', 'USUARIO']
   },
   {
     state: 'docs',
     name: 'DOCS',
     type: 'link',
-    icon: 'basic-sheet-txt'
+    icon: 'basic-sheet-txt',
+    roles: ['ADMIN', 'USUARIO']
   }
 ];
 
 @Injectable()
 export class MenuService {
+
+  constructor(private permissionsService: NgxPermissionsService,
+    private rolesService: NgxRolesService) { }
+
   getAll(): Menu[] {
     return MENUITEMS;
   }
