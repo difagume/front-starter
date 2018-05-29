@@ -49,7 +49,6 @@
     "screenfull": "3.3.2",
     "spinthatshit": "1.0.4",
     "text-mask-addons": "3.7.2",
-    "web-animations-js": "^2.3.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {

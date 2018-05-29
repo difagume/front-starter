@@ -1,1 +1,2 @@
-﻿export * from './usuario';
+﻿export { Usuario } from './usuario';
+export { Rol } from './rol';

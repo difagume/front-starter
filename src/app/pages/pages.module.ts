@@ -6,6 +6,7 @@ import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
+import { ParametrosService } from '../services/parametros.service';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
 
@@ -26,7 +27,10 @@ import { PagesRoutes } from './pages.routing';
     PerfilComponent,
     UsuariosComponent
   ],
-  providers: [UsuarioService]
+  providers: [
+    UsuarioService,
+    ParametrosService
+  ]
 })
 
 export class PagesModule { }

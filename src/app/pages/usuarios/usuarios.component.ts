@@ -1,11 +1,13 @@
 // https://www.npmjs.com/package/@swimlane/ngx-datatable
 // https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from '../../core';
-import { Usuario } from '../../models';
+import { AuthenticationService, Logger } from '../../core';
+import { Rol, Usuario } from '../../models';
+import { ParametrosService } from '../../services/parametros.service';
 import { UsuarioService } from '../../services/usuario.service';
 
 declare let swal: any;
+const log = new Logger('UsuariosComponent');
 
 @Component({
   selector: 'app-usuarios',
@@ -20,6 +22,7 @@ export class UsuariosComponent implements OnInit {
   usuarioEliminar: Usuario;
   usuarioIndex;
   usuarioLogueadoId;
+  roles: Rol[];
   columns = [
     { prop: 'usuario' },
     { name: 'Nombre' },
@@ -31,10 +34,12 @@ export class UsuariosComponent implements OnInit {
   cargando = false;
 
   constructor(private usuarioService: UsuarioService,
+    private parametrosService: ParametrosService,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.obtenerUsuarios();
+    this.obtenerRoles();
     this.usuarioLogueadoId = this.usuarioService.usuarioLogueadoId;
   }
 
@@ -50,6 +55,10 @@ export class UsuariosComponent implements OnInit {
       }, error => { });
   }
 
+  /**
+   * Función que filtra la tabla
+   * @param event
+   */
   updateFilter(event) {
     const val = event.target.value;
     // filter our data
@@ -60,22 +69,29 @@ export class UsuariosComponent implements OnInit {
     this.data = temp;
   }
 
-  /* onSelect({ selected }) {
-    console.log('idUsu:', selected[0].id, this.usuario[0].id);
-  } */
-
+  /**
+   * Función que se llama al hacer clic en el botón de editar un usuario
+   * @param id del usuario seleccionado para ser editado
+   */
   editarUsuario(id) {
+    // Seteo usuario seleccionado
     this.temp = [...this.data];
     this.usuario = this.temp.find(usu => usu.id === id);
     this.usuarioIndex = this.temp.indexOf(this.usuario);
+
+    // Seteo roles del usuario
+    this.setearRolesUsuario();
 
     setTimeout(() => {
       this.scrollTo('editar');
     }, 250);
   }
 
+  /**
+   * Función que se llama al hacer click en el botón de elimimar usuario
+   * @param id del usuario a ser eliminado
+   */
   eliminarUsuario(id) {
-    // todo validar que no va a auto elininar su usuario
     this.usuario = null;
     this.temp = [...this.data];
     this.usuarioEliminar = this.temp.find(usu => usu.id === id);
@@ -99,17 +115,24 @@ export class UsuariosComponent implements OnInit {
       });
   }
 
+  /**
+   * Función que se llama al hacer click en el botón guardar
+   */
   actualizarUsuario() {
     this.temp.splice(this.usuarioIndex, 1, this.usuario);
     this.data = [...this.temp];
+    // Filtro los roles seleccionados
+    const rolesActivos = this.roles.filter(rol => rol.activo);
+    // Seteo roles en usuario
+    const rolesUsu = rolesActivos.map(rol => rol.nombre).toString();
+    this.usuario.rol = rolesUsu;
+    // Actualizo usuario
     this.usuarioService.actualizarUsuario(this.usuario)
       .subscribe((data: any) => {
         if (this.usuarioLogueadoId === this.usuario.id) {
           this.usuario.password = '💩';
           this.usuario.token = this.authenticationService.credentials.token;
           this.authenticationService.actualizarCredentials(this.usuario);
-          console.log('1:', this.usuario);
-          console.log('2', this.authenticationService.credentials);
         }
         swal(data.name, data.message, 'success');
       }, error => { });
@@ -120,6 +143,42 @@ export class UsuariosComponent implements OnInit {
     const element = elementList[0] as HTMLElement;
     element.scrollIntoView({ behavior: 'smooth' });
   }
+
+  /**
+   * Obtengo todos los roles activos
+   */
+  obtenerRoles() {
+    this.parametrosService.obtenerRoles()
+      .subscribe(res => {
+        this.roles = res;
+      });
+  }
+
+  /**
+   * Seteo los roles activos que tiene el usuario seleccionado para mostrarlos en el front
+   */
+  setearRolesUsuario() {
+    // Falseo todos los roles
+    this.roles.forEach(rol => rol.activo = false);
+    // Habilito los roles que tiene el usuario
+    if (this.usuario.rol.length > 0) {
+      this.usuario.rol.split(',').forEach(rolNombre => {
+        const rol = this.roles.find(r => r.nombre === rolNombre);
+        rol.activo = true;
+        let index = this.roles.indexOf(rol);
+        this.roles.fill(rol, index, index++);
+      });
+    }
+  }
+
+  /**
+  * Actualiza los roles seleccionados del usuario que se está editando
+   * @param ckb datos del checkbox clickeado
+   */
+  actualizarRoles(ckb) {
+    this.roles[+ckb.name - 1].activo = ckb.checked;
+  }
+
 
   /* updateFilter(filter: string): void {
 
