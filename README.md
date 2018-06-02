@@ -45,3 +45,7 @@ https://www.tutorialspoint.com/angular_material/angular_material_toasts.htm
 
 # Roles
 https://github.com/AlexKhymenko/ngx-permissions
+
+# Git
+# Crear rama
+git checkout -b <nombre_rama>
