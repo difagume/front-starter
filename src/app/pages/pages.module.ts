@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
+import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent, CatalogoComponent } from '.';
 import { ParametrosService } from '../services/parametros.service';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
@@ -25,7 +25,8 @@ import { PagesRoutes } from './pages.routing';
     DashboardComponent,
     DocsComponent,
     PerfilComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    CatalogoComponent
   ],
   providers: [
     UsuarioService,

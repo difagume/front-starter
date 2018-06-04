@@ -8,9 +8,9 @@
       </div>
       <fieldset class="form-group">
         <label for="username" class="form-control-label">
-          Ingresa tu nombre de usuario
+          Ingresa tu nombre de usuario o email
         </label>
-        <input type="text" class="form-control" placeholder="nombre de usuario" [formControl]="form.controls['uname']" [ngClass]="{'is-invalid': form.controls['uname'].hasError('required') && form.controls['uname'].touched}"
+        <input type="text" class="form-control" placeholder="nombre de usuario o email" [formControl]="form.controls['uname']" [ngClass]="{'is-invalid': form.controls['uname'].hasError('required') && form.controls['uname'].touched}"
         />
         <div class="invalid-feedback" *ngIf="form.controls['uname'].hasError('required') && form.controls['uname'].touched">Username is required.</div>
       </fieldset>

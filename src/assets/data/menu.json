@@ -24,6 +24,13 @@
                 "roles": [
                     "ADMIN"
                 ]
+            },
+            {
+                "state": "catalogo",
+                "name": "CATALOGO",
+                "roles": [
+                    "ADMIN"
+                ]
             }
         ]
     },
