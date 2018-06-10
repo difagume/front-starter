@@ -49,3 +49,6 @@ https://github.com/AlexKhymenko/ngx-permissions
 # Git
 # Crear rama
 git checkout -b <nombre_rama>
+
+# Multiple-select
+https://github.com/ng-select/ng-select
