@@ -31,7 +31,8 @@
               "node_modules/angular-calendar/scss/angular-calendar.scss",
               "node_modules/@swimlane/ngx-datatable/release/index.css",
               "src/assets/fonts/data-table/icons.css",
-              "src/assets/styles/app.scss"
+              "src/assets/styles/app.scss",
+              "node_modules/@ng-select/ng-select/themes/default.theme.css"
             ],
             "scripts": []
           },

@@ -24,9 +24,9 @@
         <form>
           <div class="form-group row">
             <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
-            <div class="col-7">
+            <div class="col-10">
               <select class="form-control">
-                <option>-- Seleccione --</option>
+                <option>Seleccione...</option>
                 <option>Bebidas</option>
                 <option>Comida</option>
                 <option>Servicio</option>
@@ -36,9 +36,37 @@
 
           <div class="form-group row">
             <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
-            <div class="col-7">
+            <div class="col-10">
               <input class="form-control" type="text" placeholder="nombre del artículo" id="txtArticulo">
             </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
+            <ng-select class="col-10" id="ngsProductos" [items]="people$1 | async" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
+              bindLabel="name" placeholder="Seleccione los productos..." [(ngModel)]="selectedPeople1" name="people" notFoundText="No se encontró el producto"
+              (change)="onChange($event)">
+
+              <ng-template ng-option-tmp let-item="item" let-index="index">
+                <div style="margin: 5px 0;" class="card">
+                  <div class="card-body">
+                    <p class="card-text">
+                      {{item.name}}
+                      <br />
+                      <small>{{item.gender}}</small>
+                    </p>
+                  </div>
+                </div>
+              </ng-template>
+
+              <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                <div class="ng-value-wrapper default">
+                  <span class="ng-value-icon left" (click)="clear(item); $event.stopPropagation()" *ngIf="item.disabled !== true">×</span>
+                  <span class="ng-value-label">{{ item.name }}</span>
+                </div>
+              </ng-template>
+
+            </ng-select>
           </div>
 
         </form>

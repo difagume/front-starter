@@ -3,9 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPermissionsModule } from 'ngx-permissions';
-import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent, CatalogoComponent } from '.';
+import { AboutComponent, CatalogoComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
 import { ParametrosService } from '../services/parametros.service';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
@@ -17,6 +18,7 @@ import { PagesRoutes } from './pages.routing';
     NgxPermissionsModule.forChild(),
     RouterModule.forChild(PagesRoutes),
     NgbModule,
+    NgSelectModule,
     NgbAccordionModule,
     NgxDatatableModule
   ],

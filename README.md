@@ -52,3 +52,4 @@ git checkout -b <nombre_rama>
 
 # Multiple-select
 https://github.com/ng-select/ng-select
+https://github.com/nileshpatel17/ng-multiselect-dropdown
