@@ -7,6 +7,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { AboutComponent, CatalogoComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
+import { CatalogoService } from '../services/catalogo.service';
 import { ParametrosService } from '../services/parametros.service';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
@@ -32,7 +33,8 @@ import { PagesRoutes } from './pages.routing';
   ],
   providers: [
     UsuarioService,
-    ParametrosService
+    ParametrosService,
+    CatalogoService
   ]
 })
 

@@ -1,76 +1,111 @@
 <div class="row">
-  <div class="col-sm-12">
-    <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
+    <div class="col-sm-12">
+        <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
 
-    <div class="card">
-      <div class="card-header">
-        <button type="submit" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
+        <div class="card">
+            <div class="card-header">
+                <button type="submit" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
           <i class="fa fa-plus" aria-hidden="true"></i>
           Agregar
         </button>
-      </div>
-      <div class="card-body">
+            </div>
+            <div class="card-body">
 
-      </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <div class="row">
-  <div class="col-sm-12">
-    <div class="card">
-      <div class="card-header">Artículo</div>
-      <div class="card-body">
-        <form>
-          <div class="form-group row">
-            <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
-            <div class="col-10">
-              <select class="form-control">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-header">Artículo</div>
+            <div class="card-body">
+                <form>
+                    <div class="form-group row">
+                        <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
+                        <div class="col-10">
+                            <select class="form-control">
                 <option>Seleccione...</option>
                 <option>Bebidas</option>
                 <option>Comida</option>
                 <option>Servicio</option>
               </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
+                        <div class="col-10">
+                            <input class="form-control" type="text" placeholder="nombre del artículo" id="txtArticulo">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
+                        <ng-select class="col-10" id="ngsProductos" [items]="productos" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true" bindLabel="nombre" placeholder="Seleccione los productos..." [(ngModel)]="productosSeleccionados" name="producto" notFoundText="No se encontró el producto"
+                            (change)="onChange($event)">
+
+                            <ng-template ng-option-tmp let-item="item" let-index="index">
+                                <div style="margin: 5px 0;" class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">
+                                            {{item.nombre}}
+                                            <br />
+                                            <small>{{item.valor}}</small>
+                                        </p>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                                <div class="ng-value-wrapper default">
+                                    <span class="ng-value-icon left" (click)="clear(item); $event.stopPropagation()" *ngIf="item.activo === true">×</span>
+                                    <span class="ng-value-label">{{ item.nombre }}</span>
+                                </div>
+                            </ng-template>
+
+                        </ng-select>
+                    </div>
+
+                    <div class="form-group row" *ngIf="productosSeleccionados.length > 0">
+                        <label for="productosSel" class="col-2 col-form-label">Cantidad por producto:</label>
+
+                        <div class="table-responsive col-10">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Producto
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let producto of productosSeleccionados; let i=index">
+                                        <td>
+                                            <span>
+                                        </span> {{ producto.nombre }}
+                                        </td>
+                                        <td>
+                                            <input class="form-control col-md-3 mb-2" type="number" min="1" max="20" [(ngModel)]="producto.cantidad" name="cantidad" (change)="cambiaCantidad($event)">
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ producto.valor }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </form>
             </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
-            <div class="col-10">
-              <input class="form-control" type="text" placeholder="nombre del artículo" id="txtArticulo">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
-            <ng-select class="col-10" id="ngsProductos" [items]="people$1 | async" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
-              bindLabel="name" placeholder="Seleccione los productos..." [(ngModel)]="selectedPeople1" name="people" notFoundText="No se encontró el producto"
-              (change)="onChange($event)">
-
-              <ng-template ng-option-tmp let-item="item" let-index="index">
-                <div style="margin: 5px 0;" class="card">
-                  <div class="card-body">
-                    <p class="card-text">
-                      {{item.name}}
-                      <br />
-                      <small>{{item.gender}}</small>
-                    </p>
-                  </div>
-                </div>
-              </ng-template>
-
-              <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                <div class="ng-value-wrapper default">
-                  <span class="ng-value-icon left" (click)="clear(item); $event.stopPropagation()" *ngIf="item.disabled !== true">×</span>
-                  <span class="ng-value-label">{{ item.name }}</span>
-                </div>
-              </ng-template>
-
-            </ng-select>
-          </div>
-
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
