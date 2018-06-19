@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
 
@@ -11,14 +10,22 @@ import { CatalogoService } from '../../services/catalogo.service';
 })
 export class CatalogoComponent implements OnInit {
 
-  productos: Producto[] = [];
+  producto$: Observable<Producto[]>;
   productosSeleccionados: Producto[] = [];
+  valorTotal = 0;
 
   constructor(private catalogoService: CatalogoService) { }
 
   ngOnInit() {
-    this.obtenerProductos();
-    // this.producto$ = this.catalogoService.obtenerProductos();
+    // this.obtenerProductos();
+    this.producto$ = this.catalogoService.obtenerProductos();
+  }
+
+  valTotal() {
+    this.valorTotal = 0;
+    this.productosSeleccionados.forEach(p => {
+      this.valorTotal += +p.valor * +p.cantidad;
+    });
   }
 
   /* getProductos(term: string = null): Observable<Producto[]> {
@@ -29,27 +36,27 @@ export class CatalogoComponent implements OnInit {
     return of(items).pipe(delay(500));
   } */
 
-  onChange($event) {
+  onChange() {
     // console.log({ name: '(change)', value: $event });
-    console.log(this.productosSeleccionados);
-    console.log('p:', this.productos);
+    // console.log(this.productosSeleccionados);
+    this.valTotal();
   }
 
-  cambiaCantidad(event) {
+  cambiaCantidad() {
     // console.log(event);
-    console.log(this.productosSeleccionados);
-    console.log('p:', this.productos);
+    // console.log(this.productosSeleccionados);
+    this.valTotal();
   }
 
   /**
    * Obtengo todos los productos activos
    */
-  obtenerProductos() {
+  /* obtenerProductos() {
     this.catalogoService.obtenerProductos()
       .subscribe((res: Producto[]) => {
         this.productos = res;
-        // this.producto$ = this.getProductos();
+        this.producto$ = this.getProductos();
       });
-  }
+  } */
 
 }
