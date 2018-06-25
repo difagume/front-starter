@@ -32,8 +32,8 @@ export class CatalogoService {
       }));
   }
 
-  crearArticulo(rol: Articulo) {
+  crearArticulo(articulo: Articulo) {
     const url = `${URL_SERVICIOS}/catalogo/articulo?token=${this.authenticationService.credentials.token}`;
-    return this.http.post(url, rol);
+    return this.http.post(url, articulo);
   }
 }

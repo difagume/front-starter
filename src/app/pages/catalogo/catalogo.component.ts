@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Articulo, Producto, Menu } from '../../models';
+import { Articulo, Producto, Menu, ArticuloDetalle } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
-import { NgForm } from '@angular/forms';
+
+declare let swal: any;
 
 @Component({
   selector: 'app-catalogo',
@@ -21,7 +22,6 @@ export class CatalogoComponent implements OnInit {
   constructor(private catalogoService: CatalogoService) { }
 
   ngOnInit() {
-    // this.obtenerProductos();
     this.producto$ = this.catalogoService.obtenerProductos();
     this.menu$ = this.catalogoService.obtenerMenu();
   }
@@ -32,9 +32,7 @@ export class CatalogoComponent implements OnInit {
       this.valorTotal += +p.valor * +p.cantidad;
     });
 
-    // if (this.articulo.valor === 0) {
     this.articulo.valor = this.valorTotal;
-    // }
   }
 
   gananciaPorPlato() {
@@ -50,40 +48,33 @@ export class CatalogoComponent implements OnInit {
   } */
 
   onChange() {
-    // console.log({ name: '(change)', value: $event });
-    // console.log(this.productosSeleccionados);
     this.valTotal();
     this.gananciaPorPlato();
   }
 
   cambiaCantidad() {
-    // console.log(event);
-    // console.log(this.productosSeleccionados);
     this.valTotal();
     this.gananciaPorPlato();
   }
 
   cambiaPVP() {
-    // console.log(event);
-    // console.log(this.productosSeleccionados);
     this.gananciaPorPlato();
   }
 
   // guardarArticulo(forma: NgForm) {
+  // console.log('forma: ', forma);
   guardarArticulo() {
-    // console.log('forma: ', forma);
-    console.log('articulo: ', this.articulo);
-    console.log('productos: ', this.productosSeleccionados);
-  }
-  /**
-   * Obtengo todos los productos activos
-   */
-  /* obtenerProductos() {
-    this.catalogoService.obtenerProductos()
-      .subscribe((res: Producto[]) => {
-        this.productos = res;
-        this.producto$ = this.getProductos();
-      });
-  } */
+    this.articulo.articuloDetalle = [];
+    this.productosSeleccionados.forEach(producto => {
+      let articuloDetalle: ArticuloDetalle;
+      articuloDetalle = new ArticuloDetalle(null, null, producto.id, producto.cantidad, true);
+      this.articulo.articuloDetalle.push(articuloDetalle);
+    });
 
+    console.log('articulo: ', this.articulo);
+    this.catalogoService.crearArticulo(this.articulo)
+      .subscribe((data: any) => {
+        swal(data.name, data.message, 'success');
+      }, error => { });
+  }
 }

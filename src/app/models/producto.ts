@@ -1,7 +1,7 @@
 export class Producto {
 
     constructor(
-        public id: string,
+        public id: number,
         public nombre: string,
         public valor: number,
         public activo: boolean,
