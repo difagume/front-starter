@@ -36,4 +36,12 @@ export class CatalogoService {
     const url = `${URL_SERVICIOS}/catalogo/articulo?token=${this.authenticationService.credentials.token}`;
     return this.http.post(url, articulo);
   }
+
+  obtenerArticulos() {
+    const url = `${URL_SERVICIOS}/catalogo/articulos`;
+    return this.http.get(url)
+      .pipe(map((res: any) => {
+        return res.articulos;
+      }));
+  }
 }

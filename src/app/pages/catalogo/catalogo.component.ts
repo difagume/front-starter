@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Articulo, Producto, Menu, ArticuloDetalle } from '../../models';
+import { Articulo, ArticuloDetalle, Menu, Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
 
 declare let swal: any;
@@ -12,16 +12,25 @@ declare let swal: any;
 })
 export class CatalogoComponent implements OnInit {
 
+  @ViewChild('myTable') table: any;
+
   menu$: Observable<Menu[]>;
   producto$: Observable<Producto[]>;
   productosSeleccionados: Producto[] = [];
+  articulo$: Observable<any[]>;
   valorTotal = 0;
   ganancia = 0;
   articulo = new Articulo(null, null, 0, true, null, null, []);
+  detalle: any = {};
+  columns = [
+    { prop: 'nombre' },
+    { name: 'valor' }
+  ];
 
   constructor(private catalogoService: CatalogoService) { }
 
   ngOnInit() {
+    this.articulo$ = this.catalogoService.obtenerArticulos();
     this.producto$ = this.catalogoService.obtenerProductos();
     this.menu$ = this.catalogoService.obtenerMenu();
   }
@@ -76,5 +85,10 @@ export class CatalogoComponent implements OnInit {
       .subscribe((data: any) => {
         swal(data.name, data.message, 'success');
       }, error => { });
+  }
+
+  toggleExpandRow(row) {
+    console.log('Toggled Expand Row!', row);
+    this.table.rowDetail.toggleExpandRow(row);
   }
 }
