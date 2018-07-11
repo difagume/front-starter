@@ -11,11 +11,12 @@
             </div>
             <div class="card-body">
                 <small>
-                    <a href="javascript:void(0)" (click)="table.rowDetail.expandAllRows()">Expand All</a> |
-                    <a href="javascript:void(0)" (click)="table.rowDetail.collapseAllRows()">Collapse All</a>
+                    <a href="javascript:void(0)" (click)="table.rowDetail.expandAllRows()">Expandir todo</a> |
+                    <a href="javascript:void(0)" (click)="table.rowDetail.collapseAllRows()">Contraer todo</a>
                 </small>
-                <ngx-datatable #myTable class='material expandable' [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="50"
-                    [scrollbarV]="true" [rows]='articulo$ | async' [columns]="columns">
+                <ngx-datatable #myTable class='material expandable' [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'"
+                    [messages]="{ emptyMessage: 'No hay artículos', totalMessage: 'artículos' }" [limit]="7" [rows]='articulo$ | async'>
+                    <!-- [columns]="columns" -->
                     <!-- Row Detail Template -->
                     <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow>
                         <ng-template let-row="row" let-expanded="detalle" ngx-datatable-row-detail-template>
@@ -24,7 +25,9 @@
                                     <strong>Productos</strong>
                                 </div>
                                 <div *ngFor="let p of row.productos">
-                                    {{p.producto}}, {{p.cantidad}}</div>
+                                    <strong>{{p.producto}}</strong> / cantidad:
+                                    <strong>{{p.cantidad}}</strong>
+                                </div>
                             </div>
                         </ng-template>
                     </ngx-datatable-row-detail>
@@ -36,19 +39,51 @@
                             </a>
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Nombre" width="200">
+
+                    <!-- <ngx-datatable-column name="nombre">
+                        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()">
+                                <strong>{{column.name}}</strong>
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            {{value}}
+                        </ng-template>
+                    </ngx-datatable-column> -->
+
+                    <ngx-datatable-column prop="nombre" name="Artículo">
                         <ng-template let-value="value" ngx-datatable-cell-template>
                             <strong>{{value}}</strong>
+                            <!-- <strong [innerHTML]="row['nombre']"></strong> -->
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Valor" width="300">
+
+                    <!-- <ngx-datatable-column name="Menu">
+                        <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
+                            <span (click)="sort()">
+                                <strong>{{column.name}}</strong>
+                            </span>
+                        </ng-template>
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            {{value}}
+                        </ng-template>
+                    </ngx-datatable-column> -->
+
+                    <ngx-datatable-column prop="menu" name="Menú">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            {{value}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Valor">
                         <ng-template let-value="value" ngx-datatable-cell-template>
                             {{value | currency}}
                         </ng-template>
                     </ngx-datatable-column>
-                    <ngx-datatable-column name="Tiempo preparación" width="300">
-                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-                            <p [innerHTML]="row['tiempo_preparacion']"></p>
+
+                    <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
+                        <ng-template let-value="value" ngx-datatable-cell-template>
+                            {{value}}
                         </ng-template>
                     </ngx-datatable-column>
                 </ngx-datatable>

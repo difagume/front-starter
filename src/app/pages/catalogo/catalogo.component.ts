@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Articulo, ArticuloDetalle, Menu, Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
+import { map } from '../../../../node_modules/rxjs/operators';
 
 declare let swal: any;
 
@@ -22,10 +23,12 @@ export class CatalogoComponent implements OnInit {
   ganancia = 0;
   articulo = new Articulo(null, null, 0, true, null, null, []);
   detalle: any = {};
-  columns = [
+  /* columns = [
     { prop: 'nombre' },
-    { name: 'valor' }
-  ];
+    { name: 'Menu' },
+    { name: 'Valor' },
+    { name: 'tiempo_preparacion' }
+  ]; */
 
   constructor(private catalogoService: CatalogoService) { }
 
@@ -33,6 +36,23 @@ export class CatalogoComponent implements OnInit {
     this.articulo$ = this.catalogoService.obtenerArticulos();
     this.producto$ = this.catalogoService.obtenerProductos();
     this.menu$ = this.catalogoService.obtenerMenu();
+  }
+
+  /**
+   * Función que filtra la tabla
+   * @param event
+   */
+  updateFilter(event) {
+    const val = event.target.value;
+    console.log('entra', val);
+    // filter our data
+    return this.articulo$.pipe(
+      map(articulos => {
+        console.log('art:', articulos);
+        const temp = articulos.filter(d => {
+          return d.articulo.toLowerCase().indexOf(val) !== -1 || !val;
+        });
+      }));
   }
 
   valTotal() {

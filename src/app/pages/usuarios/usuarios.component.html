@@ -2,13 +2,15 @@
     <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
 
     <!-- [selectionType]="'single'" [selected]="usuario" (select)='onSelect($event)' -->
-    <ngx-datatable [columns]="columns" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'" [rows]='data' [messages]="{ emptyMessage: 'No hay usuarios', totalMessage: 'usuarios' }" [limit]="7" [loadingIndicator]="cargando" [scrollbarH]="true">
+    <ngx-datatable [columns]="columns" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'" [rows]='data'
+        [messages]="{ emptyMessage: 'No hay usuarios', totalMessage: 'usuarios' }" [limit]="7" [loadingIndicator]="cargando"
+        [scrollbarH]="true">
 
         <ngx-datatable-column name="Usuario">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">
-          <strong>{{column.name}}</strong>
-        </span>
+                    <strong>{{column.name}}</strong>
+                </span>
             </ng-template>
             <ng-template let-value="value" ngx-datatable-cell-template>
                 {{value}}
@@ -18,8 +20,8 @@
         <ngx-datatable-column name="Nombre">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">
-          <strong>{{column.name}}</strong>
-        </span>
+                    <strong>{{column.name}}</strong>
+                </span>
             </ng-template>
             <ng-template let-value="value" ngx-datatable-cell-template>
                 {{value}}
@@ -47,8 +49,8 @@
         <ngx-datatable-column name="Rol">
             <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                 <span (click)="sort()">
-          <strong>{{column.name}}</strong>
-        </span>
+                    <strong>{{column.name}}</strong>
+                </span>
             </ng-template>
             <ng-template let-value="value" ngx-datatable-cell-template>
                 {{value | titlecase}}
@@ -60,12 +62,14 @@
                 <strong>Acciones</strong>
             </ng-template>
             <ng-template let-value="value" ngx-datatable-cell-template>
-                <button (click)="editarUsuario(value)" class="btn btn-success btn-icon-icon waves-effect mr-1 mb-1" placement="top" ngbTooltip="editar" container="body">
-          <i class="fas fa-pencil-alt"></i>
-        </button>
-                <button [disabled]="value === usuarioLogueadoId" (click)="eliminarUsuario(value)" class="btn btn-danger btn-icon-icon waves-effect mr-1 mb-1" placement="top" ngbTooltip="eliminar" container="body">
-          <i class="fas fa-trash-alt"></i>
-        </button>
+                <button (click)="editarUsuario(value)" class="btn btn-success btn-icon-icon waves-effect mr-1 mb-1" placement="top" ngbTooltip="editar"
+                    container="body">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button [disabled]="value === usuarioLogueadoId" (click)="eliminarUsuario(value)" class="btn btn-danger btn-icon-icon waves-effect mr-1 mb-1"
+                    placement="top" ngbTooltip="eliminar" container="body">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
             </ng-template>
         </ngx-datatable-column>
 
@@ -81,33 +85,37 @@
 
                     <div class="form-group">
                         <label for="txtUsuario">Usuario</label>
-                        <input [(ngModel)]="usuario.usuario" name="usuario" type="text" class="form-control" id="txtUsuario" placeholder="Ingresa tu usuario" required>
+                        <input [(ngModel)]="usuario.usuario" name="usuario" type="text" class="form-control" id="txtUsuario" placeholder="Ingresa tu usuario"
+                            required>
                     </div>
 
                     <div class="form-group">
                         <label for="txtNombre">Nombre</label>
-                        <input [(ngModel)]="usuario.nombre" name="nombre" type="text" class="form-control" id="txtNombre" placeholder="Ingresa tu nombre" #nombre="ngModel" [ngClass]="{'is-invalid': nombre?.errors?.required}" required>
+                        <input [(ngModel)]="usuario.nombre" name="nombre" type="text" class="form-control" id="txtNombre" placeholder="Ingresa tu nombre"
+                            #nombre="ngModel" [ngClass]="{'is-invalid': nombre?.errors?.required}" required>
                         <div class="invalid-feedback" *ngIf="nombre?.errors?.required">Ingresa el nombre</div>
                     </div>
 
                     <div class="form-group">
                         <label for="txtApellido">Apellido</label>
-                        <input [(ngModel)]="usuario.apellido" name="apellido" type="text" class="form-control" id="txtApellido" placeholder="Ingresa tu apellido" #apellido="ngModel" [ngClass]="{'is-invalid': apellido?.errors?.required}" required>
+                        <input [(ngModel)]="usuario.apellido" name="apellido" type="text" class="form-control" id="txtApellido" placeholder="Ingresa tu apellido"
+                            #apellido="ngModel" [ngClass]="{'is-invalid': apellido?.errors?.required}" required>
                         <div class="invalid-feedback" *ngIf="apellido?.errors?.required">Ingresa el apellido</div>
                     </div>
 
                     <div class="form-group">
                         <label for="txtEmail">email</label>
-                        <input [(ngModel)]="usuario.email" name="email" type="email" class="form-control" id="txtEmail" placeholder="Ingresa tu email" #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}">
+                        <input [(ngModel)]="usuario.email" name="email" type="email" class="form-control" id="txtEmail" placeholder="Ingresa tu email"
+                            #email="ngModel" email [ngClass]="{'is-invalid': email?.errors?.email}">
                         <div class="invalid-feedback" *ngIf="email?.errors?.email">email incorrecto</div>
                     </div>
 
                     <br>
                     <hr>
                     <button type="submit" class="btn btn-primary waves-effect waves-light">
-            <i class="far fa-save" aria-hidden="true"></i>
-            Guardar
-          </button>
+                        <i class="far fa-save" aria-hidden="true"></i>
+                        Guardar
+                    </button>
                 </div>
             </div>
         </div>
@@ -121,7 +129,8 @@
                     <div class="form-group">
                         <div *ngFor="let rol of roles">
                             <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="{{rol.id}}" value="{{rol.id}}" name="{{rol.id}}" [checked]="rol.activo" (change)="actualizarRoles($event.target)">
+                                <input type="checkbox" class="custom-control-input" id="{{rol.id}}" value="{{rol.id}}" name="{{rol.id}}" [checked]="rol.activo"
+                                    (change)="actualizarRoles($event.target)">
                                 <label class="custom-control-label" for="{{rol.id}}">{{ rol.nombre | titlecase }}</label>
                             </div>
                         </div>
