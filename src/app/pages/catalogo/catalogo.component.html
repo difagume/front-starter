@@ -1,46 +1,45 @@
-<div class="row">
-    <div class="col-sm-12">
-        <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
+<div class="col-sm-12">
+    <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
 
-        <div class="card">
-            <div class="card-header">
-                <button type="submit" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    Agregar
-                </button>
-            </div>
-            <div class="card-body">
-                <small>
-                    <a href="javascript:void(0)" (click)="table.rowDetail.expandAllRows()">Expandir todo</a> |
-                    <a href="javascript:void(0)" (click)="table.rowDetail.collapseAllRows()">Contraer todo</a>
-                </small>
-                <ngx-datatable #myTable class='material expandable' [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'"
-                    [messages]="{ emptyMessage: 'No hay artículos', totalMessage: 'artículos' }" [limit]="7" [rows]='articulo$ | async'>
-                    <!-- [columns]="columns" -->
-                    <!-- Row Detail Template -->
-                    <ngx-datatable-row-detail [rowHeight]="100" #myDetailRow>
-                        <ng-template let-row="row" let-expanded="detalle" ngx-datatable-row-detail-template>
-                            <div style="padding-left:35px;" *ngIf="row.productos.length > 0">
-                                <div>
-                                    <strong>Productos</strong>
-                                </div>
-                                <div *ngFor="let p of row.productos">
-                                    <strong>{{p.producto}}</strong> / cantidad:
-                                    <strong>{{p.cantidad}}</strong>
-                                </div>
+    <div class="card">
+        <div class="card-header">
+            <button type="submit" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Agregar
+            </button>
+        </div>
+        <div class="card-body">
+            <small>
+                <a href="javascript:void(0)" (click)="table.rowDetail.expandAllRows()">Expandir todo</a> |
+                <a href="javascript:void(0)" (click)="table.rowDetail.collapseAllRows()">Contraer todo</a>
+            </small>
+            <ngx-datatable #myTable class='material expandable' [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'"
+                [messages]="{ emptyMessage: 'No hay artículos', totalMessage: 'artículos' }" [limit]="7" [rows]='articulos'>
+                <!-- [columns]="columns" -->
+                <!-- Row Detail Template -->
+                <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
+                    <ng-template let-row="row" let-expanded="detalle" ngx-datatable-row-detail-template>
+                        <div style="padding-left:35px;" *ngIf="row.productos?.length > 0">
+                            <div>
+                                <strong>Productos</strong>
                             </div>
-                        </ng-template>
-                    </ngx-datatable-row-detail>
-                    <!-- Column Templates -->
-                    <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
-                        <ng-template let-row="row" let-expanded="detalle" ngx-datatable-cell-template>
-                            <a href="javascript:void(0)" [class.datatable-icon-right]="!detalle" [class.datatable-icon-down]="detalle" title="Mostrar/ocultar detalle del artículo"
-                                (click)="toggleExpandRow(row)">
-                            </a>
-                        </ng-template>
-                    </ngx-datatable-column>
+                            <div *ngFor="let p of row.productos">
+                                <strong>{{p.producto}}</strong> / cantidad:
+                                <strong>{{p.cantidad}}</strong>
+                            </div>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-row-detail>
+                <!-- Column Templates -->
+                <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+                    <ng-template let-row="row" let-expanded="detalle" ngx-datatable-cell-template>
+                        <a href="javascript:void(0)" [class.datatable-icon-right]="!detalle" [class.datatable-icon-down]="detalle" title="Mostrar/ocultar detalle del artículo"
+                            (click)="toggleExpandRow(row)">
+                        </a>
+                    </ng-template>
+                </ngx-datatable-column>
 
-                    <!-- <ngx-datatable-column name="nombre">
+                <!-- <ngx-datatable-column name="nombre">
                         <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                             <span (click)="sort()">
                                 <strong>{{column.name}}</strong>
@@ -51,14 +50,14 @@
                         </ng-template>
                     </ngx-datatable-column> -->
 
-                    <ngx-datatable-column prop="nombre" name="Artículo">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            <strong>{{value}}</strong>
-                            <!-- <strong [innerHTML]="row['nombre']"></strong> -->
-                        </ng-template>
-                    </ngx-datatable-column>
+                <ngx-datatable-column prop="nombre" name="Artículo">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        <strong>{{value}}</strong>
+                        <!-- <strong [innerHTML]="row['nombre']"></strong> -->
+                    </ng-template>
+                </ngx-datatable-column>
 
-                    <!-- <ngx-datatable-column name="Menu">
+                <!-- <ngx-datatable-column name="Menu">
                         <ng-template let-column="column" let-sort="sortFn" ngx-datatable-header-template>
                             <span (click)="sort()">
                                 <strong>{{column.name}}</strong>
@@ -69,65 +68,63 @@
                         </ng-template>
                     </ngx-datatable-column> -->
 
-                    <ngx-datatable-column prop="menu" name="Menú">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            {{value}}
-                        </ng-template>
-                    </ngx-datatable-column>
+                <ngx-datatable-column prop="menu" name="Menú">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
 
-                    <ngx-datatable-column name="Valor">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            {{value | currency}}
-                        </ng-template>
-                    </ngx-datatable-column>
+                <ngx-datatable-column name="Valor">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        {{value | currency}}
+                    </ng-template>
+                </ngx-datatable-column>
 
-                    <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
-                        <ng-template let-value="value" ngx-datatable-cell-template>
-                            {{value}}
-                        </ng-template>
-                    </ngx-datatable-column>
-                </ngx-datatable>
-            </div>
+                <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
+                    <ng-template let-value="value" ngx-datatable-cell-template>
+                        {{value}}
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
         </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-header">Artículo</div>
-            <div class="card-body">
-                <form #f="ngForm" ngNativeValidate (ngSubmit)="f.form.valid && guardarArticulo()">
-                    <div class="form-group row">
-                        <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
-                        <div class="col-10">
-                            <select class="form-control" [(ngModel)]="articulo.id_menu" name="menu" #menu="ngModel" [ngClass]="{'is-invalid': menu.invalid && (menu.dirty || menu.touched)}"
-                                required>
-                                <!-- (change)="cambiaMenu( $event.target.value )" -->
-                                <option selected disabled value="null">Seleccione...</option>
-                                <option *ngFor="let menu of menu$ | async" [value]="menu.id">{{ menu.nombre }}</option>
-                            </select>
-                            <div class="invalid-feedback" *ngIf="menu.invalid && (menu.dirty || menu.touched)">Selecciona el menú</div>
-                        </div>
+<div class="col-sm-12">
+    <div class="card">
+        <div class="card-header">Artículo</div>
+        <div class="card-body">
+            <form #f="ngForm" ngNativeValidate (ngSubmit)="f.form.valid && guardarArticulo()">
+                <div class="form-group row">
+                    <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
+                    <div class="col-10">
+                        <select class="form-control" [(ngModel)]="articulo.id_menu" name="menu" #menu="ngModel" [ngClass]="{'is-invalid': menu.invalid && (menu.dirty || menu.touched)}"
+                            required>
+                            <!-- (change)="cambiaMenu( $event.target.value )" -->
+                            <option selected disabled value="null">Seleccione...</option>
+                            <option *ngFor="let menu of menu$ | async" [value]="menu.id">{{ menu.nombre }}</option>
+                        </select>
+                        <div class="invalid-feedback" *ngIf="menu.invalid && (menu.dirty || menu.touched)">Selecciona el menú</div>
                     </div>
+                </div>
 
-                    <div class="form-group row">
-                        <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
-                        <div class="col-10">
-                            <input class="form-control" type="text" id="txtArticulo" [(ngModel)]="articulo.nombre" name="articuloNombre" placeholder="Ingresa el nombre del artículo"
-                                #articuloNombre="ngModel" [ngClass]="{'is-invalid': articuloNombre?.errors?.required && (articuloNombre.dirty || articuloNombre.touched)}"
-                                autocomplete="off" required>
-                            <div class="invalid-feedback" *ngIf="articuloNombre?.errors?.required && (articuloNombre.dirty || articuloNombre.touched)">Ingresa el nombre del artículo</div>
-                        </div>
+                <div class="form-group row">
+                    <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
+                    <div class="col-10">
+                        <input class="form-control" type="text" id="txtArticulo" [(ngModel)]="articulo.nombre" name="articuloNombre" placeholder="Ingresa el nombre del artículo"
+                            #articuloNombre="ngModel" [ngClass]="{'is-invalid': articuloNombre?.errors?.required && (articuloNombre.dirty || articuloNombre.touched)}"
+                            autocomplete="off" required>
+                        <div class="invalid-feedback" *ngIf="articuloNombre?.errors?.required && (articuloNombre.dirty || articuloNombre.touched)">Ingresa el nombre del artículo</div>
                     </div>
+                </div>
 
-                    <div class="form-group row">
-                        <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
-                        <ng-select class="col-10" id="ngsProductos" [items]="producto$ | async" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
-                            bindLabel="nombre" placeholder="Seleccione los productos..." [(ngModel)]="productosSeleccionados"
-                            name="articuloProductos" notFoundText="No se encontró el producto" (change)="onChange($event)" required>
+                <div class="form-group row">
+                    <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
+                    <ng-select class="col-10" id="ngsProductos" [items]="producto$ | async" [multiple]="true" [closeOnSelect]="false" [hideSelected]="true"
+                        bindLabel="nombre" placeholder="Seleccione los productos..." [(ngModel)]="productosSeleccionados" name="articuloProductos"
+                        notFoundText="No se encontró el producto" (change)="onChange($event)" required>
 
-                            <!-- <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <!-- <ng-template ng-option-tmp let-item="item" let-index="index">
                                 <div style="margin: 5px 0;" class="card">
                                     <div class="card-body">
                                         <p class="card-text">
@@ -146,101 +143,100 @@
                                 </div>
                             </ng-template> -->
 
-                        </ng-select>
+                    </ng-select>
+                </div>
+
+                <div *ngIf="productosSeleccionados.length > 0">
+                    <div class="form-group row">
+                        <label for="productosSel" class="col-2 col-form-label">Cantidad por producto:</label>
+
+                        <div class="table-responsive col-10">
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Producto
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Valor unit.
+                                        </th>
+                                        <th>
+                                            Valor tot.
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                            <strong>{{ valorTotal | currency }}</strong>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                    <tr *ngFor="let producto of productosSeleccionados">
+                                        <td>
+                                            <span>{{ producto.nombre }}</span>
+                                        </td>
+                                        <td>
+                                            <input class="form-control col-md-3 mb-2" type="number" min="1" max="20" [(ngModel)]="producto.cantidad" [ngModelOptions]="{standalone: true}"
+                                                (change)="cambiaCantidad($event)" #productoCantidad="ngModel" autocomplete="off"
+                                                required>
+                                            <div class="invalid-feedback" *ngIf="productoCantidad?.errors?.required">Ingresa la cantidad del producto</div>
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ producto.valor | currency }}
+                                        </td>
+                                        <td class="align-middle">
+                                            {{ producto.valor * producto.cantidad | currency }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div *ngIf="productosSeleccionados.length > 0">
-                        <div class="form-group row">
-                            <label for="productosSel" class="col-2 col-form-label">Cantidad por producto:</label>
-
-                            <div class="table-responsive col-10">
-                                <table class="table mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                Producto
-                                            </th>
-                                            <th>
-                                                Cantidad
-                                            </th>
-                                            <th>
-                                                Valor unit.
-                                            </th>
-                                            <th>
-                                                Valor tot.
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <strong>{{ valorTotal | currency }}</strong>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        <tr *ngFor="let producto of productosSeleccionados">
-                                            <td>
-                                                <span>{{ producto.nombre }}</span>
-                                            </td>
-                                            <td>
-                                                <input class="form-control col-md-3 mb-2" type="number" min="1" max="20" [(ngModel)]="producto.cantidad" [ngModelOptions]="{standalone: true}"
-                                                    (change)="cambiaCantidad($event)" #productoCantidad="ngModel" autocomplete="off"
-                                                    required>
-                                                <div class="invalid-feedback" *ngIf="productoCantidad?.errors?.required">Ingresa la cantidad del producto</div>
-                                            </td>
-                                            <td class="align-middle">
-                                                {{ producto.valor | currency }}
-                                            </td>
-                                            <td class="align-middle">
-                                                {{ producto.valor * producto.cantidad | currency }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Precio de venta:</label>
+                        <div class="col-2">
+                            <input class="form-control" type="number" min="1" [(ngModel)]="articulo.valor" (change)="cambiaPVP($event)" name="articuloValor"
+                                #articuloValor="ngModel" [ngClass]="{'is-invalid': articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)}"
+                                required>
+                            <div class="invalid-feedback" *ngIf="articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)">Ingresa la cantidad del producto</div>
                         </div>
-
-                        <div class="form-group row">
-                            <label class="col-2 col-form-label">Precio de venta:</label>
-                            <div class="col-2">
-                                <input class="form-control" type="number" min="1" [(ngModel)]="articulo.valor" (change)="cambiaPVP($event)" name="articuloValor"
-                                    #articuloValor="ngModel" [ngClass]="{'is-invalid': articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)}"
-                                    required>
-                                <div class="invalid-feedback" *ngIf="articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)">Ingresa la cantidad del producto</div>
-                            </div>
-                            <div class="col-4 col-form-label">
-                                <h5 class="m-0" [ngClass]="{'text-danger':ganancia < 0, 'text-success':ganancia > 0, 'text-info':ganancia === 0}">Ganancia por plato: {{ ganancia | currency }}</h5>
-                                <!-- <span class="badge badge-info">Ganancia por plato: {{ ganancia | currency }}</span> -->
-                                <!-- <label class="col-form-label text-muted">Ganancia por plato: {{ ganancia | currency }}</label> -->
-                            </div>
+                        <div class="col-4 col-form-label">
+                            <h5 class="m-0" [ngClass]="{'text-danger':ganancia < 0, 'text-success':ganancia > 0, 'text-info':ganancia === 0}">Ganancia por plato: {{ ganancia | currency }}</h5>
+                            <!-- <span class="badge badge-info">Ganancia por plato: {{ ganancia | currency }}</span> -->
+                            <!-- <label class="col-form-label text-muted">Ganancia por plato: {{ ganancia | currency }}</label> -->
                         </div>
-
-                        <div class="form-group row">
-                            <label class="col-2 col-form-label">Tiempo de preparación:</label>
-                            <div class="col-2">
-                                <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempo_preparacion" name="articuloTiempo"
-                                    #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
-                                    required>
-                                <div class="invalid-feedback" *ngIf="articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)">Ingresa la cantidad del producto</div>
-                                <!-- <ngb-timepicker [(ngModel)]="articulo.tiempo_preparacion" [ngModelOptions]="{standalone: true}"></ngb-timepicker> -->
-                                <!-- <button class="btn mb-3 mt-3" style="opacity: 0;">&nbsp;</button> -->
-                                <!-- <pre>Selected time: {{articulo.tiempo_preparacion | json}}</pre> -->
-                            </div>
-                        </div>
-
-                        <hr>
-                        <label class="col-2 col-form-label"></label>
-                        <button type="submit" class="btn col-2 btn-primary waves-effect waves-light">
-                            <i class="far fa-save" aria-hidden="true"></i>
-                            Guardar
-                        </button>
                     </div>
-                </form>
-            </div>
+
+                    <div class="form-group row">
+                        <label class="col-2 col-form-label">Tiempo de preparación:</label>
+                        <div class="col-2">
+                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempo_preparacion" name="articuloTiempo"
+                                #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
+                                required>
+                            <div class="invalid-feedback" *ngIf="articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)">Ingresa la cantidad del producto</div>
+                            <!-- <ngb-timepicker [(ngModel)]="articulo.tiempo_preparacion" [ngModelOptions]="{standalone: true}"></ngb-timepicker> -->
+                            <!-- <button class="btn mb-3 mt-3" style="opacity: 0;">&nbsp;</button> -->
+                            <!-- <pre>Selected time: {{articulo.tiempo_preparacion | json}}</pre> -->
+                        </div>
+                    </div>
+
+                    <hr>
+                    <label class="col-2 col-form-label"></label>
+                    <button type="submit" class="btn col-2 btn-primary waves-effect waves-light">
+                        <i class="far fa-save" aria-hidden="true"></i>
+                        Guardar
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

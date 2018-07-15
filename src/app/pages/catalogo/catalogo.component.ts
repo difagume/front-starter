@@ -1,8 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Articulo, ArticuloDetalle, Menu, Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
-import { map } from '../../../../node_modules/rxjs/operators';
 
 declare let swal: any;
 
@@ -15,14 +14,17 @@ export class CatalogoComponent implements OnInit {
 
   @ViewChild('myTable') table: any;
 
+  articulos = [];
+  temp = [];
   menu$: Observable<Menu[]>;
   producto$: Observable<Producto[]>;
   productosSeleccionados: Producto[] = [];
-  articulo$: Observable<any[]>;
+  // articulo$: Observable<any[]>;
   valorTotal = 0;
   ganancia = 0;
   articulo = new Articulo(null, null, 0, true, null, null, []);
   detalle: any = {};
+  cargando = false;
   /* columns = [
     { prop: 'nombre' },
     { name: 'Menu' },
@@ -30,29 +32,42 @@ export class CatalogoComponent implements OnInit {
     { name: 'tiempo_preparacion' }
   ]; */
 
-  constructor(private catalogoService: CatalogoService) { }
+  constructor(
+    private catalogoService: CatalogoService,
+    private ref: ChangeDetectorRef
+  ) { }
 
   ngOnInit() {
-    this.articulo$ = this.catalogoService.obtenerArticulos();
+    this.obtenerArticulos();
+    // this.articulo$ = this.catalogoService.obtenerArticulos();
     this.producto$ = this.catalogoService.obtenerProductos();
     this.menu$ = this.catalogoService.obtenerMenu();
   }
 
+  obtenerArticulos() {
+    this.cargando = true;
+    this.catalogoService.obtenerArticulos()
+      .subscribe((articulos: Articulo[]) => {
+        this.temp = [...articulos];
+        this.articulos = articulos;
+        this.cargando = false;
+
+        this.ref.detectChanges();
+      }, error => { });
+  }
+
   /**
-   * Función que filtra la tabla
-   * @param event
-   */
+  * Función que filtra la tabla
+  * @param event
+  */
   updateFilter(event) {
     const val = event.target.value;
-    console.log('entra', val);
     // filter our data
-    return this.articulo$.pipe(
-      map(articulos => {
-        console.log('art:', articulos);
-        const temp = articulos.filter(d => {
-          return d.articulo.toLowerCase().indexOf(val) !== -1 || !val;
-        });
-      }));
+    const temp = this.temp.filter(d => {
+      return d.nombre.toLowerCase().indexOf(val) !== -1 || !val;
+    });
+    // update the data
+    this.articulos = temp;
   }
 
   valTotal() {
@@ -100,15 +115,17 @@ export class CatalogoComponent implements OnInit {
       this.articulo.articuloDetalle.push(articuloDetalle);
     });
 
-    console.log('articulo: ', this.articulo);
     this.catalogoService.crearArticulo(this.articulo)
       .subscribe((data: any) => {
         swal(data.name, data.message, 'success');
+
+        // Actualizo listado de articulos
+        this.obtenerArticulos();
       }, error => { });
   }
 
   toggleExpandRow(row) {
-    console.log('Toggled Expand Row!', row);
+    // console.log('Toggled Expand Row!', row);
     this.table.rowDetail.toggleExpandRow(row);
   }
 }
