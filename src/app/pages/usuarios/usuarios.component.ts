@@ -16,7 +16,7 @@ const log = new Logger('UsuariosComponent');
 })
 export class UsuariosComponent implements OnInit {
 
-  data = [];
+  usuarios = [];
   temp = [];
   usuario: Usuario;
   usuarioEliminar: Usuario;
@@ -50,24 +50,39 @@ export class UsuariosComponent implements OnInit {
         // cache our list
         this.temp = [...usuarios];
         // push our inital complete list
-        this.data = usuarios;
+        this.usuarios = usuarios;
         this.cargando = false;
       }, error => { });
   }
 
   /**
-   * Función que filtra la tabla
+   * Filtro para todas las columnas
    * @param event
    */
   updateFilter(event) {
+    const val = event.target.value;
+
+    const temp = this.temp.filter(
+      item => Object.keys(item).some(
+        k => item[k] != null && item[k].toString().toLowerCase()
+          .includes(val.toLowerCase()))
+    );
+    this.usuarios = temp;
+  }
+
+  /**
+   * Función que filtra una columna de la tabla
+   * @param event
+   */
+  /* updateFilter(event) {
     const val = event.target.value;
     // filter our data
     const temp = this.temp.filter(d => {
       return d.usuario.toLowerCase().indexOf(val) !== -1 || !val;
     });
     // update the data
-    this.data = temp;
-  }
+    this.usuarios = temp;
+  } */
 
   /**
    * Función que se llama al hacer clic en el botón de editar un usuario
@@ -75,7 +90,7 @@ export class UsuariosComponent implements OnInit {
    */
   editarUsuario(id) {
     // Seteo usuario seleccionado
-    this.temp = [...this.data];
+    this.temp = [...this.usuarios];
     this.usuario = this.temp.find(usu => usu.id === id);
     this.usuarioIndex = this.temp.indexOf(this.usuario);
 
@@ -93,7 +108,7 @@ export class UsuariosComponent implements OnInit {
    */
   eliminarUsuario(id) {
     this.usuario = null;
-    this.temp = [...this.data];
+    this.temp = [...this.usuarios];
     this.usuarioEliminar = this.temp.find(usu => usu.id === id);
     this.usuarioIndex = this.temp.indexOf(this.usuarioEliminar);
     swal({
@@ -108,7 +123,7 @@ export class UsuariosComponent implements OnInit {
           this.usuarioService.eliminarUsuario(this.usuarioEliminar)
             .subscribe((data: any) => {
               this.temp.splice(this.usuarioIndex, 1);
-              this.data = [...this.temp];
+              this.usuarios = [...this.temp];
               swal(data.name, data.message, 'success');
             }, error => { });
         }
@@ -120,7 +135,7 @@ export class UsuariosComponent implements OnInit {
    */
   actualizarUsuario() {
     this.temp.splice(this.usuarioIndex, 1, this.usuario);
-    this.data = [...this.temp];
+    this.usuarios = [...this.temp];
     // Filtro los roles seleccionados
     const rolesActivos = this.roles.filter(rol => rol.activo);
     // Seteo roles en usuario

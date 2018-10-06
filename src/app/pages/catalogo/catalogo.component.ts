@@ -23,14 +23,15 @@ export class CatalogoComponent implements OnInit {
   valorTotal = 0;
   ganancia = 0;
   articulo = new Articulo(null, null, 0, true, null, null, []);
+  articuloIndex;
   detalle: any = {};
   cargando = false;
-  /* columns = [
-    { prop: 'nombre' },
-    { name: 'Menu' },
-    { name: 'Valor' },
-    { name: 'tiempo_preparacion' }
-  ]; */
+  /*  columns = [
+     { prop: 'nombre' },
+     { name: 'menu' },
+     { name: 'valor' },
+     { name: 'tiempo_preparacion' }
+   ]; */
 
   constructor(
     private catalogoService: CatalogoService,
@@ -57,16 +58,30 @@ export class CatalogoComponent implements OnInit {
   }
 
   /**
-  * Función que filtra la tabla
+  * Función que filtra una columna de la tabla
   * @param event
   */
-  updateFilter(event) {
+  /* updateFilter(event) {
     const val = event.target.value;
     // filter our data
     const temp = this.temp.filter(d => {
       return d.nombre.toLowerCase().indexOf(val) !== -1 || !val;
     });
     // update the data
+    this.articulos = temp;
+  } */
+
+  /**
+   * Filtro para todas las columnas
+   */
+  updateFilter(event) {
+    const val = event.target.value;
+
+    const temp = this.temp.filter(
+      item => Object.keys(item).some(
+        k => item[k] != null && item[k].toString().toLowerCase()
+          .includes(val.toLowerCase()))
+    );
     this.articulos = temp;
   }
 
@@ -103,6 +118,32 @@ export class CatalogoComponent implements OnInit {
 
   cambiaPVP() {
     this.gananciaPorPlato();
+  }
+
+  /**
+   * Función que se llama al hacer clic en el botón de editar un articulo
+   * @param id del articulo seleccionado para ser editado
+   */
+  editarArticulo(id) {
+    // Seteo articulo seleccionado
+    this.temp = [...this.articulos];
+    this.articulo = this.temp.find(art => art.id === id);
+    // this.productosSeleccionados = this.articulo.productos;
+    console.log('artSelec:', this.articulo);
+    this.articuloIndex = this.temp.indexOf(this.articulo);
+
+    // Seteo roles del usuario
+    // this.setearRolesUsuario();
+
+    setTimeout(() => {
+      this.scrollTo('editar');
+    }, 250);
+  }
+
+  scrollTo(className: string): void {
+    const elementList = document.querySelectorAll('.' + className);
+    const element = elementList[0] as HTMLElement;
+    element.scrollIntoView({ behavior: 'smooth' });
   }
 
   // guardarArticulo(forma: NgForm) {

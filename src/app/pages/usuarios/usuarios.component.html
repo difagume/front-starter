@@ -1,8 +1,8 @@
 <div class="col-sm-12">
-    <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar la columna de usuario..." required (keyup)='updateFilter($event)'>
+    <input type="text" class="form-control mb-3" placeholder="Escribe aquí para filtrar..." required (keyup)='updateFilter($event)'>
 
     <!-- [selectionType]="'single'" [selected]="usuario" (select)='onSelect($event)' -->
-    <ngx-datatable [columns]="columns" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'" [rows]='data'
+    <ngx-datatable [columns]="columns" [columnMode]="'force'" [headerHeight]="40" [footerHeight]="50" [rowHeight]="'auto'" [rows]='usuarios'
         [messages]="{ emptyMessage: 'No hay usuarios', totalMessage: 'usuarios' }" [limit]="7" [loadingIndicator]="cargando"
         [scrollbarH]="true">
 
