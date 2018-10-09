@@ -1,10 +1,11 @@
 export class ArticuloDetalle {
-
-    constructor(
-        public id: number,
-        public id_articulo: number,
-        public id_producto: number,
-        public cantidad: number,
-        public activo: boolean
-    ) { }
+    public id: number;
+    public idArticulo: number;
+    public idProducto: number;
+    public cantidad: number;
+    public activo: boolean;
+    constructor(idProducto, cantidad) {
+        this.idProducto = idProducto;
+        this.cantidad = cantidad;
+    }
 }

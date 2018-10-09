@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
         log.debug(`${credentials.usuario} inició sesión exitosamente`);
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
-        // log.debug('Login error: ', error);
+        // log.debug('Login error --> ', error);
         // error.interceptor actua
       });
   }

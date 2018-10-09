@@ -1,12 +1,9 @@
 
-import { throwError as observableThrowError, Observable } from 'rxjs';
-
-import { catchError } from 'rxjs/operators';
-import { HTTP_INTERCEPTORS, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-
-
+import { Observable, throwError as observableThrowError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { AuthenticationService, Logger } from '..';
 
 declare let swal: any;
@@ -23,11 +20,12 @@ export class ErrorInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // extract error message from http body if an error occurs
         return next.handle(request).pipe(catchError(errorResponse => {
+
             log.debug(errorResponse.error);
 
             if (!navigator.onLine) {
                 // Handle offline error
-                swal('Aviso', 'No tiene conexión de Internet', 'error');
+                swal('Aviso 😮', 'No tiene conexión de Internet', 'error');
             } else {
                 if (errorResponse.error.sesionCaducada) {
                     swal(errorResponse.error.error.name, errorResponse.error.error.message, 'error');
@@ -35,8 +33,10 @@ export class ErrorInterceptor implements HttpInterceptor {
                 } else
                     if (errorResponse.error.error) {
                         swal(errorResponse.error.error.name, errorResponse.error.error.message, 'error');
-                    } else {
+                    } else if (errorResponse.error.name) {
                         swal(errorResponse.error.name, errorResponse.error.message, 'error');
+                    } else {
+                        swal('Aviso 😮', 'No tiene conexión al servidor', 'error');
                     }
             }
 

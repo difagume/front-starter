@@ -20,12 +20,13 @@
                 <!-- Row Detail Template -->
                 <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
                     <ng-template let-row="row" let-expanded="detalle" ngx-datatable-row-detail-template>
-                        <div style="padding-left:35px;" *ngIf="row.productos?.length > 0">
+
+                        <div style="padding-left:35px;" *ngIf="row.articuloDetalle.nodes.length > 0">
                             <div>
                                 <strong>Productos</strong>
                             </div>
-                            <div *ngFor="let p of row.productos">
-                                <strong>{{p.producto}}</strong> / cantidad:
+                            <div *ngFor="let p of row.articuloDetalle.nodes">
+                                <strong>{{p.producto.nombre}}</strong> / cantidad:
                                 <strong>{{p.cantidad}}</strong>
                             </div>
                         </div>
@@ -70,7 +71,7 @@
                         </ng-template>
                     </ngx-datatable-column> -->
 
-                <ngx-datatable-column prop="menu" name="Menú">
+                <ngx-datatable-column prop="articulo_menu" name="Menú">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
@@ -82,7 +83,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
+                <ngx-datatable-column prop="tiempoPreparacion" name="Tiempo de preparación">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
@@ -105,6 +106,7 @@
                     </ng-template>
                 </ngx-datatable-column>
             </ngx-datatable>
+
         </div>
     </div>
 </div>
@@ -117,11 +119,12 @@
                 <div class="form-group row">
                     <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
                     <div class="col-10">
-                        <select class="form-control" [(ngModel)]="articulo.id_menu" name="menu" #menu="ngModel"
+                        <select class="form-control" [(ngModel)]="articulo.idMenu" name="menu" #menu="ngModel"
                             [ngClass]="{'is-invalid': menu.invalid && (menu.dirty || menu.touched)}" required>
                             <!-- (change)="cambiaMenu( $event.target.value )" -->
                             <option selected disabled value="null">Seleccione...</option>
-                            <option *ngFor="let menu of menu$ | async" [value]="menu.id">{{ menu.nombre }}</option>
+                            <option *ngFor="let menu of menus | async" [value]="menu.id">{{
+                                menu.nombre }}</option>
                         </select>
                         <div class="invalid-feedback" *ngIf="menu.invalid && (menu.dirty || menu.touched)">Selecciona
                             el menú</div>
@@ -141,7 +144,7 @@
 
                 <div class="form-group row">
                     <label for="ngsProductos" class="col-2 col-form-label">Productos del artículo:</label>
-                    <ng-select class="col-10" id="ngsProductos" [items]="producto$ | async" [multiple]="true"
+                    <ng-select class="col-10" id="ngsProductos" [items]="productos | async" [multiple]="true"
                         [closeOnSelect]="false" [hideSelected]="true" bindLabel="nombre" placeholder="Seleccione los productos..."
                         [(ngModel)]="productosSeleccionados" name="articuloProductos" notFoundText="No se encontró el producto"
                         (change)="onChange($event)" required>
@@ -228,7 +231,7 @@
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Precio de venta:</label>
                         <div class="col-2">
-                            <input class="form-control" type="number" min="1" [(ngModel)]="articulo.valor" (change)="cambiaPVP($event)"
+                            <input currencyMask class="form-control" min="1" [(ngModel)]="articulo.valor" (keyup)="keyUp.next($event)"
                                 name="articuloValor" #articuloValor="ngModel" [ngClass]="{'is-invalid': articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)}"
                                 required>
                             <div class="invalid-feedback" *ngIf="articuloValor?.errors?.required && (articuloValor.dirty || articuloValor.touched)">Ingresa
@@ -245,7 +248,7 @@
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Tiempo de preparación:</label>
                         <div class="col-2">
-                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempo_preparacion"
+                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempoPreparacion"
                                 name="articuloTiempo" #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
                                 required>
                             <div class="invalid-feedback" *ngIf="articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)">Ingresa

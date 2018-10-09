@@ -6,8 +6,8 @@ export class Articulo {
         public nombre: string,
         public valor: number,
         public activo: boolean,
-        public tiempo_preparacion: string,
-        public id_menu: number,
+        public tiempoPreparacion: string,
+        public idMenu: number,
         public articuloDetalle: ArticuloDetalle[]
     ) { }
 }

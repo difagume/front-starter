@@ -1,1 +1,13 @@
 <p>Dashboard</p>
+
+<div *ngIf="loading">
+    Cargando...
+</div>
+<div *ngIf="error">
+    Error :(
+</div>
+<div *ngIf="productos">
+    <div *ngFor="let producto of productos">
+        <p>{{producto.nombre}}: {{producto.valor}}</p>
+    </div>
+</div>

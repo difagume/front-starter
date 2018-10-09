@@ -57,3 +57,9 @@ https://github.com/nileshpatel17/ng-multiselect-dropdown
 #Refrescar front
 en el constructor llamar a: private ref: ChangeDetectorRef
 en el método llamar a: this.ref.detectChanges();
+
+# Apolo angular
+https://www.apollographql.com/docs/angular/basics/setup.html
+
+# Currency mask
+https://www.npmjs.com/package/ngx-currency

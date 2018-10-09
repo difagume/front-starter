@@ -1,8 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Articulo, ArticuloDetalle, Menu, Producto } from '../../models';
+import { Observable, of, Subject } from 'rxjs';
+import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
+import { Articulo, ArticuloDetalle, Producto, Menu } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
-
 declare let swal: any;
 
 @Component({
@@ -14,10 +14,13 @@ export class CatalogoComponent implements OnInit {
 
   @ViewChild('myTable') table: any;
 
-  articulos = [];
+  // articulos = [];
+  articulos: any[];
   temp = [];
-  menu$: Observable<Menu[]>;
-  producto$: Observable<Producto[]>;
+  // menu$: Observable<Menu[]>;
+  menus: Observable<any>;
+  // producto$: Observable<Producto[]>;
+  productos: Observable<any>;
   productosSeleccionados: Producto[] = [];
   // articulo$: Observable<any[]>;
   valorTotal = 0;
@@ -26,6 +29,8 @@ export class CatalogoComponent implements OnInit {
   articuloIndex;
   detalle: any = {};
   cargando = false;
+  error: any;
+  public keyUp = new Subject<void>();
   /*  columns = [
      { prop: 'nombre' },
      { name: 'menu' },
@@ -36,25 +41,55 @@ export class CatalogoComponent implements OnInit {
   constructor(
     private catalogoService: CatalogoService,
     private ref: ChangeDetectorRef
-  ) { }
-
-  ngOnInit() {
-    this.obtenerArticulos();
-    // this.articulo$ = this.catalogoService.obtenerArticulos();
-    this.producto$ = this.catalogoService.obtenerProductos();
-    this.menu$ = this.catalogoService.obtenerMenu();
+  ) {
+    this.keyUp.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      flatMap(search => of(search).pipe(delay(300)))
+    ).subscribe(() => this.cambiaPVP());
   }
 
-  obtenerArticulos() {
+  ngOnInit() {
+    // this.obtenerArticulos();
+    this.obtenerArticulos();
+    // this.articulo$ = this.catalogoService.obtenerArticulos();
+    // this.producto$ = this.catalogoService.obtenerProductos();
+    this.productos = this.catalogoService.allProductos();
+    // this.menu$ = this.catalogoService.obtenerMenu();
+    this.menus = this.catalogoService.allMenus();
+  }
+
+  /* obtenerArticulos() {
     this.cargando = true;
     this.catalogoService.obtenerArticulos()
       .subscribe((articulos: Articulo[]) => {
         this.temp = [...articulos];
         this.articulos = articulos;
         this.cargando = false;
-
         this.ref.detectChanges();
       }, error => { });
+  } */
+
+  obtenerArticulos() {
+    this.catalogoService.allArticulos()
+      .valueChanges.subscribe(({ data, loading }) => {
+        this.cargando = loading;
+        this.error = data['error'];
+
+        // Agrego una propiedad al articulo para tener el nombre del menu
+        data['allArticulos'].nodes.map(art => {
+          art['articulo_menu'] = art.menu.nombre;
+        });
+
+        this.temp = [...data['allArticulos'].nodes];
+        this.articulos = data && data['allArticulos'].nodes;
+
+        console.log('ARTICULOS: ', this.articulos);
+
+      }, (err) => {
+        this.error = err;
+        this.cargando = false;
+      });
   }
 
   /**
@@ -152,17 +187,27 @@ export class CatalogoComponent implements OnInit {
     this.articulo.articuloDetalle = [];
     this.productosSeleccionados.forEach(producto => {
       let articuloDetalle: ArticuloDetalle;
-      articuloDetalle = new ArticuloDetalle(null, null, producto.id, producto.cantidad, true);
+      articuloDetalle = new ArticuloDetalle(producto.id, producto.cantidad);
       this.articulo.articuloDetalle.push(articuloDetalle);
     });
 
-    this.catalogoService.crearArticulo(this.articulo)
+    this.catalogoService.createArticulo(this.articulo)
+      .subscribe(({ data }) => {
+        // console.log(data['createArticulo'].articulo);
+        swal('Artículo creado 😏',
+          `El artículo: ${data['createArticulo'].articulo.nombre} ha sido creado`,
+          'success');
+      }, (error) => {
+        console.log('there was an error sending the query', error);
+      });
+
+    /* this.catalogoService.crearArticulo(this.articulo)
       .subscribe((data: any) => {
         swal(data.name, data.message, 'success');
 
         // Actualizo listado de articulos
-        this.obtenerArticulos();
-      }, error => { });
+        // this.obtenerArticulos2();
+      }, error => { }); */
   }
 
   toggleExpandRow(row) {
