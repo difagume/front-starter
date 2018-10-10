@@ -75,7 +75,8 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [
     AuthenticationService,
     AuthenticationGuard,
-    ErrorInterceptorProvider
+    ErrorInterceptorProvider,
+    // JwtInterceptorProvider
   ],
   bootstrap: [AppComponent]
 })

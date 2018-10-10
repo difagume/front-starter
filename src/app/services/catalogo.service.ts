@@ -80,6 +80,15 @@ export class CatalogoService {
         return res.articulos;
       }));
   } */
+
+  eliminarArticulo(articulo: Articulo) {
+    return this.apollo.mutate({
+      mutation: deleteArticulo,
+      variables: {
+        idArticulo: articulo.id
+      }
+    });
+  }
 }
 
 const allArticulos = gql`
@@ -142,7 +151,7 @@ const createArticulo = gql`
     $articulovalor: BigFloat!
     $articuloIdMenu: BigInt!
     $articuloTiempoPreparacion: Time!
-    $articuloDetalles: [FkArticuloDetalleAticuloArticuloDetalleCreateInput!]
+    $articuloDetalles: [FkArticuloDetalleArticuloArticuloDetalleCreateInput!]
   ) {
     createArticulo(
       input: {
@@ -170,6 +179,18 @@ const createArticulo = gql`
           }
         }
         tiempoPreparacion
+      }
+    }
+  }
+`;
+
+
+const deleteArticulo = gql`
+  mutation($idArticulo: BigInt!) {
+    eliminarArticulo: deleteArticuloById(input: { id: $idArticulo }) {
+      articulo {
+        id
+        nombre
       }
     }
   }

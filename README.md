@@ -28,31 +28,35 @@ Before running the tests make sure you are serving the app via `ng serve`.
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
 
-## Fuentes
-# Actualizar paquetes npm
+# Git
+## Crear rama
+git checkout -b <nombre_rama>
+
+
+# Fuentes
+## Actualizar paquetes npm
 https://docs.npmjs.com/getting-started/updating-local-packages
 
-# Botón flotante
+## Botón flotante
 https://material.io/develop/web/components/buttons/floating-action-buttons/
 https://github.com/igghera/floating-action-menu
 
-# DataTable
-// https://www.npmjs.com/package/@swimlane/ngx-datatable
-// https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
+## DataTable
+https://www.npmjs.com/package/@swimlane/ngx-datatable
+https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
 
-# Material toasts
+## Material toasts
 https://www.tutorialspoint.com/angular_material/angular_material_toasts.htm
 
-# Roles
+## Roles
 https://github.com/AlexKhymenko/ngx-permissions
 
-# Git
-# Crear rama
-git checkout -b <nombre_rama>
-
-# Multiple-select
+## Multiple-select
 https://github.com/ng-select/ng-select
 https://github.com/nileshpatel17/ng-multiselect-dropdown
+
+# Currency mask
+https://www.npmjs.com/package/ngx-currency
 
 #Refrescar front
 en el constructor llamar a: private ref: ChangeDetectorRef
@@ -61,5 +65,5 @@ en el método llamar a: this.ref.detectChanges();
 # Apolo angular
 https://www.apollographql.com/docs/angular/basics/setup.html
 
-# Currency mask
-https://www.npmjs.com/package/ngx-currency
+# JWT interceptor
+http://jasonwatmore.com/post/2018/05/23/angular-6-jwt-authentication-example-tutorial

@@ -26,6 +26,7 @@ export class CatalogoComponent implements OnInit {
   valorTotal = 0;
   ganancia = 0;
   articulo = new Articulo(null, null, 0, true, null, null, []);
+  articuloEliminar = new Articulo(null, null, 0, true, null, null, []);
   articuloIndex;
   detalle: any = {};
   cargando = false;
@@ -208,6 +209,37 @@ export class CatalogoComponent implements OnInit {
         // Actualizo listado de articulos
         // this.obtenerArticulos2();
       }, error => { }); */
+  }
+
+  /**
+   * Función que se llama al hacer click en el botón de elimimar articulo
+   * @param id del articulo a ser eliminado
+   */
+  eliminarArticulo(id) {
+    this.articulo = null;
+    this.temp = [...this.articulos];
+    this.articuloEliminar = this.temp.find(art => art.id === id);
+    this.articuloIndex = this.temp.indexOf(this.articuloEliminar);
+    swal({
+      title: '¿Estás seguro?',
+      text: 'Estás a punto de eliminar al artículo: ' + this.articuloEliminar.nombre,
+      icon: 'warning',
+      buttons: ['Cancelar', true],
+      dangerMode: true,
+    })
+      .then(eliminar => {
+        if (eliminar) {
+          this.catalogoService.eliminarArticulo(this.articuloEliminar)
+            .subscribe(({ data }) => {
+              this.temp.splice(this.articuloIndex, 1);
+              this.articulos = [...this.temp];
+              swal('Artículo eliminado 😪',
+                `El artículo: ${data['eliminarArticulo'].articulo.nombre} ha sido eliminado`, 'success');
+            }, (error) => {
+              console.log('there was an error sending the query', error);
+            });
+        }
+      });
   }
 
   toggleExpandRow(row) {
