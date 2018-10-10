@@ -1,7 +1,9 @@
+import { HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
+import { AuthenticationService } from '../../core/authentication/authentication.service';
 
 // const productos = gql`{allProductos{nodes{id nombre valor stock}}}`;
 const Productos = gql`
@@ -29,7 +31,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   idProducto: number;
   private querySubscription: Subscription;
 
-  constructor(private apollo: Apollo) { }
+  constructor(private apollo: Apollo,
+    private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
     this.idProducto = 6;
@@ -38,6 +41,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         query: Productos,
         variables: {
           id: this.idProducto,
+        },
+        context: {
+          // example of setting the headers with context per operation
+          headers: new HttpHeaders().set('Token', this.authenticationService.credentials.token),
         },
       })
       .valueChanges.subscribe(({ data, loading }) => {
