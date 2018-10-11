@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         context: {
           // example of setting the headers with context per operation
-          headers: new HttpHeaders().set('Token', this.authenticationService.credentials.token),
+          headers: new HttpHeaders().set('Authorization', `Bearer ${this.authenticationService.credentials.token}`),
         },
       })
       .valueChanges.subscribe(({ data, loading }) => {
