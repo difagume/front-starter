@@ -25,7 +25,7 @@ export class CatalogoComponent implements OnInit {
   // articulo$: Observable<any[]>;
   valorTotal = 0;
   ganancia = 0;
-  articulo = new Articulo(null, null, 0, true, null, null, []);
+  articulo = new Articulo(null, null, 0, true, '00:00', null, []);
   articuloEliminar = new Articulo(null, null, 0, true, null, null, []);
   articuloIndex;
   detalle: any = {};
@@ -195,11 +195,15 @@ export class CatalogoComponent implements OnInit {
     this.catalogoService.createArticulo(this.articulo)
       .subscribe(({ data }) => {
         // console.log(data['createArticulo'].articulo);
-        swal('Artículo creado 😏',
-          `El artículo: ${data['createArticulo'].articulo.nombre} ha sido creado`,
-          'success');
-      }, (error) => {
-        console.log('there was an error sending the query', error);
+        swal('Artículo creado 😏', `El artículo: ${data['createArticulo'].articulo.nombre} ha sido creado`, 'success');
+      }, (error: string) => {
+        console.log(error);
+        if (error.toString().includes('uk_item_nombre')) {
+          swal('Error al crear el artículo 😪', `El artículo con ese nombre ya existe`, 'error');
+        }
+        /* else {
+          swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
+        } */
       });
 
     /* this.catalogoService.crearArticulo(this.articulo)
