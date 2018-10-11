@@ -67,3 +67,6 @@ https://www.apollographql.com/docs/angular/basics/setup.html
 
 # JWT interceptor
 http://jasonwatmore.com/post/2018/05/23/angular-6-jwt-authentication-example-tutorial
+
+# Manejo de errores
+https://www.apollographql.com/docs/angular/features/error-handling.html

@@ -38,9 +38,11 @@ import {
 } from './core';
 import { AuthenticationGuard } from './core/authentication/authentication.guard';
 import { ErrorInterceptorProvider } from './core/helpers/error.interceptor';
-import { JwtInterceptorProvider } from './core/helpers/jwt.interceptor';
 import { URL_SERVICIOS } from './config';
-import { concat, ApolloLink } from 'apollo-link';
+import { ApolloLink, from, concat } from 'apollo-link';
+import { onError } from 'apollo-link-error';
+
+// declare let swal: any;
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -95,9 +97,11 @@ export class AppModule {
     apollo: Apollo,
     httpLink: HttpLink
   ) {
-    // Con headers
+
+    // URI del servidores express donde escucha las peticiones de graphql
     const http = httpLink.create({ uri: `${URL_SERVICIOS}/graphql` });
 
+    // Middleware para setear headers
     const authMiddleware = new ApolloLink((operation, forward) => {
       const currentUser = JSON.parse(localStorage.getItem('credentials'));
       if (currentUser && currentUser.token) {
@@ -109,6 +113,24 @@ export class AppModule {
       return forward(operation);
     });
 
+    // Middleware para manejo de errorers de apollo
+    /* const errorMiddleware = onError(({ graphQLErrors }) => {
+      if (graphQLErrors) {
+        graphQLErrors.map(({ message, locations, path }) =>
+          // console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
+          swal('Error al crear el artículo', message, 'error')
+        );
+      }
+      // if (networkError) { console.log(`[Network error]: ${JSON.stringify(networkError)}`); }
+    }); */
+
+    // Con headers, manejo de errores
+    /* apollo.create({
+      link: from([authMiddleware, errorMiddleware, http]),
+      cache: new InMemoryCache(),
+    }); */
+
+    // Con headers
     apollo.create({
       link: concat(authMiddleware, http),
       cache: new InMemoryCache(),
