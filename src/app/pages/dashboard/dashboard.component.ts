@@ -5,17 +5,16 @@ import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../core/authentication/authentication.service';
 
-// const productos = gql`{allProductos{nodes{id nombre valor stock}}}`;
 const Productos = gql`
-                      query todosProductos($id: Int!) {
-                        allProductos(condition: { id: $id }) {
-                          nodes {
-                            nombre
-                            valor
-                          }
-                        }
-                      }
-                    `;
+  query todosProductos($id: Int!) {
+    allProductos(condition: { id: $id }) {
+      nodes {
+        nombre
+        valor
+      }
+    }
+  }
+`;
 
 @Component({
   selector: 'app-dashboard',
@@ -42,10 +41,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         variables: {
           id: this.idProducto,
         },
-        context: {
+        /* context: {
           // example of setting the headers with context per operation
           headers: new HttpHeaders().set('Authorization', `Bearer ${this.authenticationService.credentials.token}`),
-        },
+        }, */
       })
       .valueChanges.subscribe(({ data, loading }) => {
         this.loading = loading;
@@ -55,17 +54,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.error = err;
         this.loading = false;
       });
-
-    /* this.apollo
-      .watchQuery({
-        query: gql`{allProductos{nodes{id nombre valor stock}}}`,
-      })
-      .valueChanges.subscribe(result => {
-        this.productos = result.data && result.data['allProductos'].nodes;
-        console.log(this.productos);
-        this.loading = result.loading;
-        this.error = result['error'];
-      }); */
   }
 
   ngOnDestroy() {

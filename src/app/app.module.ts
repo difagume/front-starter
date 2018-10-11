@@ -95,13 +95,16 @@ export class AppModule {
     apollo: Apollo,
     httpLink: HttpLink
   ) {
-    // const http = httpLink.create({ uri: `${URL_SERVICIOS}/graphql` });
+    // Con headers
+    const http = httpLink.create({ uri: `${URL_SERVICIOS}/graphql` });
 
-    /* const authMiddleware = new ApolloLink((operation, forward) => {
-      // add the authorization to the headers
-      operation.setContext({
-        headers: new HttpHeaders().set('Token', localStorage.getItem('token') || '')
-      });
+    const authMiddleware = new ApolloLink((operation, forward) => {
+      const currentUser = JSON.parse(localStorage.getItem('credentials'));
+      if (currentUser && currentUser.token) {
+        operation.setContext({
+          headers: new HttpHeaders().set('Authorization', `Bearer ${currentUser.token}` || '')
+        });
+      }
 
       return forward(operation);
     });
@@ -109,12 +112,12 @@ export class AppModule {
     apollo.create({
       link: concat(authMiddleware, http),
       cache: new InMemoryCache(),
-    }); */
+    });
 
-    apollo.create({
-      // link: httpLink.create({ uri: `${URL_SERVICIOS}/die` }),
+    // Sin headers
+    /* apollo.create({
       link: httpLink.create({ uri: `${URL_SERVICIOS}/graphql` }),
       cache: new InMemoryCache(),
-    });
+    }); */
   }
 }
