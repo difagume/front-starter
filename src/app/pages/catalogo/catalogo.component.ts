@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
-import { Articulo, ArticuloDetalle, Producto, Menu } from '../../models';
+import { Articulo, ArticuloDetalle, Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
 declare let swal: any;
 
@@ -41,7 +41,7 @@ export class CatalogoComponent implements OnInit {
 
   constructor(
     private catalogoService: CatalogoService,
-    private ref: ChangeDetectorRef
+    // private ref: ChangeDetectorRef
   ) {
     this.keyUp.pipe(
       debounceTime(300),
@@ -72,8 +72,10 @@ export class CatalogoComponent implements OnInit {
   } */
 
   obtenerArticulos() {
+    console.log('obtenerArticulos()');
     this.catalogoService.allArticulos()
-      .valueChanges.subscribe(({ data, loading }) => {
+      .valueChanges
+      .subscribe(({ data, loading }) => {
         this.cargando = loading;
         this.error = data['error'];
 
@@ -85,9 +87,8 @@ export class CatalogoComponent implements OnInit {
         this.temp = [...data['allArticulos'].nodes];
         this.articulos = data && data['allArticulos'].nodes;
 
-        console.log('ARTICULOS: ', this.articulos);
-
       }, (err) => {
+        console.log(err);
         this.error = err;
         this.cargando = false;
       });
@@ -192,10 +193,11 @@ export class CatalogoComponent implements OnInit {
       this.articulo.articuloDetalle.push(articuloDetalle);
     });
 
-    this.catalogoService.createArticulo(this.articulo)
+    this.catalogoService.crearArticulo(this.articulo)
       .subscribe(({ data }) => {
-        // console.log(data['createArticulo'].articulo);
-        swal('Artículo creado 😏', `El artículo: ${data['createArticulo'].articulo.nombre} ha sido creado`, 'success');
+
+        swal('Artículo creado 😏', `El artículo: ${data.createArticulo.articulo.nombre} ha sido creado`, 'success');
+
       }, (error: string) => {
         console.log(error);
         if (error.toString().includes('uk_item_nombre')) {
@@ -235,12 +237,11 @@ export class CatalogoComponent implements OnInit {
         if (eliminar) {
           this.catalogoService.eliminarArticulo(this.articuloEliminar)
             .subscribe(({ data }) => {
-              this.temp.splice(this.articuloIndex, 1);
-              this.articulos = [...this.temp];
-              swal('Artículo eliminado 😪',
-                `El artículo: ${data['eliminarArticulo'].articulo.nombre} ha sido eliminado`, 'success');
+
+              swal('Artículo eliminado 😪', `El artículo: ${data['eliminarArticulo'].articulo.nombre} ha sido eliminado`, 'success');
+
             }, (error) => {
-              console.log('there was an error sending the query', error);
+              console.log(error);
             });
         }
       });

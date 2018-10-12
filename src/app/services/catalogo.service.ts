@@ -27,7 +27,7 @@ export class CatalogoService {
   } */
 
   allProductos() {
-    return this.apollo.watchQuery({ query: allProductos }).valueChanges
+    return this.apollo.query({ query: allProductos })
       .pipe(map(({ data }) => {
 
         data['allProductos'].productos.map(producto => {
@@ -51,7 +51,7 @@ export class CatalogoService {
   } */
 
   allMenus() {
-    return this.apollo.watchQuery({ query: allMenus }).valueChanges
+    return this.apollo.query({ query: allMenus })
       .pipe(map(({ data }) => data['allMenus'].menus));
   }
 
@@ -60,16 +60,24 @@ export class CatalogoService {
     return this.http.post(url, articulo);
   } */
 
-  createArticulo(articulo: Articulo) {
+  crearArticulo(articulo: Articulo) {
     return this.apollo.mutate({
-      mutation: createArticulo,
+      mutation: CreateArticulo,
       variables: {
         articuloNombre: articulo.nombre,
         articulovalor: articulo.valor,
         articuloIdMenu: articulo.idMenu,
         articuloTiempoPreparacion: articulo.tiempoPreparacion,
         articuloDetalles: articulo.articuloDetalle
-      }
+      },
+      update: (store, { data: { createArticulo } }) => {
+        // Read the data from our cache for this query.
+        const data: any = store.readQuery({ query: allArticulos });
+        // Add our comment from the mutation to the end.
+        data.allArticulos.nodes.push(createArticulo.articulo);
+        // Write our data back to the cache.
+        store.writeQuery({ query: allArticulos, data });
+      },
     });
   }
 
@@ -86,13 +94,18 @@ export class CatalogoService {
       mutation: deleteArticulo,
       variables: {
         idArticulo: articulo.id
-      }
+      },
+      update: (store, { data: { eliminarArticulo } }) => {
+        const data: any = store.readQuery({ query: allArticulos });
+        data.allArticulos.nodes.splice(data.allArticulos.nodes.indexOf(articulo), 1);
+        store.writeQuery({ query: allArticulos, data });
+      },
     });
   }
 }
 
 const allArticulos = gql`
-      {
+      query AllArticulos {
         allArticulos(orderBy: ID_ASC, condition: { activo: true }) {
           nodes {
             id
@@ -145,8 +158,8 @@ const allProductos = gql`
   }
 `;
 
-const createArticulo = gql`
-  mutation(
+const CreateArticulo = gql`
+  mutation createArticulo(
     $articuloNombre: String!
     $articulovalor: BigFloat!
     $articuloIdMenu: BigInt!
@@ -169,16 +182,24 @@ const createArticulo = gql`
         nombre
         valor
         activo
-        idMenu
+        tiempoPreparacion
+        menu: menuByIdMenu {
+          id
+          nombre
+        }
         articuloDetalle: articuloDetallesByIdArticulo {
           nodes {
-            producto: productoByIdProducto {
-              nombre
-            }
+            id
+            activo
             cantidad
+            producto: productoByIdProducto {
+              id
+              nombre
+              valor
+              stock
+            }
           }
         }
-        tiempoPreparacion
       }
     }
   }
@@ -186,7 +207,7 @@ const createArticulo = gql`
 
 
 const deleteArticulo = gql`
-  mutation($idArticulo: BigInt!) {
+  mutation eliminarArticulo($idArticulo: BigInt!) {
     eliminarArticulo: deleteArticuloById(input: { id: $idArticulo }) {
       articulo {
         id
