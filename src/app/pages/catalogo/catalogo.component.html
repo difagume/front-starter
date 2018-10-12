@@ -3,7 +3,7 @@
 
     <div class="card">
         <div class="card-header">
-            <button type="submit" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
+            <button (click)="agregarArticulo()" type="button" class="btn btn-info btn-round waves-effect waves-light ml-auto px-4">
                 <i class="fa fa-plus" aria-hidden="true"></i>
                 Agregar
             </button>
@@ -106,7 +106,7 @@
     </div>
 </div>
 
-<div class="col-sm-12">
+<div class="col-sm-12" *ngIf="articulo">
     <div class="card">
         <div class="card-header">Artículo</div>
         <div class="card-body">
@@ -158,6 +158,14 @@
                             </ng-template> -->
 
                     </ng-select>
+                </div>
+
+                <div *ngIf="productosSeleccionados.length == 0">
+                    <label class="col-2 col-form-label"></label>
+                    <button (click)="limpiarData()" type="button" class="btn col-2 btn-warning waves-effect waves-light">
+                    <i class="far fa-times-circle" aria-hidden="true"></i>
+                    Cancelar
+                </button>
                 </div>
 
                 <div *ngIf="productosSeleccionados.length > 0">
@@ -244,6 +252,12 @@
                     <button type="submit" class="btn col-2 btn-primary waves-effect waves-light">
                         <i class="far fa-save" aria-hidden="true"></i>
                         Guardar
+                    </button>
+
+                    <label class="col-2 col-form-label"></label>
+                    <button (click)="limpiarData()" type="button" class="btn col-2 btn-warning waves-effect waves-light">
+                        <i class="far fa-times-circle" aria-hidden="true"></i>
+                        Cancelar
                     </button>
                 </div>
             </form>

@@ -25,7 +25,8 @@ export class CatalogoComponent implements OnInit {
   // articulo$: Observable<any[]>;
   valorTotal = 0;
   ganancia = 0;
-  articulo = new Articulo(null, null, 0, true, '00:00', null, []);
+  // articulo = new Articulo(null, null, 0, true, '00:00', null, []);
+  articulo: any;
   articuloEliminar = new Articulo(null, null, 0, true, null, null, []);
   articuloIndex;
   detalle: any = {};
@@ -162,19 +163,40 @@ export class CatalogoComponent implements OnInit {
    * @param id del articulo seleccionado para ser editado
    */
   editarArticulo(id) {
+    setTimeout(() => {
+      this.scrollTo('editar');
+    }, 250);
+
     // Seteo articulo seleccionado
     this.temp = [...this.articulos];
     this.articulo = this.temp.find(art => art.id === id);
     // this.productosSeleccionados = this.articulo.productos;
     console.log('artSelec:', this.articulo);
-    this.articuloIndex = this.temp.indexOf(this.articulo);
+    // this.articuloIndex = this.articulos.indexOf(this.articulo);
 
-    // Seteo roles del usuario
-    // this.setearRolesUsuario();
+    if (this.articulo) {
 
-    setTimeout(() => {
-      this.scrollTo('editar');
-    }, 250);
+      // Seteo el idMenu del articulo seleccionado
+      if (this.articulo.menu) {
+        this.articulo.idMenu = this.articulo.menu.id;
+      }
+
+      // Lleno productosSeleccionados del artículo que voy a editar
+      if (this.articulo.articuloDetalle) {
+        this.productosSeleccionados = [];
+        this.valorTotal = 0;
+
+        this.articulo.articuloDetalle.nodes.forEach(articuloDetalle => {
+
+          this.productosSeleccionados.push({
+            ...articuloDetalle.producto, cantidad: articuloDetalle.cantidad
+          });
+
+          this.valorTotal += +articuloDetalle.producto.valor * +articuloDetalle.cantidad;
+        });
+      }
+      this.gananciaPorPlato();
+    }
   }
 
   scrollTo(className: string): void {
@@ -196,6 +218,7 @@ export class CatalogoComponent implements OnInit {
     this.catalogoService.crearArticulo(this.articulo)
       .subscribe(({ data }) => {
 
+        this.limpiarData();
         swal('Artículo creado 😏', `El artículo: ${data.createArticulo.articulo.nombre} ha sido creado`, 'success');
 
       }, (error: string) => {
@@ -207,6 +230,7 @@ export class CatalogoComponent implements OnInit {
           swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
         } */
       });
+
 
     /* this.catalogoService.crearArticulo(this.articulo)
       .subscribe((data: any) => {
@@ -247,8 +271,21 @@ export class CatalogoComponent implements OnInit {
       });
   }
 
+  agregarArticulo() {
+    setTimeout(() => {
+      this.scrollTo('editar');
+    }, 250);
+
+    this.articulo = new Articulo(null, null, 0, true, '00:00', null, []);
+  }
+
   toggleExpandRow(row) {
     // console.log('Toggled Expand Row!', row);
     this.table.rowDetail.toggleExpandRow(row);
+  }
+
+  limpiarData() {
+    this.productosSeleccionados = [];
+    this.articulo = null;
   }
 }
