@@ -91,49 +91,73 @@ export class CatalogoService {
 
   eliminarArticulo(articulo: Articulo) {
     return this.apollo.mutate({
-      mutation: deleteArticulo,
+      mutation: DeleteArticulo,
       variables: {
         idArticulo: articulo.id
       },
       update: (store, { data: { eliminarArticulo } }) => {
         const data: any = store.readQuery({ query: allArticulos });
-        data.allArticulos.nodes.splice(data.allArticulos.nodes.indexOf(articulo), 1);
+        const indice = data.allArticulos.nodes.map(art => art.id).indexOf(eliminarArticulo.articulo.id);
+        data.allArticulos.nodes.splice(indice, 1);
         store.writeQuery({ query: allArticulos, data });
       },
     });
   }
+
+  actualizarArticulo(articulo: Articulo) {
+    return this.apollo.mutate({
+      mutation: UpdateArticulo,
+      variables: {
+        articuloId: articulo.id,
+        articuloNombre: articulo.nombre,
+        articulovalor: articulo.valor,
+        articuloIdMenu: articulo.idMenu,
+        articuloTiempoPreparacion: articulo.tiempoPreparacion
+        // articuloDetalles: articulo.articuloDetalle
+      },
+      /* update: (store, { data: { createArticulo } }) => {
+        // Read the data from our cache for this query.
+        const data: any = store.readQuery({ query: allArticulos });
+        // Add our comment from the mutation to the end.
+        data.allArticulos.nodes.push(createArticulo.articulo);
+        // Write our data back to the cache.
+        store.writeQuery({ query: allArticulos, data });
+      }, */
+    });
+  }
+
 }
 
 const allArticulos = gql`
-      query AllArticulos {
-        allArticulos(orderBy: ID_ASC, condition: { activo: true }) {
+  query AllArticulos {
+    allArticulos(orderBy: ID_ASC, condition: { activo: true }) {
+      nodes {
+        id
+        nombre
+        valor
+        activo
+        tiempoPreparacion
+        menu: menuByIdMenu {
+          id
+          nombre
+        }
+        articuloDetalle: articuloDetallesByIdArticulo(condition: { activo: true }) {
           nodes {
             id
-            nombre
-            valor
             activo
-            tiempoPreparacion
-            menu: menuByIdMenu {
+            cantidad
+            producto: productoByIdProducto {
               id
               nombre
-            }
-            articuloDetalle: articuloDetallesByIdArticulo(condition: { activo: true }) {
-              nodes {
-                id
-                activo
-                cantidad
-                producto: productoByIdProducto {
-                  id
-                  nombre
-                  valor
-                  stock
-                }
-              }
+              valor
+              stock
             }
           }
         }
       }
-    `;
+    }
+  }
+`;
 
 const allMenus = gql`
   {
@@ -206,12 +230,46 @@ const CreateArticulo = gql`
 `;
 
 
-const deleteArticulo = gql`
+const DeleteArticulo = gql`
   mutation eliminarArticulo($idArticulo: BigInt!) {
     eliminarArticulo: deleteArticuloById(input: { id: $idArticulo }) {
       articulo {
         id
         nombre
+      }
+    }
+  }
+`;
+
+const UpdateArticulo = gql`
+  mutation updateArticuloById(
+    $articuloId: BigInt!
+    $articuloNombre: String!
+    $articulovalor: BigFloat!
+    $articuloIdMenu: BigInt!
+    $articuloTiempoPreparacion: Time!
+  ) {
+    updateArticuloById(
+      input: {
+        id: $articuloId
+        articuloPatch: {
+          nombre: $articuloNombre
+          valor: $articulovalor
+          idMenu: $articuloIdMenu
+          tiempoPreparacion: $articuloTiempoPreparacion
+        }
+      }
+    ) {
+      articulo {
+        id
+        nombre
+        valor
+        activo
+        tiempoPreparacion
+        menu: menuByIdMenu {
+          id
+          nombre
+        }
       }
     }
   }
