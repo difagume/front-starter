@@ -73,7 +73,6 @@ export class CatalogoComponent implements OnInit {
   } */
 
   obtenerArticulos() {
-    console.log('obtenerArticulos()');
     this.catalogoService.allArticulos()
       .valueChanges
       .subscribe(({ data, loading }) => {
@@ -163,10 +162,6 @@ export class CatalogoComponent implements OnInit {
    * @param id del articulo seleccionado para ser editado
    */
   editarArticulo(id) {
-    setTimeout(() => {
-      this.scrollTo('editar');
-    }, 250);
-
     // Seteo articulo seleccionado
     this.temp = [...this.articulos];
     this.articulo = this.temp.find(art => art.id === id);
@@ -175,6 +170,10 @@ export class CatalogoComponent implements OnInit {
     // this.articuloIndex = this.articulos.indexOf(this.articulo);
 
     if (this.articulo) {
+
+      setTimeout(() => {
+        this.scrollTo('editar');
+      }, 250);
 
       // Seteo el idMenu del articulo seleccionado
       if (this.articulo.menu) {
@@ -207,7 +206,10 @@ export class CatalogoComponent implements OnInit {
 
   // guardarArticulo(forma: NgForm) {
   // console.log('forma: ', forma);
-  guardarArticulo() {
+  /**
+   * Método que agrega un artículo y sus detalles
+   */
+  crearArticulo() {
     this.articulo.articuloDetalle = [];
     this.productosSeleccionados.forEach(producto => {
       let articuloDetalle: ArticuloDetalle;
@@ -230,15 +232,36 @@ export class CatalogoComponent implements OnInit {
           swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
         } */
       });
+  }
 
+  /* this.catalogoService.crearArticulo(this.articulo)
+    .subscribe((data: any) => {
+      swal(data.name, data.message, 'success');
 
-    /* this.catalogoService.crearArticulo(this.articulo)
-      .subscribe((data: any) => {
-        swal(data.name, data.message, 'success');
+      // Actualizo listado de articulos
+      // this.obtenerArticulos2();
+    }, error => { }); */
 
-        // Actualizo listado de articulos
-        // this.obtenerArticulos2();
-      }, error => { }); */
+  /**
+   * Método que actualiza un artículo seleccionado
+   */
+  actualizarArticulo() {
+    this.catalogoService.actualizarArticulo(this.articulo)
+      .subscribe(({ data }) => {
+
+        this.limpiarData();
+        console.log('artículo actualizado --> ', data.updateArticuloById.articulo.nombre);
+        // swal('Artículo actualizado 😏', `El artículo: ${data.updateArticuloById.articulo.nombre} ha sido actualizado`, 'success');
+
+      }, (error: string) => {
+        console.log(error);
+        /* if (error.toString().includes('uk_item_nombre')) {
+          swal('Error al crear el artículo 😪', `El artículo con ese nombre ya existe`, 'error');
+        } */
+        /* else {
+          swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
+        } */
+      });
   }
 
   /**
@@ -271,12 +294,28 @@ export class CatalogoComponent implements OnInit {
       });
   }
 
+  /**
+   * Método invocado desde el botón de Agregar
+   */
   agregarArticulo() {
     setTimeout(() => {
       this.scrollTo('editar');
     }, 250);
 
     this.articulo = new Articulo(null, null, 0, true, '00:00', null, []);
+  }
+
+  /**
+   * Método invocado desde el botón de Guardar
+   */
+  crear_actualizarArticulo() {
+    if (this.articulo) {
+      if (this.articulo.id) {
+        this.actualizarArticulo();
+      } else {
+        this.crearArticulo();
+      }
+    }
   }
 
   toggleExpandRow(row) {

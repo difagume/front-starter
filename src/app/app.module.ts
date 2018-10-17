@@ -40,7 +40,6 @@ import { AuthenticationGuard } from './core/authentication/authentication.guard'
 import { ErrorInterceptorProvider } from './core/helpers/error.interceptor';
 import { URL_SERVICIOS } from './config';
 import { ApolloLink, from, concat } from 'apollo-link';
-import { onError } from 'apollo-link-error';
 
 // declare let swal: any;
 
@@ -113,7 +112,7 @@ export class AppModule {
       return forward(operation);
     });
 
-    // Middleware para manejo de errorers de apollo
+    // Middleware para manejo de errorers de apollo (paquete: apollo-link-error)
     /* const errorMiddleware = onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
