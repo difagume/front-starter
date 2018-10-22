@@ -80,12 +80,12 @@ export class CatalogoComponent implements OnInit {
         this.error = data['error'];
 
         // Agrego una propiedad al articulo para tener el nombre del menu
-        data['allArticulos'].nodes.map(art => {
+        data['articulos'].map(art => {
           art['articulo_menu'] = art.menu.nombre;
         });
 
-        this.temp = [...data['allArticulos'].nodes];
-        this.articulos = data && data['allArticulos'].nodes;
+        this.temp = [...data['articulos']];
+        this.articulos = data && data['articulos'];
 
       }, (err) => {
         console.log(err);
@@ -285,7 +285,7 @@ export class CatalogoComponent implements OnInit {
           this.catalogoService.eliminarArticulo(this.articuloEliminar)
             .subscribe(({ data }) => {
 
-              swal('Artículo eliminado 😪', `El artículo: ${data['eliminarArticulo'].articulo.nombre} ha sido eliminado`, 'success');
+              swal('Artículo eliminado 😪', `El artículo: ${data['eliminarArticulo'].nombre} ha sido eliminado`, 'success');
 
             }, (error) => {
               console.log(error);

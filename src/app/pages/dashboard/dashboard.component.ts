@@ -6,12 +6,10 @@ import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../core/authentication/authentication.service';
 
 const Productos = gql`
-  query todosProductos($id: Int!) {
-    allProductos(condition: { id: $id }) {
-      nodes {
+  query todosProductos($id: ID!) {
+    producto: productoes(where: { id: $id }) {
         nombre
         valor
-      }
     }
   }
 `;
@@ -27,14 +25,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = true;
   error: any;
   articulo: any;
-  idProducto: number;
+  idProducto: String;
   private querySubscription: Subscription;
 
   constructor(private apollo: Apollo,
     private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
-    this.idProducto = 6;
+    this.idProducto = 'cjnhpli2t000l0822cggy3bu1';
     this.querySubscription = this.apollo
       .watchQuery({
         query: Productos,
@@ -50,7 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .valueChanges.subscribe(({ data, loading }) => {
         this.loading = loading;
         this.error = data['error'];
-        this.productos = data && data['allProductos'].nodes;
+        this.productos = data && data['producto'];
       }, (err) => {
         this.error = err;
         this.loading = false;

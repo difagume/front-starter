@@ -15,26 +15,14 @@ export class CatalogoService {
     private authenticationService: AuthenticationService,
     private apollo: Apollo) { }
 
-  /* obtenerProductos() {
-    const url = `${URL_SERVICIOS}/catalogo/productos`;
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        res.productos.forEach(p => {
-          p.cantidad = 1;
-        });
-        return res.productos;
-      }));
-  } */
-
   allProductos() {
     return this.apollo.query({ query: allProductos })
       .pipe(map(({ data }) => {
-
-        data['allProductos'].productos.map(producto => {
+        data['productos'].map(producto => {
           // Agrego a cada producto la propiedad: cantidad
           producto['cantidad'] = 1;
         });
-        return data['allProductos'].productos;
+        return data['productos'];
       }));
   }
 
@@ -42,63 +30,44 @@ export class CatalogoService {
     return this.apollo.watchQuery({ query: allArticulos });
   }
 
-  /* obtenerMenu() {
-    const url = `${URL_SERVICIOS}/catalogo/menu`;
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        return res.menu;
-      }));
-  } */
-
   allMenus() {
     return this.apollo.query({ query: allMenus })
-      .pipe(map(({ data }) => data['allMenus'].menus));
+      .pipe(map(({ data }) => data['menus']));
   }
 
-  /* crearArticulo(articulo: Articulo) {
-    const url = `${URL_SERVICIOS}/catalogo/articulo?token=${this.authenticationService.credentials.token}`;
-    return this.http.post(url, articulo);
-  } */
+  crearArticulo(articulo: any) {
+    console.log('createArticulo --> ', articulo);
 
-  crearArticulo(articulo: Articulo) {
     return this.apollo.mutate({
       mutation: CreateArticulo,
       variables: {
-        articuloNombre: articulo.nombre,
-        articulovalor: articulo.valor,
-        articuloIdMenu: articulo.idMenu,
-        articuloTiempoPreparacion: articulo.tiempoPreparacion,
-        articuloDetalles: articulo.articuloDetalle
+        nombre: articulo.nombre,
+        valor: articulo.valor,
+        menu: articulo.idMenu,
+        tiempo_preparacion: articulo.tiempo_preparacion,
+        articulos_detalle: articulo.articuloDetalle
       },
       update: (store, { data: { createArticulo } }) => {
         // Read the data from our cache for this query.
         const data: any = store.readQuery({ query: allArticulos });
         // Add our comment from the mutation to the end.
-        data.allArticulos.nodes.push(createArticulo.articulo);
+        data.articulos.push(createArticulo);
         // Write our data back to the cache.
         store.writeQuery({ query: allArticulos, data });
       },
     });
   }
 
-  /* obtenerArticulos() {
-    const url = `${URL_SERVICIOS}/catalogo/articulos`;
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        return res.articulos;
-      }));
-  } */
-
   eliminarArticulo(articulo: Articulo) {
     return this.apollo.mutate({
       mutation: DeleteArticulo,
       variables: {
-        idArticulo: articulo.id
+        id: articulo.id
       },
       update: (store, { data: { eliminarArticulo } }) => {
         const data: any = store.readQuery({ query: allArticulos });
-        const indice = data.allArticulos.nodes.map(art => art.id).indexOf(eliminarArticulo.articulo.id);
-        data.allArticulos.nodes.splice(indice, 1);
+        const indice = data.articulos.map(art => art.id).indexOf(eliminarArticulo.id);
+        data.articulos.splice(indice, 1);
         store.writeQuery({ query: allArticulos, data });
       },
     });
@@ -125,34 +94,27 @@ export class CatalogoService {
       }, */
     });
   }
-
 }
 
 const allArticulos = gql`
   query AllArticulos {
-    allArticulos(orderBy: ID_ASC, condition: { activo: true }) {
-      nodes {
+    articulos: articuloes(orderBy: id_ASC, where: { activo: true }) {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
         id
         nombre
-        valor
-        activo
-        tiempoPreparacion
-        menu: menuByIdMenu {
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
           id
           nombre
-        }
-        articuloDetalle: articuloDetallesByIdArticulo(condition: { activo: true }) {
-          nodes {
-            id
-            activo
-            cantidad
-            producto: productoByIdProducto {
-              id
-              nombre
-              valor
-              stock
-            }
-          }
+          valor
+          stock
         }
       }
     }
@@ -161,82 +123,67 @@ const allArticulos = gql`
 
 const allMenus = gql`
   {
-    allMenus(orderBy: ID_ASC, condition: { activo: true }) {
-      menus: nodes {
-        id
-        nombre
-      }
+    menus(where: { activo: true }, orderBy: id_ASC) {
+      id
+      nombre
     }
   }
 `;
 
 const allProductos = gql`
   {
-    allProductos(orderBy: ID_ASC, condition: { activo: true }) {
-      productos: nodes {
-        id
-        nombre
-        valor
-      }
+    productos: productoes(where: { activo: true }, orderBy: id_ASC) {
+      id
+      nombre
+      valor
     }
   }
 `;
 
 const CreateArticulo = gql`
   mutation createArticulo(
-    $articuloNombre: String!
-    $articulovalor: BigFloat!
-    $articuloIdMenu: BigInt!
-    $articuloTiempoPreparacion: Time!
-    $articuloDetalles: [FkArticuloDetalleArticuloArticuloDetalleCreateInput!]
+    $nombre: String!
+    $valor: Float!
+    $menu: ID!
+    $tiempo_preparacion: DateTime!
+    $articulos_detalle: [Articulo_detalleCreateWithoutArticuloInput!]
   ) {
     createArticulo(
-      input: {
-        articulo: {
-          nombre: $articuloNombre
-          valor: $articulovalor
-          idMenu: $articuloIdMenu
-          tiempoPreparacion: $articuloTiempoPreparacion
-          articuloDetallesUsingId: { create: $articuloDetalles }
-        }
+      data: {
+        nombre: $nombre
+        valor: $valor
+        tiempo_preparacion: $tiempo_preparacion
+        menu: { connect: { id: $menu } }
+        articulos_detalle: { create: $articulos_detalle }
       }
     ) {
-      articulo {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
         id
         nombre
-        valor
-        activo
-        tiempoPreparacion
-        menu: menuByIdMenu {
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
           id
           nombre
-        }
-        articuloDetalle: articuloDetallesByIdArticulo {
-          nodes {
-            id
-            activo
-            cantidad
-            producto: productoByIdProducto {
-              id
-              nombre
-              valor
-              stock
-            }
-          }
+          valor
+          stock
         }
       }
     }
   }
 `;
 
-
 const DeleteArticulo = gql`
-  mutation eliminarArticulo($idArticulo: BigInt!) {
-    eliminarArticulo: deleteArticuloById(input: { id: $idArticulo }) {
-      articulo {
-        id
-        nombre
-      }
+  mutation eliminarArticulo($id: ID!) {
+    eliminarArticulo: deleteArticulo(where: { id: $id }) {
+      id
+      nombre
     }
   }
 `;

@@ -21,11 +21,11 @@
                 <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow>
                     <ng-template let-row="row" let-expanded="detalle" ngx-datatable-row-detail-template>
 
-                        <div style="padding-left:35px;" *ngIf="row.articuloDetalle.nodes.length > 0">
+                        <div style="padding-left:35px;" *ngIf="row.articuloDetalle.length > 0">
                             <div>
                                 <strong>Productos</strong>
                             </div>
-                            <div *ngFor="let p of row.articuloDetalle.nodes">
+                            <div *ngFor="let p of row.articuloDetalle">
                                 <strong>{{p.producto.nombre}}</strong> / cantidad:
                                 <strong>{{p.cantidad}}</strong>
                             </div>
@@ -83,7 +83,7 @@
                     </ng-template>
                 </ngx-datatable-column>
 
-                <ngx-datatable-column prop="tiempoPreparacion" name="Tiempo de preparación">
+                <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                         {{value}}
                     </ng-template>
@@ -258,7 +258,7 @@
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Tiempo de preparación:</label>
                         <div class="col-2">
-                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempoPreparacion"
+                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempo_preparacion"
                                 name="articuloTiempo" #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
                                 required>
                             <div class="invalid-feedback" *ngIf="articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)">Ingresa
