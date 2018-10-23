@@ -97,8 +97,8 @@ export class AppModule {
     httpLink: HttpLink
   ) {
 
-    // URI del servidores express donde escucha las peticiones de graphql
-    const http = httpLink.create({ uri: `${URL_SERVICIOS}/graphql` });
+    // URI del servidor graphql-yoga donde escucha las peticiones de graphql
+    const http = httpLink.create({ uri: URL_SERVICIOS });
 
     // Middleware para setear headers
     const authMiddleware = new ApolloLink((operation, forward) => {

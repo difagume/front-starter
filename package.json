@@ -8,7 +8,9 @@
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "graphql": "npm run graphql:generate",
+    "graphql:generate": "gql-gen --schema http://localhost:4000 --template graphql-codegen-apollo-angular-template --out ./src/app/generated/graphql.ts ./src/app/*.graphql"
   },
   "private": true,
   "dependencies": {
@@ -70,6 +72,9 @@
     "@types/node": "^10.5.2",
     "@types/socket.io-client": "^1.4.32",
     "codelyzer": "^4.4.2",
+    "graphql-code-generator": "^0.12.6",
+    "graphql-codegen-apollo-angular-template": "^0.12.6",
+    "graphql-codegen-introspection-template": "^0.12.6",
     "jasmine-core": "~3.1.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "^2.0.4",

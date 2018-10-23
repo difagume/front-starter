@@ -70,3 +70,9 @@ http://jasonwatmore.com/post/2018/05/23/angular-6-jwt-authentication-example-tut
 
 # Manejo de errores
 https://www.apollographql.com/docs/angular/features/error-handling.html
+
+
+# Generar Apollo services (Query, Mutation, Subscription)
+## src/app/generated/graphql.ts
+https://github.com/kamilkisiela/apollo-angular-services
+npm run graphql
