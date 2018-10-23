@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
-import { Articulo, ArticuloDetalle, Producto } from '../../models';
+import { ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput } from '../../generated/graphql';
+import { Articulo, Producto } from '../../models';
 import { CatalogoService } from '../../services/catalogo.service';
+
 declare let swal: any;
 
 @Component({
@@ -14,19 +16,15 @@ export class CatalogoComponent implements OnInit {
 
   @ViewChild('myTable') table: any;
 
-  // articulos = [];
   articulos: any[];
   temp = [];
-  // menu$: Observable<Menu[]>;
   menus: Observable<any>;
-  // producto$: Observable<Producto[]>;
   productos: Observable<any>;
   productosSeleccionados: Producto[] = [];
-  // articulo$: Observable<any[]>;
   valorTotal = 0;
   ganancia = 0;
-  // articulo = new Articulo(null, null, 0, true, '00:00', null, []);
   articulo: any;
+  art: ArticuloCreateInput;
   articuloEliminar = new Articulo(null, null, 0, true, null, null, []);
   articuloIndex;
   detalle: any = {};
@@ -52,25 +50,10 @@ export class CatalogoComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.obtenerArticulos();
     this.obtenerArticulos();
-    // this.articulo$ = this.catalogoService.obtenerArticulos();
-    // this.producto$ = this.catalogoService.obtenerProductos();
     this.productos = this.catalogoService.allProductos();
-    // this.menu$ = this.catalogoService.obtenerMenu();
     this.menus = this.catalogoService.allMenus();
   }
-
-  /* obtenerArticulos() {
-    this.cargando = true;
-    this.catalogoService.obtenerArticulos()
-      .subscribe((articulos: Articulo[]) => {
-        this.temp = [...articulos];
-        this.articulos = articulos;
-        this.cargando = false;
-        this.ref.detectChanges();
-      }, error => { });
-  } */
 
   obtenerArticulos() {
     this.catalogoService.allArticulos()
@@ -134,14 +117,6 @@ export class CatalogoComponent implements OnInit {
   gananciaPorPlato() {
     this.ganancia = this.articulo.valor - this.valorTotal;
   }
-
-  /* getProductos(term: string = null): Observable<Producto[]> {
-    let items = this.productos;
-    if (term) {
-      items = items.filter(x => x.nombre.toLocaleLowerCase().indexOf(term.toLocaleLowerCase()) > -1);
-    }
-    return of(items).pipe(delay(500));
-  } */
 
   onChange() {
     this.valTotal();
@@ -210,37 +185,43 @@ export class CatalogoComponent implements OnInit {
    * Método que agrega un artículo y sus detalles
    */
   crearArticulo() {
-    this.articulo.articuloDetalle = [];
+    const articulosDetalle: ArticuloDetalleCreateWithoutArticuloInput[] = [];
     this.productosSeleccionados.forEach(producto => {
-      let articuloDetalle: ArticuloDetalle;
-      articuloDetalle = new ArticuloDetalle(producto.id, producto.cantidad);
-      this.articulo.articuloDetalle.push(articuloDetalle);
+
+      articulosDetalle.push({
+        cantidad: producto.cantidad,
+        producto: {
+          connect: { id: producto.id.toString() }
+        }
+      });
+
     });
 
-    this.catalogoService.crearArticulo(this.articulo)
+    this.art = {
+      nombre: this.articulo.nombre,
+      valor: this.articulo.valor,
+      tiempo_preparacion: 'T'.concat(this.articulo.tiempo_preparacion),
+      menu: { connect: { id: this.articulo.idMenu } },
+      articulos_detalle: { create: articulosDetalle }
+    };
+
+    // this.catalogoService.crearArticulo(this.articulo)
+    this.catalogoService.crearArticulo(this.art)
       .subscribe(({ data }) => {
 
         this.limpiarData();
-        swal('Artículo creado 😏', `El artículo: ${data.createArticulo.articulo.nombre} ha sido creado`, 'success');
+        swal('Artículo creado 😏', `El artículo: ${data.createArticulo.nombre} ha sido creado`, 'success');
 
       }, (error: string) => {
         console.log(error);
         if (error.toString().includes('uk_item_nombre')) {
           swal('Error al crear el artículo 😪', `El artículo con ese nombre ya existe`, 'error');
         }
-        /* else {
-          swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
-        } */
+        // else {
+        //  swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
+        // }
       });
   }
-
-  /* this.catalogoService.crearArticulo(this.articulo)
-    .subscribe((data: any) => {
-      swal(data.name, data.message, 'success');
-
-      // Actualizo listado de articulos
-      // this.obtenerArticulos2();
-    }, error => { }); */
 
   /**
    * Método que actualiza un artículo seleccionado

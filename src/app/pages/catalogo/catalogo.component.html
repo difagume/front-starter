@@ -85,7 +85,7 @@
 
                 <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
                     <ng-template let-value="value" ngx-datatable-cell-template>
-                        {{value}}
+                        {{value | date:'hh:mm' }}
                     </ng-template>
                 </ngx-datatable-column>
 

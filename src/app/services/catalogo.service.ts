@@ -4,6 +4,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from '../core';
+import { ArticuloCreateInput } from '../generated/graphql';
 import { Articulo } from '../models';
 
 @Injectable(/* {
@@ -35,17 +36,11 @@ export class CatalogoService {
       .pipe(map(({ data }) => data['menus']));
   }
 
-  crearArticulo(articulo: any) {
-    console.log('createArticulo --> ', articulo);
-
+  crearArticulo(articulo: ArticuloCreateInput) {
     return this.apollo.mutate({
       mutation: CreateArticulo,
       variables: {
-        nombre: articulo.nombre,
-        valor: articulo.valor,
-        menu: articulo.idMenu,
-        tiempo_preparacion: articulo.tiempo_preparacion,
-        articulos_detalle: articulo.articuloDetalle
+        data: articulo
       },
       update: (store, { data: { createArticulo } }) => {
         // Read the data from our cache for this query.
@@ -141,22 +136,8 @@ const allProductos = gql`
 `;
 
 const CreateArticulo = gql`
-  mutation createArticulo(
-    $nombre: String!
-    $valor: Float!
-    $menu: ID!
-    $tiempo_preparacion: DateTime!
-    $articulos_detalle: [Articulo_detalleCreateWithoutArticuloInput!]
-  ) {
-    createArticulo(
-      data: {
-        nombre: $nombre
-        valor: $valor
-        tiempo_preparacion: $tiempo_preparacion
-        menu: { connect: { id: $menu } }
-        articulos_detalle: { create: $articulos_detalle }
-      }
-    ) {
+  mutation createArticulo( $data: ArticuloCreateInput! ) {
+    createArticulo( data: $data ) {
       id
       nombre
       valor
