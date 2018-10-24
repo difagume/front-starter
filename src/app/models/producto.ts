@@ -1,4 +1,4 @@
-export class Producto {
+/* export class Producto {
 
     public id: number;
     public nombre: string;
@@ -9,3 +9,4 @@ export class Producto {
 
     constructor() { }
 }
+ */

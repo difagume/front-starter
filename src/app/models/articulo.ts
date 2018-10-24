@@ -1,4 +1,4 @@
-import { ArticuloDetalle } from './articuloDetalle';
+/* import { ArticuloDetalle } from './articuloDetalle';
 export class Articulo {
 
     constructor(
@@ -11,3 +11,4 @@ export class Articulo {
         public articuloDetalle: ArticuloDetalle[]
     ) { }
 }
+ */

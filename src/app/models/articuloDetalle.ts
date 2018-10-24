@@ -1,4 +1,4 @@
-export class ArticuloDetalle {
+/* export class ArticuloDetalle {
     public id: number;
     public idArticulo: number;
     public idProducto: number;
@@ -9,3 +9,4 @@ export class ArticuloDetalle {
         this.cantidad = cantidad;
     }
 }
+ */

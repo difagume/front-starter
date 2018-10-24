@@ -1,4 +1,4 @@
-export class Menu {
+/* export class Menu {
 
     public id: string;
     public nombre: string;
@@ -6,3 +6,4 @@ export class Menu {
 
     constructor() { }
 }
+ */

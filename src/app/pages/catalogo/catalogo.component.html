@@ -85,7 +85,7 @@
 
                 <ngx-datatable-column prop="tiempo_preparacion" name="Tiempo de preparación">
                     <ng-template let-value="value" ngx-datatable-cell-template>
-                        {{value | date:'hh:mm' }}
+                        {{value.length > 5 ? (value | date:'HH:mm':'+0000') : (value) }}
                     </ng-template>
                 </ngx-datatable-column>
 
@@ -119,7 +119,7 @@
                 <div class="form-group row">
                     <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
                     <div class="col-10">
-                        <select class="form-control" [(ngModel)]="articulo.idMenu" name="menu" #menu="ngModel"
+                        <select class="form-control" [(ngModel)]="articulo.menu.id" name="menu" #menu="ngModel"
                             [ngClass]="{'is-invalid': menu.invalid && (menu.dirty || menu.touched)}" required>
                             <!-- (change)="cambiaMenu( $event.target.value )" -->
                             <option selected disabled value="null">Seleccione...</option>
@@ -258,8 +258,10 @@
                     <div class="form-group row">
                         <label class="col-2 col-form-label">Tiempo de preparación:</label>
                         <div class="col-2">
-                            <input class="form-control" type="time" min="00:00" max="06:00" [(ngModel)]="articulo.tiempo_preparacion"
-                                name="articuloTiempo" #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
+                            <!-- [ngModel]="articulo.tiempo_preparacion | date:'HH:mm':'+0000'"
+                                (ngModelChange)="articulo.tiempo_preparacion=$event" -->
+                            <input class="form-control" type="time" min="00:00" max="06:00" name="articuloTiempo"
+                                [(ngModel)]="articulo.tiempo_preparacion" #articuloTiempo="ngModel" [ngClass]="{'is-invalid': articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)}"
                                 required>
                             <div class="invalid-feedback" *ngIf="articuloTiempo?.errors?.required && (articuloTiempo.dirty || articuloTiempo.touched)">Ingresa
                                 la cantidad del producto</div>

@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
-import { ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput } from '../../generated/graphql';
-import { Articulo, Producto } from '../../models';
+import { ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput, ArticuloUpdateInput } from '../../generated/graphql';
 import { CatalogoService } from '../../services/catalogo.service';
-
 declare let swal: any;
 
 @Component({
@@ -20,15 +19,17 @@ export class CatalogoComponent implements OnInit {
   temp = [];
   menus: Observable<any>;
   productos: Observable<any>;
-  productosSeleccionados: Producto[] = [];
+  productosSeleccionados: any[] = [];
   valorTotal = 0;
   ganancia = 0;
   articulo: any;
-  art: ArticuloCreateInput;
-  articuloEliminar = new Articulo(null, null, 0, true, null, null, []);
+  articuloCrear: ArticuloCreateInput;
+  articuloActualizar: ArticuloUpdateInput;
+  // articulos_detalleEliminar: ArticuloDetalleWhereUniqueInput[] = [];
+  articuloEliminar: any = {};
   articuloIndex;
   detalle: any = {};
-  cargando = false;
+  cargando = true;
   error: any;
   public keyUp = new Subject<void>();
   /*  columns = [
@@ -140,9 +141,6 @@ export class CatalogoComponent implements OnInit {
     // Seteo articulo seleccionado
     this.temp = [...this.articulos];
     this.articulo = this.temp.find(art => art.id === id);
-    // this.productosSeleccionados = this.articulo.productos;
-    console.log('artSelec:', this.articulo);
-    // this.articuloIndex = this.articulos.indexOf(this.articulo);
 
     if (this.articulo) {
 
@@ -150,25 +148,24 @@ export class CatalogoComponent implements OnInit {
         this.scrollTo('editar');
       }, 250);
 
-      // Seteo el idMenu del articulo seleccionado
-      if (this.articulo.menu) {
-        this.articulo.idMenu = this.articulo.menu.id;
-      }
+      this.articulo.tiempo_preparacion = moment.utc(this.articulo.tiempo_preparacion).format('HH:mm');
 
       // Lleno productosSeleccionados del artículo que voy a editar
       if (this.articulo.articuloDetalle) {
         this.productosSeleccionados = [];
         this.valorTotal = 0;
 
-        this.articulo.articuloDetalle.nodes.forEach(articuloDetalle => {
-
+        this.articulo.articuloDetalle.forEach(articuloDetalle => {
           this.productosSeleccionados.push({
             ...articuloDetalle.producto, cantidad: articuloDetalle.cantidad
           });
 
+          // this.articulos_detalleEliminar.push({ id: articuloDetalle.id });
+
           this.valorTotal += +articuloDetalle.producto.valor * +articuloDetalle.cantidad;
         });
       }
+
       this.gananciaPorPlato();
     }
   }
@@ -179,8 +176,6 @@ export class CatalogoComponent implements OnInit {
     element.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // guardarArticulo(forma: NgForm) {
-  // console.log('forma: ', forma);
   /**
    * Método que agrega un artículo y sus detalles
    */
@@ -194,19 +189,17 @@ export class CatalogoComponent implements OnInit {
           connect: { id: producto.id.toString() }
         }
       });
-
     });
 
-    this.art = {
+    this.articuloCrear = {
       nombre: this.articulo.nombre,
       valor: this.articulo.valor,
       tiempo_preparacion: 'T'.concat(this.articulo.tiempo_preparacion),
-      menu: { connect: { id: this.articulo.idMenu } },
+      menu: { connect: { id: this.articulo.menu.id } },
       articulos_detalle: { create: articulosDetalle }
     };
 
-    // this.catalogoService.crearArticulo(this.articulo)
-    this.catalogoService.crearArticulo(this.art)
+    this.catalogoService.crearArticulo(this.articuloCrear)
       .subscribe(({ data }) => {
 
         this.limpiarData();
@@ -227,12 +220,34 @@ export class CatalogoComponent implements OnInit {
    * Método que actualiza un artículo seleccionado
    */
   actualizarArticulo() {
-    this.catalogoService.actualizarArticulo(this.articulo)
+    const articulos_detalleCrear: ArticuloDetalleCreateWithoutArticuloInput[] = [];
+    this.productosSeleccionados.forEach(producto => {
+      articulos_detalleCrear.push({
+        cantidad: producto.cantidad,
+        producto: { connect: { id: producto.id, nombre: producto.nombre } }
+      });
+    });
+    // Lleno el objeto articuloActualizar
+    this.articuloActualizar = {
+      nombre: this.articulo.nombre,
+      valor: this.articulo.valor,
+      // tiempo_preparacion: moment(this.articulo.tiempo_preparacion).format('HH:mm'),
+      tiempo_preparacion: 'T'.concat(this.articulo.tiempo_preparacion),
+      menu: { connect: { id: this.articulo.menu.id } },
+      articulos_detalle: {
+        create: articulos_detalleCrear,
+        // delete: this.articulos_detalleEliminar
+      }
+    };
+
+    this.catalogoService.eliminarArticuloDetalles(this.articulo.id)
+      .subscribe();
+
+    this.catalogoService.actualizarArticulo(this.articuloActualizar, this.articulo.id)
       .subscribe(({ data }) => {
 
         this.limpiarData();
-        console.log('artículo actualizado --> ', data.updateArticuloById.articulo.nombre);
-        // swal('Artículo actualizado 😏', `El artículo: ${data.updateArticuloById.articulo.nombre} ha sido actualizado`, 'success');
+        swal('Artículo actualizado 😏', `El artículo: ${data.updateArticulo.nombre} ha sido actualizado`, 'success');
 
       }, (error: string) => {
         console.log(error);
@@ -282,8 +297,7 @@ export class CatalogoComponent implements OnInit {
     setTimeout(() => {
       this.scrollTo('editar');
     }, 250);
-
-    this.articulo = new Articulo(null, null, 0, true, '00:00', null, []);
+    this.articulo = { menu: {} };
   }
 
   /**
@@ -307,5 +321,8 @@ export class CatalogoComponent implements OnInit {
   limpiarData() {
     this.productosSeleccionados = [];
     this.articulo = null;
+    this.articuloCrear = null;
+    this.articuloActualizar = null;
   }
+
 }

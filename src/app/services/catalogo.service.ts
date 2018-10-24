@@ -4,8 +4,7 @@ import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from '../core';
-import { ArticuloCreateInput } from '../generated/graphql';
-import { Articulo } from '../models';
+import { ArticuloCreateInput, ArticuloUpdateInput } from '../generated/graphql';
 
 @Injectable(/* {
   providedIn: PagesModule
@@ -53,7 +52,7 @@ export class CatalogoService {
     });
   }
 
-  eliminarArticulo(articulo: Articulo) {
+  eliminarArticulo(articulo: any) {
     return this.apollo.mutate({
       mutation: DeleteArticulo,
       variables: {
@@ -68,25 +67,22 @@ export class CatalogoService {
     });
   }
 
-  actualizarArticulo(articulo: Articulo) {
+  eliminarArticuloDetalles(idArticulo) {
+    return this.apollo.mutate({
+      mutation: DeleteManyArticulo_detalles,
+      variables: {
+        id: idArticulo
+      }
+    });
+  }
+
+  actualizarArticulo(articulo: ArticuloUpdateInput, id) {
     return this.apollo.mutate({
       mutation: UpdateArticulo,
       variables: {
-        articuloId: articulo.id,
-        articuloNombre: articulo.nombre,
-        articulovalor: articulo.valor,
-        articuloIdMenu: articulo.idMenu,
-        articuloTiempoPreparacion: articulo.tiempoPreparacion
-        // articuloDetalles: articulo.articuloDetalle
-      },
-      /* update: (store, { data: { createArticulo } }) => {
-        // Read the data from our cache for this query.
-        const data: any = store.readQuery({ query: allArticulos });
-        // Add our comment from the mutation to the end.
-        data.allArticulos.nodes.push(createArticulo.articulo);
-        // Write our data back to the cache.
-        store.writeQuery({ query: allArticulos, data });
-      }, */
+        data: articulo,
+        id: id
+      }
     });
   }
 }
@@ -169,34 +165,33 @@ const DeleteArticulo = gql`
   }
 `;
 
+const DeleteManyArticulo_detalles = gql`
+  mutation deleteManyArticulo_detalles($id: ID!) {
+    eliminarArticuloDetalles: deleteManyArticulo_detalles(where: { articulo: { id: $id } }) {
+      count
+    }
+  }
+`;
+
 const UpdateArticulo = gql`
-  mutation updateArticuloById(
-    $articuloId: BigInt!
-    $articuloNombre: String!
-    $articulovalor: BigFloat!
-    $articuloIdMenu: BigInt!
-    $articuloTiempoPreparacion: Time!
-  ) {
-    updateArticuloById(
-      input: {
-        id: $articuloId
-        articuloPatch: {
-          nombre: $articuloNombre
-          valor: $articulovalor
-          idMenu: $articuloIdMenu
-          tiempoPreparacion: $articuloTiempoPreparacion
-        }
-      }
-    ) {
-      articulo {
+  mutation updateArticulo($data: ArticuloUpdateInput!, $id: ID!) {
+    updateArticulo(data: $data, where: { id: $id }) {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
         id
         nombre
-        valor
-        activo
-        tiempoPreparacion
-        menu: menuByIdMenu {
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
           id
           nombre
+          valor
+          stock
         }
       }
     }
