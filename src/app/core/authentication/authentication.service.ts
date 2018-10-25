@@ -1,10 +1,11 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import gql from 'graphql-tag';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { URL_SERVICIOS } from '../../config';
 import { Logger } from '../logger.service';
 
 const log = new Logger('AuthenticationService');
@@ -41,7 +42,8 @@ export class AuthenticationService {
   private _credentials: Credentials | null;
 
   constructor(private http: HttpClient,
-    private ngxPermissionsService: NgxPermissionsService) {
+    private ngxPermissionsService: NgxPermissionsService,
+    private apollo: Apollo) {
     const savedCredentials = sessionStorage.getItem(credentialsKey) || localStorage.getItem(credentialsKey);
     if (savedCredentials) {
       this._credentials = JSON.parse(savedCredentials);
@@ -54,11 +56,16 @@ export class AuthenticationService {
    * @return {Observable<Credentials>} The user credentials.
    */
   login(context: LoginContext): Observable<Credentials> {
-    const url = URL_SERVICIOS + '/login';
-    return this.http.post(url, { usuario: context.usuario, password: context.password }).pipe(
-      map((resp: any) => {
-        this.setCredentials(resp.usuario, context.remember);
-        return (resp.usuario);
+    return this.apollo.watchQuery({
+      query: Login,
+      variables: {
+        usuario: context.usuario,
+        password: context.password
+      }
+    }).valueChanges.pipe(
+      map(({ data }) => {
+        this.setCredentials({ ...data['login'].user, token: data['login'].token }, context.remember);
+        return data['login'].user;
       }));
   }
 
@@ -127,3 +134,19 @@ export class AuthenticationService {
   }
 
 }
+
+const Login = gql`
+  query login($usuario: String!, $password: String!) {
+    login(usuario: $usuario, password: $password) {
+      token
+      user {
+        id
+        usuario
+        email
+        nombre
+        apellido
+        rol
+      }
+    }
+  }
+`;

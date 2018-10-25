@@ -56,6 +56,7 @@ export interface Query {
   usuarioses: (Usuarios | null)[];
   usuariosesConnection: UsuariosConnection;
   node?: Node | null;
+  login: AuthPayload;
 }
 
 export interface Articulo {
@@ -209,6 +210,11 @@ export interface AggregateUsuarios {
   count: number;
 }
 
+export interface AuthPayload {
+  token: string;
+  user: Usuarios;
+}
+
 export interface Mutation {
   createArticulo: Articulo;
   updateArticulo?: Articulo | null;
@@ -246,6 +252,7 @@ export interface Mutation {
   upsertUsuarios: Usuarios;
   deleteUsuarios?: Usuarios | null;
   deleteManyUsuarioses: BatchPayload;
+  signup: AuthPayload;
 }
 
 export interface BatchPayload {
@@ -1230,6 +1237,10 @@ export interface UsuariosesConnectionQueryArgs {
 export interface NodeQueryArgs {
   id: string;
 }
+export interface LoginQueryArgs {
+  usuario: string;
+  password: string;
+}
 export interface ArticulosDetalleArticuloArgs {
   where?: ArticuloDetalleWhereInput | null;
   orderBy?: ArticuloDetalleOrderByInput | null;
@@ -1388,6 +1399,13 @@ export interface DeleteUsuariosMutationArgs {
 }
 export interface DeleteManyUsuariosesMutationArgs {
   where?: UsuariosWhereInput | null;
+}
+export interface SignupMutationArgs {
+  usuario: string;
+  email: string;
+  password: string;
+  nombre: string;
+  apellido: string;
 }
 export interface ArticuloSubscriptionArgs {
   where?: ArticuloSubscriptionWhereInput | null;
@@ -1561,6 +1579,7 @@ export namespace QueryResolvers {
       Context
     >;
     node?: NodeResolver<Node | null, any, Context>;
+    login?: LoginResolver<AuthPayload, any, Context>;
   }
 
   export type ArticuloResolver<
@@ -1804,6 +1823,16 @@ export namespace QueryResolvers {
   > = Resolver<R, Parent, Context, NodeArgs>;
   export interface NodeArgs {
     id: string;
+  }
+
+  export type LoginResolver<
+    R = AuthPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, LoginArgs>;
+  export interface LoginArgs {
+    usuario: string;
+    password: string;
   }
 }
 
@@ -2455,6 +2484,24 @@ export namespace AggregateUsuariosResolvers {
   >;
 }
 
+export namespace AuthPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    token?: TokenResolver<string, any, Context>;
+    user?: UserResolver<Usuarios, any, Context>;
+  }
+
+  export type TokenResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type UserResolver<
+    R = Usuarios,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
 export namespace MutationResolvers {
   export interface Resolvers<Context = any> {
     createArticulo?: CreateArticuloResolver<Articulo, any, Context>;
@@ -2541,6 +2588,7 @@ export namespace MutationResolvers {
       any,
       Context
     >;
+    signup?: SignupResolver<AuthPayload, any, Context>;
   }
 
   export type CreateArticuloResolver<
@@ -2889,6 +2937,19 @@ export namespace MutationResolvers {
   > = Resolver<R, Parent, Context, DeleteManyUsuariosesArgs>;
   export interface DeleteManyUsuariosesArgs {
     where?: UsuariosWhereInput | null;
+  }
+
+  export type SignupResolver<
+    R = AuthPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, SignupArgs>;
+  export interface SignupArgs {
+    usuario: string;
+    email: string;
+    password: string;
+    nombre: string;
+    apellido: string;
   }
 }
 

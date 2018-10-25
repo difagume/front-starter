@@ -22,6 +22,7 @@ import { NgxPermissionsModule } from 'ngx-permissions';
 
 import { ApolloModule, Apollo } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
+import { onError } from 'apollo-link-error';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import {
@@ -41,7 +42,7 @@ import { ErrorInterceptorProvider } from './core/helpers/error.interceptor';
 import { URL_SERVICIOS } from './config';
 import { ApolloLink, from, concat } from 'apollo-link';
 
-// declare let swal: any;
+declare let swal: any;
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -113,27 +114,27 @@ export class AppModule {
     });
 
     // Middleware para manejo de errorers de apollo (paquete: apollo-link-error)
-    /* const errorMiddleware = onError(({ graphQLErrors }) => {
+    const errorMiddleware = onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
           // console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
-          swal('Error al crear el artículo', message, 'error')
+          swal('Error', message, 'error')
         );
       }
       // if (networkError) { console.log(`[Network error]: ${JSON.stringify(networkError)}`); }
-    }); */
+    });
 
     // Con headers, manejo de errores
-    /* apollo.create({
+    apollo.create({
       link: from([authMiddleware, errorMiddleware, http]),
       cache: new InMemoryCache(),
-    }); */
+    });
 
     // Con headers
-    apollo.create({
+    /* apollo.create({
       link: concat(authMiddleware, http),
       cache: new InMemoryCache(),
-    });
+    }); */
 
     // Sin headers
     /* apollo.create({
