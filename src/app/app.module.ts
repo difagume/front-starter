@@ -116,10 +116,10 @@ export class AppModule {
     // Middleware para manejo de errorers de apollo (paquete: apollo-link-error)
     const errorMiddleware = onError(({ graphQLErrors }) => {
       if (graphQLErrors) {
-        graphQLErrors.map(({ message, locations, path }) =>
-          // console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
-          swal('Error', message, 'error')
-        );
+        graphQLErrors.map(({ message, locations, path }) => {
+          console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`);
+          swal('Error', message, 'error');
+        });
       }
       // if (networkError) { console.log(`[Network error]: ${JSON.stringify(networkError)}`); }
     });

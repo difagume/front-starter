@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { CustomValidators } from 'ng2-validation';
 import { Logger } from '../../core';
-import { Usuario } from '../../models';
+import { UsuariosCreateInput } from '../../generated/graphql';
 import { UsuarioService } from '../../services/usuario.service';
 
 declare let swal: any;
@@ -20,7 +20,7 @@ const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
 export class SignupComponent implements OnInit {
 
   public form: FormGroup;
-  usuario: Usuario;
+  usuario: UsuariosCreateInput;
   constructor(private fb: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService) { }
@@ -41,23 +41,19 @@ export class SignupComponent implements OnInit {
   }
 
   guardar() {
-    this.usuario = new Usuario(
-      null,
-      this.form.value.usuario,
-      this.form.value.password,
-      this.form.value.email,
-      this.form.value.nombre,
-      this.form.value.apellido,
-      null,
-      null,
-      false,
-      null);
+    this.usuario = {
+      usuario: this.form.value.usuario,
+      password: this.form.value.password,
+      email: this.form.value.email,
+      nombre: this.form.value.nombre,
+      apellido: this.form.value.apellido
+    };
 
-    this.usuarioService.registrarUsuario(this.usuario)
-      .subscribe((data: any) => {
-        swal(data.name, data.message, 'success');
+    this.usuarioService.signup(this.usuario)
+      .subscribe(({ data }) => {
+        swal('Usuario creado 😏', `El usuario: ${data.signup.user.usuario} ha sido creado`, 'success');
         this.router.navigate(['/login']);
-      }, error => { });
+      });
   }
 
 }

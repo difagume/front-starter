@@ -2,10 +2,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Login } from '../../graphql/graphql';
 import { Logger } from '../logger.service';
 
 const log = new Logger('AuthenticationService');
@@ -134,19 +134,3 @@ export class AuthenticationService {
   }
 
 }
-
-const Login = gql`
-  query login($usuario: String!, $password: String!) {
-    login(usuario: $usuario, password: $password) {
-      token
-      user {
-        id
-        usuario
-        email
-        nombre
-        apellido
-        rol
-      }
-    }
-  }
-`;

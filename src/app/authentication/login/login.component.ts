@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/'], { replaceUrl: true });
       }, error => {
         // log.debug('Login error --> ', error);
-        // error.interceptor actua
+        // apollo-link-error actua
       });
   }
 
