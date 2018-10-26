@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
 import { map } from 'rxjs/operators';
 import { URL_SERVICIOS } from '../config';
 import { AuthenticationService } from '../core';
-import { Rol } from '../models';
+import { Rol } from '../generated/graphql';
+import { roles } from '../graphql/graphql';
 
 @Injectable(/* {
   providedIn: PagesModule
@@ -11,7 +13,8 @@ import { Rol } from '../models';
 export class ParametrosService {
 
   constructor(private http: HttpClient,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,
+    private apollo: Apollo) { }
 
   actualizarRol(rol: Rol) {
     const url = `${URL_SERVICIOS}/rol/${rol.id}?token=${this.authenticationService.credentials.token}`;
@@ -29,11 +32,8 @@ export class ParametrosService {
   }
 
   obtenerRoles() {
-    const url = `${URL_SERVICIOS}/rol`;
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        return res.roles;
-      }));
+    return this.apollo.query({ query: roles })
+      .pipe(map(({ data }) => data['roles']));
   }
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService, Credentials, Logger } from '../../core';
-import { Usuario } from '../../models';
+import { AuthenticationService, Logger } from '../../core';
+import { Usuarios, UsuariosUpdateInput } from '../../generated/graphql';
 import { UsuarioService } from '../../services/usuario.service';
 
 declare let swal: any;
@@ -13,7 +13,7 @@ const log = new Logger('PerfilComponent');
 })
 export class PerfilComponent implements OnInit {
 
-  usuario: Usuario;
+  usuario: UsuariosUpdateInput;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -21,26 +21,32 @@ export class PerfilComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.usuario = this.authenticationService._credentials;
-    this.usuario = new Usuario(
-      this.authenticationService.credentials.id,
-      this.authenticationService.credentials.usuario,
-      this.authenticationService.credentials.password,
-      this.authenticationService.credentials.email,
-      this.authenticationService.credentials.nombre,
-      this.authenticationService.credentials.apellido,
-      this.authenticationService.credentials.rol,
-      this.authenticationService.credentials.img,
-      this.authenticationService.credentials.social,
-      this.authenticationService.credentials.token
-    );
+    this.usuario = {
+      usuario: this.authenticationService.credentials.usuario,
+      email: this.authenticationService.credentials.email,
+      nombre: this.authenticationService.credentials.nombre,
+      apellido: this.authenticationService.credentials.apellido
+    };
   }
 
   guardar() {
-    this.usuarioService.actualizarUsuario(this.usuario)
-      .subscribe((data: any) => {
-        this.authenticationService.actualizarCredentials(this.usuario);
-        swal(data.name, data.message, 'success');
-      }, error => { });
+    this.usuarioService.actualizarUsuario(this.usuario, this.authenticationService.credentials.id)
+      .subscribe(({ data: { updateUsuarios } }) => {
+
+        this.authenticationService.actualizarCredentials({
+          id: this.authenticationService.credentials.id,
+          usuario: this.usuario.usuario,
+          password: this.authenticationService.credentials.password,
+          email: this.usuario.email,
+          nombre: this.usuario.nombre,
+          apellido: this.usuario.apellido,
+          rol: this.authenticationService.credentials.rol,
+          img: this.authenticationService.credentials.img,
+          social: this.authenticationService.credentials.social,
+          token: this.authenticationService.credentials.token
+        });
+
+        swal('Usuario actualizado 😏', `El usuario ${updateUsuarios.usuario} ha sido actualizado`, 'success');
+      });
   }
 }

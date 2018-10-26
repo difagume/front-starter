@@ -44,7 +44,53 @@ export const Singup = gql`
   }
 `;
 
-export const Usuario = gql`
+export const usuarios = gql`
+  query Usuarios {
+    usuarios: usuarioses(where: { activo: true }) {
+      id
+      usuario
+      email
+      nombre
+      apellido
+      rol
+      estado
+    }
+  }
+`;
+
+export const roles = gql`
+  query Roles{
+    roles: rols(where: { activo: true }) {
+      id
+      nombre
+    }
+  }
+`;
+
+export const DeleteUsuarios = gql`
+  mutation eliminarUsuario($id: ID!) {
+    eliminarUsuario: deleteUsuarios(where: { id: $id }) {
+      id
+      usuario
+    }
+  }
+`;
+
+export const ActualizarUsuario = gql`
+  mutation updateUsuarios($data: UsuariosUpdateInput!, $id: ID!) {
+    updateUsuarios(data: $data, where: { id: $id }) {
+      id
+      usuario
+      email
+      nombre
+      apellido
+      rol
+      estado
+    }
+  }
+`;
+
+/* export const Usuario = gql`
   query usuarios($id: ID!){
     usuarios(where: { id: $id }) {
       id
@@ -55,4 +101,4 @@ export const Usuario = gql`
       rol
     }
   }
-`;
+`; */

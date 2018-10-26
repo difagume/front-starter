@@ -200,10 +200,10 @@ export class CatalogoComponent implements OnInit {
     };
 
     this.catalogoService.crearArticulo(this.articuloCrear)
-      .subscribe(({ data }) => {
+      .subscribe(({ data: { createArticulo } }) => {
 
         this.limpiarData();
-        swal('Artículo creado 😏', `El artículo: ${data.createArticulo.nombre} ha sido creado`, 'success');
+        swal('Artículo creado 😏', `El artículo: ${createArticulo.nombre} ha sido creado`, 'success');
 
       }, (error: string) => {
         console.log(error);
@@ -244,10 +244,10 @@ export class CatalogoComponent implements OnInit {
       .subscribe();
 
     this.catalogoService.actualizarArticulo(this.articuloActualizar, this.articulo.id)
-      .subscribe(({ data }) => {
+      .subscribe(({ data: { updateArticulo } }) => {
 
         this.limpiarData();
-        swal('Artículo actualizado 😏', `El artículo: ${data.updateArticulo.nombre} ha sido actualizado`, 'success');
+        swal('Artículo actualizado 😏', `El artículo: ${updateArticulo.nombre} ha sido actualizado`, 'success');
 
       }, (error: string) => {
         console.log(error);
@@ -279,9 +279,9 @@ export class CatalogoComponent implements OnInit {
       .then(eliminar => {
         if (eliminar) {
           this.catalogoService.eliminarArticulo(this.articuloEliminar)
-            .subscribe(({ data }) => {
+            .subscribe(({ data: { eliminarArticulo } }) => {
 
-              swal('Artículo eliminado 😪', `El artículo: ${data['eliminarArticulo'].nombre} ha sido eliminado`, 'success');
+              swal('Artículo eliminado 😪', `El artículo: ${eliminarArticulo.nombre} ha sido eliminado`, 'success');
 
             }, (error) => {
               console.log(error);

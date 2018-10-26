@@ -1,31 +1,31 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { map } from 'rxjs/operators';
-import { URL_SERVICIOS } from '../config';
 import { AuthenticationService, Logger } from '../core';
-import { UsuariosCreateInput } from '../generated/graphql';
-import { Singup } from '../graphql/graphql';
-import { Usuario } from '../models';
+import { UsuariosCreateInput, UsuariosUpdateInput } from '../generated/graphql';
+import { ActualizarUsuario, DeleteUsuarios, Singup, usuarios } from '../graphql/graphql';
 
 const log = new Logger('UsuarioService');
 
 @Injectable()
 export class UsuarioService {
 
-  constructor(private http: HttpClient,
-    private authenticationService: AuthenticationService,
+  constructor(private authenticationService: AuthenticationService,
     private apollo: Apollo) { }
 
-  actualizarUsuario(usuario: Usuario) {
-    const url = `${URL_SERVICIOS}/usuario/${usuario.id}?token=${this.authenticationService.credentials.token}`;
-    return this.http.put(url, usuario);
-  }
+  /*   actualizarUsuario(usuario: Usuario) {
+      const url = `${URL_SERVICIOS}/usuario/${usuario.id}?token=${this.authenticationService.credentials.token}`;
+      return this.http.put(url, usuario);
+    } */
 
-  /* registrarUsuario(usuario: UsuariosCreateInput) {
-    const url = `${URL_SERVICIOS}/usuario/registrar`;
-    return this.http.post(url, usuario);
-  } */
+  actualizarUsuario(usuario: UsuariosUpdateInput, id) {
+    return this.apollo.mutate({
+      mutation: ActualizarUsuario,
+      variables: {
+        data: usuario,
+        id: id
+      }
+    });
+  }
 
   signup(usuario: UsuariosCreateInput) {
     return this.apollo.mutate({
@@ -45,17 +45,28 @@ export class UsuarioService {
     });
   }
 
-  eliminarUsuario(usuario: Usuario) {
+  /* eliminarUsuario(usuario: Usuario) {
     const url = `${URL_SERVICIOS}/usuario/eliminar/${usuario.id}?token=${this.authenticationService.credentials.token}`;
     return this.http.put(url, usuario);
+  } */
+
+  eliminarUsuario(usuario: any) {
+    return this.apollo.mutate({
+      mutation: DeleteUsuarios,
+      variables: {
+        id: usuario.id
+      },
+      update: (store, { data: { eliminarUsuario } }) => {
+        const data: any = store.readQuery({ query: usuarios });
+        const indice = data.usuarios.map(usu => usu.id).indexOf(eliminarUsuario.id);
+        data.usuarios.splice(indice, 1);
+        store.writeQuery({ query: usuarios, data });
+      },
+    });
   }
 
   obtenerUsuarios() {
-    const url = `${URL_SERVICIOS}/usuario`;
-    return this.http.get(url)
-      .pipe(map((res: any) => {
-        return res.usuarios;
-      }));
+    return this.apollo.watchQuery({ query: usuarios });
   }
 
   get usuarioLogueadoId(): string | null {

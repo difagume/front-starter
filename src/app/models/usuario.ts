@@ -1,4 +1,4 @@
-export class Usuario {
+/* export class Usuario {
 
     constructor(
         public id: string,
@@ -12,4 +12,5 @@ export class Usuario {
         public social: boolean,
         public token: string
     ) { }
-}
+} */
+

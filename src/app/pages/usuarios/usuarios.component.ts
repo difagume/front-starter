@@ -1,12 +1,12 @@
 // https://www.npmjs.com/package/@swimlane/ngx-datatable
 // https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService, Logger } from '../../core';
-import { Rol, Usuario } from '../../models';
+import { Logger } from '../../core';
+import { Rol, Usuarios, UsuariosUpdateInput } from '../../generated/graphql';
 import { ParametrosService } from '../../services/parametros.service';
 import { UsuarioService } from '../../services/usuario.service';
-
 declare let swal: any;
+
 const log = new Logger('UsuariosComponent');
 
 @Component({
@@ -18,8 +18,8 @@ export class UsuariosComponent implements OnInit {
 
   usuarios = [];
   temp = [];
-  usuario: Usuario;
-  usuarioEliminar: Usuario;
+  usuario: Usuarios;
+  usuarioEliminar: Usuarios;
   usuarioIndex;
   usuarioLogueadoId;
   roles: Rol[];
@@ -31,11 +31,10 @@ export class UsuariosComponent implements OnInit {
     { name: 'Rol' }
   ];
 
-  cargando = false;
+  cargando = true;
 
   constructor(private usuarioService: UsuarioService,
-    private parametrosService: ParametrosService,
-    private authenticationService: AuthenticationService) { }
+    private parametrosService: ParametrosService) { }
 
   ngOnInit() {
     this.obtenerUsuarios();
@@ -44,15 +43,13 @@ export class UsuariosComponent implements OnInit {
   }
 
   obtenerUsuarios() {
-    this.cargando = true;
     this.usuarioService.obtenerUsuarios()
-      .subscribe((usuarios: Usuario[]) => {
-        // cache our list
-        this.temp = [...usuarios];
-        // push our inital complete list
-        this.usuarios = usuarios;
-        this.cargando = false;
-      }, error => { });
+      .valueChanges
+      .subscribe(({ data, loading }) => {
+        this.cargando = loading;
+        this.temp = [...data['usuarios']];
+        this.usuarios = data && data['usuarios'];
+      });
   }
 
   /**
@@ -91,7 +88,7 @@ export class UsuariosComponent implements OnInit {
   editarUsuario(id) {
     // Seteo usuario seleccionado
     this.temp = [...this.usuarios];
-    this.usuario = this.temp.find(usu => usu.id === id);
+    this.usuario = { ...this.temp.find(usu => usu.id === id) };
     this.usuarioIndex = this.temp.indexOf(this.usuario);
 
     // Seteo roles del usuario
@@ -121,11 +118,11 @@ export class UsuariosComponent implements OnInit {
       .then(eliminar => {
         if (eliminar) {
           this.usuarioService.eliminarUsuario(this.usuarioEliminar)
-            .subscribe((data: any) => {
+            .subscribe(({ data: { eliminarUsuario } }) => {
               this.temp.splice(this.usuarioIndex, 1);
               this.usuarios = [...this.temp];
-              swal(data.name, data.message, 'success');
-            }, error => { });
+              swal('Usuario eliminado 😪', `El usuario ${eliminarUsuario.usuario} ha sido eliminado`, 'success');
+            });
         }
       });
   }
@@ -134,23 +131,26 @@ export class UsuariosComponent implements OnInit {
    * Función que se llama al hacer click en el botón guardar
    */
   actualizarUsuario() {
-    this.temp.splice(this.usuarioIndex, 1, this.usuario);
-    this.usuarios = [...this.temp];
     // Filtro los roles seleccionados
     const rolesActivos = this.roles.filter(rol => rol.activo);
     // Seteo roles en usuario
     const rolesUsu = rolesActivos.map(rol => rol.nombre).toString();
     this.usuario.rol = rolesUsu;
+
+    // Lleno objeto para actualizar
+    const usuarioActualizar: UsuariosUpdateInput = {
+      usuario: this.usuario.usuario,
+      email: this.usuario.email,
+      nombre: this.usuario.nombre,
+      apellido: this.usuario.apellido,
+      rol: this.usuario.rol
+    };
     // Actualizo usuario
-    this.usuarioService.actualizarUsuario(this.usuario)
-      .subscribe((data: any) => {
-        if (this.usuarioLogueadoId === this.usuario.id) {
-          this.usuario.password = '💩';
-          this.usuario.token = this.authenticationService.credentials.token;
-          this.authenticationService.actualizarCredentials(this.usuario);
-        }
-        swal(data.name, data.message, 'success');
-      }, error => { });
+    this.usuarioService.actualizarUsuario(usuarioActualizar, this.usuario.id)
+      .subscribe(({ data: { updateUsuarios } }) => {
+        swal('Usuario actualizado 😏', `El usuario ${updateUsuarios.usuario} ha sido actualizado`, 'success');
+        this.usuario = null;
+      });
   }
 
   scrollTo(className: string): void {
@@ -191,7 +191,11 @@ export class UsuariosComponent implements OnInit {
    * @param ckb datos del checkbox clickeado
    */
   actualizarRoles(ckb) {
-    this.roles[+ckb.name - 1].activo = ckb.checked;
+    this.roles.forEach(rol => {
+      if (rol.id === ckb.id) {
+        rol.activo = ckb.checked;
+      }
+    });
   }
 
 

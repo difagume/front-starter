@@ -1,9 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
-import { AuthenticationService } from '../core';
 import { ArticuloCreateInput, ArticuloUpdateInput } from '../generated/graphql';
 
 @Injectable(/* {
@@ -11,9 +9,7 @@ import { ArticuloCreateInput, ArticuloUpdateInput } from '../generated/graphql';
 } */)
 export class CatalogoService {
 
-  constructor(private http: HttpClient,
-    private authenticationService: AuthenticationService,
-    private apollo: Apollo) { }
+  constructor(private apollo: Apollo) { }
 
   allProductos() {
     return this.apollo.query({ query: allProductos })
