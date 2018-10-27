@@ -52,9 +52,9 @@ export interface Query {
   rol?: Rol | null;
   rols: (Rol | null)[];
   rolsConnection: RolConnection;
-  usuarios?: Usuarios | null;
-  usuarioses: (Usuarios | null)[];
-  usuariosesConnection: UsuariosConnection;
+  usuario?: Usuario | null;
+  usuarios: (Usuario | null)[];
+  usuariosConnection: UsuarioConnection;
   node?: Node | null;
   login: AuthPayload;
 }
@@ -181,7 +181,7 @@ export interface AggregateRol {
   count: number;
 }
 
-export interface Usuarios {
+export interface Usuario {
   id: string;
   usuario: string;
   email: string;
@@ -195,24 +195,24 @@ export interface Usuarios {
   activo: boolean;
 }
 
-export interface UsuariosConnection {
+export interface UsuarioConnection {
   pageInfo: PageInfo;
-  edges: (UsuariosEdge | null)[];
-  aggregate: AggregateUsuarios;
+  edges: (UsuarioEdge | null)[];
+  aggregate: AggregateUsuario;
 }
 
-export interface UsuariosEdge {
-  node: Usuarios;
+export interface UsuarioEdge {
+  node: Usuario;
   cursor: string;
 }
 
-export interface AggregateUsuarios {
+export interface AggregateUsuario {
   count: number;
 }
 
 export interface AuthPayload {
   token: string;
-  user: Usuarios;
+  user: Usuario;
 }
 
 export interface Mutation {
@@ -246,12 +246,12 @@ export interface Mutation {
   upsertRol: Rol;
   deleteRol?: Rol | null;
   deleteManyRols: BatchPayload;
-  createUsuarios: Usuarios;
-  updateUsuarios?: Usuarios | null;
-  updateManyUsuarioses: BatchPayload;
-  upsertUsuarios: Usuarios;
-  deleteUsuarios?: Usuarios | null;
-  deleteManyUsuarioses: BatchPayload;
+  createUsuario: Usuario;
+  updateUsuario?: Usuario | null;
+  updateManyUsuarios: BatchPayload;
+  upsertUsuario: Usuario;
+  deleteUsuario?: Usuario | null;
+  deleteManyUsuarios: BatchPayload;
   signup: AuthPayload;
 }
 
@@ -265,7 +265,9 @@ export interface Subscription {
   menu?: MenuSubscriptionPayload | null;
   producto?: ProductoSubscriptionPayload | null;
   rol?: RolSubscriptionPayload | null;
-  usuarios?: UsuariosSubscriptionPayload | null;
+  usuario?: UsuarioSubscriptionPayload | null;
+  roles?: Rol | null;
+  usuarios?: Usuario | null;
 }
 
 export interface ArticuloSubscriptionPayload {
@@ -337,14 +339,14 @@ export interface RolPreviousValues {
   activo: boolean;
 }
 
-export interface UsuariosSubscriptionPayload {
+export interface UsuarioSubscriptionPayload {
   mutation: MutationType;
-  node?: Usuarios | null;
+  node?: Usuario | null;
   updatedFields?: string[] | null;
-  previousValues?: UsuariosPreviousValues | null;
+  previousValues?: UsuarioPreviousValues | null;
 }
 
-export interface UsuariosPreviousValues {
+export interface UsuarioPreviousValues {
   id: string;
   usuario: string;
   email: string;
@@ -599,13 +601,13 @@ export interface RolWhereInput {
   NOT?: RolWhereInput[] | null;
 }
 
-export interface UsuariosWhereUniqueInput {
+export interface UsuarioWhereUniqueInput {
   id?: string | null;
   usuario?: string | null;
   email?: string | null;
 }
 
-export interface UsuariosWhereInput {
+export interface UsuarioWhereInput {
   id?: string | null;
   id_not?: string | null;
   id_in?: string[] | null;
@@ -736,9 +738,9 @@ export interface UsuariosWhereInput {
   estado_not_ends_with?: string | null;
   activo?: boolean | null;
   activo_not?: boolean | null;
-  AND?: UsuariosWhereInput[] | null;
-  OR?: UsuariosWhereInput[] | null;
-  NOT?: UsuariosWhereInput[] | null;
+  AND?: UsuarioWhereInput[] | null;
+  OR?: UsuarioWhereInput[] | null;
+  NOT?: UsuarioWhereInput[] | null;
 }
 
 export interface ArticuloCreateInput {
@@ -1017,7 +1019,7 @@ export interface RolUpdateInput {
   activo?: boolean | null;
 }
 
-export interface UsuariosCreateInput {
+export interface UsuarioCreateInput {
   usuario: string;
   email: string;
   password: string;
@@ -1030,7 +1032,7 @@ export interface UsuariosCreateInput {
   activo?: boolean | null;
 }
 
-export interface UsuariosUpdateInput {
+export interface UsuarioUpdateInput {
   usuario?: string | null;
   email?: string | null;
   password?: string | null;
@@ -1098,15 +1100,15 @@ export interface RolSubscriptionWhereInput {
   NOT?: RolSubscriptionWhereInput[] | null;
 }
 
-export interface UsuariosSubscriptionWhereInput {
+export interface UsuarioSubscriptionWhereInput {
   mutation_in?: MutationType[] | null;
   updatedFields_contains?: string | null;
   updatedFields_contains_every?: string[] | null;
   updatedFields_contains_some?: string[] | null;
-  node?: UsuariosWhereInput | null;
-  AND?: UsuariosSubscriptionWhereInput[] | null;
-  OR?: UsuariosSubscriptionWhereInput[] | null;
-  NOT?: UsuariosSubscriptionWhereInput[] | null;
+  node?: UsuarioWhereInput | null;
+  AND?: UsuarioSubscriptionWhereInput[] | null;
+  OR?: UsuarioSubscriptionWhereInput[] | null;
+  NOT?: UsuarioSubscriptionWhereInput[] | null;
 }
 export interface ArticuloQueryArgs {
   where: ArticuloWhereUniqueInput;
@@ -1213,21 +1215,21 @@ export interface RolsConnectionQueryArgs {
   first?: number | null;
   last?: number | null;
 }
-export interface UsuariosQueryArgs {
-  where: UsuariosWhereUniqueInput;
+export interface UsuarioQueryArgs {
+  where: UsuarioWhereUniqueInput;
 }
-export interface UsuariosesQueryArgs {
-  where?: UsuariosWhereInput | null;
-  orderBy?: UsuariosOrderByInput | null;
+export interface UsuariosQueryArgs {
+  where?: UsuarioWhereInput | null;
+  orderBy?: UsuarioOrderByInput | null;
   skip?: number | null;
   after?: string | null;
   before?: string | null;
   first?: number | null;
   last?: number | null;
 }
-export interface UsuariosesConnectionQueryArgs {
-  where?: UsuariosWhereInput | null;
-  orderBy?: UsuariosOrderByInput | null;
+export interface UsuariosConnectionQueryArgs {
+  where?: UsuarioWhereInput | null;
+  orderBy?: UsuarioOrderByInput | null;
   skip?: number | null;
   after?: string | null;
   before?: string | null;
@@ -1378,27 +1380,27 @@ export interface DeleteRolMutationArgs {
 export interface DeleteManyRolsMutationArgs {
   where?: RolWhereInput | null;
 }
-export interface CreateUsuariosMutationArgs {
-  data: UsuariosCreateInput;
+export interface CreateUsuarioMutationArgs {
+  data: UsuarioCreateInput;
 }
-export interface UpdateUsuariosMutationArgs {
-  data: UsuariosUpdateInput;
-  where: UsuariosWhereUniqueInput;
+export interface UpdateUsuarioMutationArgs {
+  data: UsuarioUpdateInput;
+  where: UsuarioWhereUniqueInput;
 }
-export interface UpdateManyUsuariosesMutationArgs {
-  data: UsuariosUpdateInput;
-  where?: UsuariosWhereInput | null;
+export interface UpdateManyUsuariosMutationArgs {
+  data: UsuarioUpdateInput;
+  where?: UsuarioWhereInput | null;
 }
-export interface UpsertUsuariosMutationArgs {
-  where: UsuariosWhereUniqueInput;
-  create: UsuariosCreateInput;
-  update: UsuariosUpdateInput;
+export interface UpsertUsuarioMutationArgs {
+  where: UsuarioWhereUniqueInput;
+  create: UsuarioCreateInput;
+  update: UsuarioUpdateInput;
 }
-export interface DeleteUsuariosMutationArgs {
-  where: UsuariosWhereUniqueInput;
+export interface DeleteUsuarioMutationArgs {
+  where: UsuarioWhereUniqueInput;
 }
-export interface DeleteManyUsuariosesMutationArgs {
-  where?: UsuariosWhereInput | null;
+export interface DeleteManyUsuariosMutationArgs {
+  where?: UsuarioWhereInput | null;
 }
 export interface SignupMutationArgs {
   usuario: string;
@@ -1422,8 +1424,8 @@ export interface ProductoSubscriptionArgs {
 export interface RolSubscriptionArgs {
   where?: RolSubscriptionWhereInput | null;
 }
-export interface UsuariosSubscriptionArgs {
-  where?: UsuariosSubscriptionWhereInput | null;
+export interface UsuarioSubscriptionArgs {
+  where?: UsuarioSubscriptionWhereInput | null;
 }
 
 export enum ArticuloOrderByInput {
@@ -1499,7 +1501,7 @@ export enum RolOrderByInput {
   updatedAt_DESC = "updatedAt_DESC"
 }
 
-export enum UsuariosOrderByInput {
+export enum UsuarioOrderByInput {
   id_ASC = "id_ASC",
   id_DESC = "id_DESC",
   usuario_ASC = "usuario_ASC",
@@ -1571,10 +1573,10 @@ export namespace QueryResolvers {
     rol?: RolResolver<Rol | null, any, Context>;
     rols?: RolsResolver<(Rol | null)[], any, Context>;
     rolsConnection?: RolsConnectionResolver<RolConnection, any, Context>;
-    usuarios?: UsuariosResolver<Usuarios | null, any, Context>;
-    usuarioses?: UsuariosesResolver<(Usuarios | null)[], any, Context>;
-    usuariosesConnection?: UsuariosesConnectionResolver<
-      UsuariosConnection,
+    usuario?: UsuarioResolver<Usuario | null, any, Context>;
+    usuarios?: UsuariosResolver<(Usuario | null)[], any, Context>;
+    usuariosConnection?: UsuariosConnectionResolver<
+      UsuarioConnection,
       any,
       Context
     >;
@@ -1777,23 +1779,23 @@ export namespace QueryResolvers {
     last?: number | null;
   }
 
+  export type UsuarioResolver<
+    R = Usuario | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UsuarioArgs>;
+  export interface UsuarioArgs {
+    where: UsuarioWhereUniqueInput;
+  }
+
   export type UsuariosResolver<
-    R = Usuarios | null,
+    R = (Usuario | null)[],
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context, UsuariosArgs>;
   export interface UsuariosArgs {
-    where: UsuariosWhereUniqueInput;
-  }
-
-  export type UsuariosesResolver<
-    R = (Usuarios | null)[],
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context, UsuariosesArgs>;
-  export interface UsuariosesArgs {
-    where?: UsuariosWhereInput | null;
-    orderBy?: UsuariosOrderByInput | null;
+    where?: UsuarioWhereInput | null;
+    orderBy?: UsuarioOrderByInput | null;
     skip?: number | null;
     after?: string | null;
     before?: string | null;
@@ -1801,14 +1803,14 @@ export namespace QueryResolvers {
     last?: number | null;
   }
 
-  export type UsuariosesConnectionResolver<
-    R = UsuariosConnection,
+  export type UsuariosConnectionResolver<
+    R = UsuarioConnection,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, UsuariosesConnectionArgs>;
-  export interface UsuariosesConnectionArgs {
-    where?: UsuariosWhereInput | null;
-    orderBy?: UsuariosOrderByInput | null;
+  > = Resolver<R, Parent, Context, UsuariosConnectionArgs>;
+  export interface UsuariosConnectionArgs {
+    where?: UsuarioWhereInput | null;
+    orderBy?: UsuarioOrderByInput | null;
     skip?: number | null;
     after?: string | null;
     before?: string | null;
@@ -2358,7 +2360,7 @@ export namespace AggregateRolResolvers {
   >;
 }
 
-export namespace UsuariosResolvers {
+export namespace UsuarioResolvers {
   export interface Resolvers<Context = any> {
     id?: IdResolver<string, any, Context>;
     usuario?: UsuarioResolver<string, any, Context>;
@@ -2430,11 +2432,11 @@ export namespace UsuariosResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace UsuariosConnectionResolvers {
+export namespace UsuarioConnectionResolvers {
   export interface Resolvers<Context = any> {
     pageInfo?: PageInfoResolver<PageInfo, any, Context>;
-    edges?: EdgesResolver<(UsuariosEdge | null)[], any, Context>;
-    aggregate?: AggregateResolver<AggregateUsuarios, any, Context>;
+    edges?: EdgesResolver<(UsuarioEdge | null)[], any, Context>;
+    aggregate?: AggregateResolver<AggregateUsuario, any, Context>;
   }
 
   export type PageInfoResolver<
@@ -2443,28 +2445,28 @@ export namespace UsuariosConnectionResolvers {
     Context = any
   > = Resolver<R, Parent, Context>;
   export type EdgesResolver<
-    R = (UsuariosEdge | null)[],
+    R = (UsuarioEdge | null)[],
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
   export type AggregateResolver<
-    R = AggregateUsuarios,
+    R = AggregateUsuario,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace UsuariosEdgeResolvers {
+export namespace UsuarioEdgeResolvers {
   export interface Resolvers<Context = any> {
-    node?: NodeResolver<Usuarios, any, Context>;
+    node?: NodeResolver<Usuario, any, Context>;
     cursor?: CursorResolver<string, any, Context>;
   }
 
-  export type NodeResolver<
-    R = Usuarios,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
+  export type NodeResolver<R = Usuario, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
   export type CursorResolver<
     R = string,
     Parent = any,
@@ -2472,7 +2474,7 @@ export namespace UsuariosEdgeResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace AggregateUsuariosResolvers {
+export namespace AggregateUsuarioResolvers {
   export interface Resolvers<Context = any> {
     count?: CountResolver<number, any, Context>;
   }
@@ -2487,7 +2489,7 @@ export namespace AggregateUsuariosResolvers {
 export namespace AuthPayloadResolvers {
   export interface Resolvers<Context = any> {
     token?: TokenResolver<string, any, Context>;
-    user?: UserResolver<Usuarios, any, Context>;
+    user?: UserResolver<Usuario, any, Context>;
   }
 
   export type TokenResolver<R = string, Parent = any, Context = any> = Resolver<
@@ -2495,11 +2497,11 @@ export namespace AuthPayloadResolvers {
     Parent,
     Context
   >;
-  export type UserResolver<
-    R = Usuarios,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
+  export type UserResolver<R = Usuario, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
 }
 
 export namespace MutationResolvers {
@@ -2574,20 +2576,12 @@ export namespace MutationResolvers {
     upsertRol?: UpsertRolResolver<Rol, any, Context>;
     deleteRol?: DeleteRolResolver<Rol | null, any, Context>;
     deleteManyRols?: DeleteManyRolsResolver<BatchPayload, any, Context>;
-    createUsuarios?: CreateUsuariosResolver<Usuarios, any, Context>;
-    updateUsuarios?: UpdateUsuariosResolver<Usuarios | null, any, Context>;
-    updateManyUsuarioses?: UpdateManyUsuariosesResolver<
-      BatchPayload,
-      any,
-      Context
-    >;
-    upsertUsuarios?: UpsertUsuariosResolver<Usuarios, any, Context>;
-    deleteUsuarios?: DeleteUsuariosResolver<Usuarios | null, any, Context>;
-    deleteManyUsuarioses?: DeleteManyUsuariosesResolver<
-      BatchPayload,
-      any,
-      Context
-    >;
+    createUsuario?: CreateUsuarioResolver<Usuario, any, Context>;
+    updateUsuario?: UpdateUsuarioResolver<Usuario | null, any, Context>;
+    updateManyUsuarios?: UpdateManyUsuariosResolver<BatchPayload, any, Context>;
+    upsertUsuario?: UpsertUsuarioResolver<Usuario, any, Context>;
+    deleteUsuario?: DeleteUsuarioResolver<Usuario | null, any, Context>;
+    deleteManyUsuarios?: DeleteManyUsuariosResolver<BatchPayload, any, Context>;
     signup?: SignupResolver<AuthPayload, any, Context>;
   }
 
@@ -2881,62 +2875,62 @@ export namespace MutationResolvers {
     where?: RolWhereInput | null;
   }
 
-  export type CreateUsuariosResolver<
-    R = Usuarios,
+  export type CreateUsuarioResolver<
+    R = Usuario,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, CreateUsuariosArgs>;
-  export interface CreateUsuariosArgs {
-    data: UsuariosCreateInput;
+  > = Resolver<R, Parent, Context, CreateUsuarioArgs>;
+  export interface CreateUsuarioArgs {
+    data: UsuarioCreateInput;
   }
 
-  export type UpdateUsuariosResolver<
-    R = Usuarios | null,
+  export type UpdateUsuarioResolver<
+    R = Usuario | null,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, UpdateUsuariosArgs>;
-  export interface UpdateUsuariosArgs {
-    data: UsuariosUpdateInput;
-    where: UsuariosWhereUniqueInput;
+  > = Resolver<R, Parent, Context, UpdateUsuarioArgs>;
+  export interface UpdateUsuarioArgs {
+    data: UsuarioUpdateInput;
+    where: UsuarioWhereUniqueInput;
   }
 
-  export type UpdateManyUsuariosesResolver<
+  export type UpdateManyUsuariosResolver<
     R = BatchPayload,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, UpdateManyUsuariosesArgs>;
-  export interface UpdateManyUsuariosesArgs {
-    data: UsuariosUpdateInput;
-    where?: UsuariosWhereInput | null;
+  > = Resolver<R, Parent, Context, UpdateManyUsuariosArgs>;
+  export interface UpdateManyUsuariosArgs {
+    data: UsuarioUpdateInput;
+    where?: UsuarioWhereInput | null;
   }
 
-  export type UpsertUsuariosResolver<
-    R = Usuarios,
+  export type UpsertUsuarioResolver<
+    R = Usuario,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, UpsertUsuariosArgs>;
-  export interface UpsertUsuariosArgs {
-    where: UsuariosWhereUniqueInput;
-    create: UsuariosCreateInput;
-    update: UsuariosUpdateInput;
+  > = Resolver<R, Parent, Context, UpsertUsuarioArgs>;
+  export interface UpsertUsuarioArgs {
+    where: UsuarioWhereUniqueInput;
+    create: UsuarioCreateInput;
+    update: UsuarioUpdateInput;
   }
 
-  export type DeleteUsuariosResolver<
-    R = Usuarios | null,
+  export type DeleteUsuarioResolver<
+    R = Usuario | null,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, DeleteUsuariosArgs>;
-  export interface DeleteUsuariosArgs {
-    where: UsuariosWhereUniqueInput;
+  > = Resolver<R, Parent, Context, DeleteUsuarioArgs>;
+  export interface DeleteUsuarioArgs {
+    where: UsuarioWhereUniqueInput;
   }
 
-  export type DeleteManyUsuariosesResolver<
+  export type DeleteManyUsuariosResolver<
     R = BatchPayload,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, DeleteManyUsuariosesArgs>;
-  export interface DeleteManyUsuariosesArgs {
-    where?: UsuariosWhereInput | null;
+  > = Resolver<R, Parent, Context, DeleteManyUsuariosArgs>;
+  export interface DeleteManyUsuariosArgs {
+    where?: UsuarioWhereInput | null;
   }
 
   export type SignupResolver<
@@ -2984,11 +2978,9 @@ export namespace SubscriptionResolvers {
       Context
     >;
     rol?: RolResolver<RolSubscriptionPayload | null, any, Context>;
-    usuarios?: UsuariosResolver<
-      UsuariosSubscriptionPayload | null,
-      any,
-      Context
-    >;
+    usuario?: UsuarioResolver<UsuarioSubscriptionPayload | null, any, Context>;
+    roles?: RolesResolver<Rol | null, any, Context>;
+    usuarios?: UsuariosResolver<Usuario | null, any, Context>;
   }
 
   export type ArticuloResolver<
@@ -3036,14 +3028,25 @@ export namespace SubscriptionResolvers {
     where?: RolSubscriptionWhereInput | null;
   }
 
-  export type UsuariosResolver<
-    R = UsuariosSubscriptionPayload | null,
+  export type UsuarioResolver<
+    R = UsuarioSubscriptionPayload | null,
     Parent = any,
     Context = any
-  > = Resolver<R, Parent, Context, UsuariosArgs>;
-  export interface UsuariosArgs {
-    where?: UsuariosSubscriptionWhereInput | null;
+  > = Resolver<R, Parent, Context, UsuarioArgs>;
+  export interface UsuarioArgs {
+    where?: UsuarioSubscriptionWhereInput | null;
   }
+
+  export type RolesResolver<
+    R = Rol | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UsuariosResolver<
+    R = Usuario | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace ArticuloSubscriptionPayloadResolvers {
@@ -3364,13 +3367,13 @@ export namespace RolPreviousValuesResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace UsuariosSubscriptionPayloadResolvers {
+export namespace UsuarioSubscriptionPayloadResolvers {
   export interface Resolvers<Context = any> {
     mutation?: MutationResolver<MutationType, any, Context>;
-    node?: NodeResolver<Usuarios | null, any, Context>;
+    node?: NodeResolver<Usuario | null, any, Context>;
     updatedFields?: UpdatedFieldsResolver<string[] | null, any, Context>;
     previousValues?: PreviousValuesResolver<
-      UsuariosPreviousValues | null,
+      UsuarioPreviousValues | null,
       any,
       Context
     >;
@@ -3382,7 +3385,7 @@ export namespace UsuariosSubscriptionPayloadResolvers {
     Context = any
   > = Resolver<R, Parent, Context>;
   export type NodeResolver<
-    R = Usuarios | null,
+    R = Usuario | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
@@ -3392,13 +3395,13 @@ export namespace UsuariosSubscriptionPayloadResolvers {
     Context = any
   > = Resolver<R, Parent, Context>;
   export type PreviousValuesResolver<
-    R = UsuariosPreviousValues | null,
+    R = UsuarioPreviousValues | null,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
 }
 
-export namespace UsuariosPreviousValuesResolvers {
+export namespace UsuarioPreviousValuesResolvers {
   export interface Resolvers<Context = any> {
     id?: IdResolver<string, any, Context>;
     usuario?: UsuarioResolver<string, any, Context>;

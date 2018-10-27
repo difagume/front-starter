@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { CustomValidators } from 'ng2-validation';
 import { Logger } from '../../core';
-import { UsuariosCreateInput } from '../../generated/graphql';
+import { UsuarioCreateInput } from '../../generated/graphql';
 import { UsuarioService } from '../../services/usuario.service';
 
 declare let swal: any;
@@ -20,7 +20,7 @@ const confirmPassword = new FormControl('', CustomValidators.equalTo(password));
 export class SignupComponent implements OnInit {
 
   public form: FormGroup;
-  usuario: UsuariosCreateInput;
+  usuario: UsuarioCreateInput;
   constructor(private fb: FormBuilder,
     private router: Router,
     private usuarioService: UsuarioService) { }

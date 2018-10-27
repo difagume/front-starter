@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { AuthenticationService, Logger } from '../core';
-import { UsuariosCreateInput, UsuariosUpdateInput } from '../generated/graphql';
-import { ActualizarUsuario, DeleteUsuarios, Singup, SingupSubscription, usuarios } from '../graphql/graphql';
+import { UsuarioCreateInput, UsuarioUpdateInput } from '../generated/graphql';
+import { ActualizarUsuario, DeleteUsuario, Singup, SingupSubscription, usuarios } from '../graphql/graphql';
 
 const log = new Logger('UsuarioService');
 
@@ -19,7 +19,7 @@ export class UsuarioService {
       return this.http.put(url, usuario);
     } */
 
-  actualizarUsuario(usuario: UsuariosUpdateInput, id) {
+  actualizarUsuario(usuario: UsuarioUpdateInput, id) {
     return this.apollo.mutate({
       mutation: ActualizarUsuario,
       variables: {
@@ -30,7 +30,7 @@ export class UsuarioService {
   }
 
   // Agrega un usuario
-  signup(usuario: UsuariosCreateInput) {
+  signup(usuario: UsuarioCreateInput) {
     return this.apollo.mutate({
       mutation: Singup,
       variables: {
@@ -55,7 +55,7 @@ export class UsuarioService {
 
   eliminarUsuario(usuario: any) {
     return this.apollo.mutate({
-      mutation: DeleteUsuarios,
+      mutation: DeleteUsuario,
       variables: {
         id: usuario.id
       },

@@ -46,7 +46,7 @@ export const Singup = gql`
 
 export const usuarios = gql`
   query Usuarios {
-    usuarios: usuarioses(where: { activo: true }) {
+    usuarios(where: { activo: true }) {
       id
       usuario
       email
@@ -67,9 +67,9 @@ export const roles = gql`
   }
 `;
 
-export const DeleteUsuarios = gql`
+export const DeleteUsuario = gql`
   mutation eliminarUsuario($id: ID!) {
-    eliminarUsuario: deleteUsuarios(where: { id: $id }) {
+    eliminarUsuario: deleteUsuario(where: { id: $id }) {
       id
       usuario
     }
@@ -77,8 +77,8 @@ export const DeleteUsuarios = gql`
 `;
 
 export const ActualizarUsuario = gql`
-  mutation updateUsuarios($data: UsuariosUpdateInput!, $id: ID!) {
-    updateUsuarios(data: $data, where: { id: $id }) {
+  mutation updateUsuario($data: UsuarioUpdateInput!, $id: ID!) {
+    updateUsuario(data: $data, where: { id: $id }) {
       id
       usuario
       email
@@ -92,7 +92,7 @@ export const ActualizarUsuario = gql`
 
 export const SingupSubscription = gql`
   subscription {
-    usuarios: susuarios {
+    usuarios {
       id
       usuario
       email

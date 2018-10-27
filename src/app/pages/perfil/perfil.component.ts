@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService, Logger } from '../../core';
-import { Usuarios, UsuariosUpdateInput } from '../../generated/graphql';
+import { UsuarioUpdateInput } from '../../generated/graphql';
 import { UsuarioService } from '../../services/usuario.service';
 
 declare let swal: any;
@@ -13,7 +13,7 @@ const log = new Logger('PerfilComponent');
 })
 export class PerfilComponent implements OnInit {
 
-  usuario: UsuariosUpdateInput;
+  usuario: UsuarioUpdateInput;
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -31,7 +31,7 @@ export class PerfilComponent implements OnInit {
 
   guardar() {
     this.usuarioService.actualizarUsuario(this.usuario, this.authenticationService.credentials.id)
-      .subscribe(({ data: { updateUsuarios } }) => {
+      .subscribe(({ data: { updateUsuario } }) => {
 
         this.authenticationService.actualizarCredentials({
           id: this.authenticationService.credentials.id,
@@ -46,7 +46,7 @@ export class PerfilComponent implements OnInit {
           token: this.authenticationService.credentials.token
         });
 
-        swal('Usuario actualizado 😏', `El usuario ${updateUsuarios.usuario} ha sido actualizado`, 'success');
+        swal('Usuario actualizado 😏', `El usuario ${updateUsuario.usuario} ha sido actualizado`, 'success');
       });
   }
 }

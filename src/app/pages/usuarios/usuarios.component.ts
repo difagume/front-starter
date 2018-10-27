@@ -3,7 +3,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Logger } from '../../core';
-import { Rol, Usuarios, UsuariosUpdateInput } from '../../generated/graphql';
+import { Rol, Usuario, UsuarioUpdateInput } from '../../generated/graphql';
 import { ParametrosService } from '../../services/parametros.service';
 import { UsuarioService } from '../../services/usuario.service';
 declare let swal: any;
@@ -18,8 +18,8 @@ const log = new Logger('UsuariosComponent');
 export class UsuariosComponent implements OnInit, OnDestroy {
   usuarios = [];
   temp = [];
-  usuario: Usuarios;
-  usuarioEliminar: Usuarios;
+  usuario: Usuario;
+  usuarioEliminar: Usuario;
   usuarioIndex;
   usuarioLogueadoId;
   roles: Rol[];
@@ -145,7 +145,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.usuario.rol = rolesUsu;
 
     // Lleno objeto para actualizar
-    const usuarioActualizar: UsuariosUpdateInput = {
+    const usuarioActualizar: UsuarioUpdateInput = {
       usuario: this.usuario.usuario,
       email: this.usuario.email,
       nombre: this.usuario.nombre,
@@ -154,8 +154,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     };
     // Actualizo usuario
     this.usuarioService.actualizarUsuario(usuarioActualizar, this.usuario.id)
-      .subscribe(({ data: { updateUsuarios } }) => {
-        swal('Usuario actualizado 😏', `El usuario ${updateUsuarios.usuario} ha sido actualizado`, 'success');
+      .subscribe(({ data: { updateUsuario } }) => {
+        swal('Usuario actualizado 😏', `El usuario ${updateUsuario.usuario} ha sido actualizado`, 'success');
         this.usuario = null;
       });
   }
