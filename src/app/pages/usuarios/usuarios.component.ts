@@ -1,6 +1,7 @@
 // https://www.npmjs.com/package/@swimlane/ngx-datatable
 // https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Logger } from '../../core';
 import { Rol, Usuarios, UsuariosUpdateInput } from '../../generated/graphql';
 import { ParametrosService } from '../../services/parametros.service';
@@ -14,8 +15,7 @@ const log = new Logger('UsuariosComponent');
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.scss']
 })
-export class UsuariosComponent implements OnInit {
-
+export class UsuariosComponent implements OnInit, OnDestroy {
   usuarios = [];
   temp = [];
   usuario: Usuarios;
@@ -32,6 +32,7 @@ export class UsuariosComponent implements OnInit {
   ];
 
   cargando = true;
+  obtenerUsuariosSubscription: Subscription = new Subscription();
 
   constructor(private usuarioService: UsuarioService,
     private parametrosService: ParametrosService) { }
@@ -40,10 +41,16 @@ export class UsuariosComponent implements OnInit {
     this.obtenerUsuarios();
     this.obtenerRoles();
     this.usuarioLogueadoId = this.usuarioService.usuarioLogueadoId;
+
+    this.usuarioService.subscribeToSignup();
+  }
+
+  ngOnDestroy() {
+    this.obtenerUsuariosSubscription.unsubscribe();
   }
 
   obtenerUsuarios() {
-    this.usuarioService.obtenerUsuarios()
+    this.obtenerUsuariosSubscription = this.usuarioService.obtenerUsuarios()
       .valueChanges
       .subscribe(({ data, loading }) => {
         this.cargando = loading;

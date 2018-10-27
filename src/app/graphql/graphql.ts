@@ -90,15 +90,31 @@ export const ActualizarUsuario = gql`
   }
 `;
 
-/* export const Usuario = gql`
-  query usuarios($id: ID!){
-    usuarios(where: { id: $id }) {
+export const SingupSubscription = gql`
+  subscription {
+    usuarios: susuarios {
       id
       usuario
       email
       nombre
       apellido
       rol
+      estado
+    }
+  }
+`;
+/* export const SingupSubscription = gql`
+  subscription {
+    usuarios(where: { mutation_in: [CREATED] }) {
+      node {
+        id
+        usuario
+        email
+        nombre
+        apellido
+        rol
+        estado
+      }
     }
   }
 `; */

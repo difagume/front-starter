@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
+import { Apollo, QueryRef } from 'apollo-angular';
 import { AuthenticationService, Logger } from '../core';
 import { UsuariosCreateInput, UsuariosUpdateInput } from '../generated/graphql';
-import { ActualizarUsuario, DeleteUsuarios, Singup, usuarios } from '../graphql/graphql';
+import { ActualizarUsuario, DeleteUsuarios, Singup, SingupSubscription, usuarios } from '../graphql/graphql';
 
 const log = new Logger('UsuarioService');
 
 @Injectable()
 export class UsuarioService {
+
+  allUsuariosQuery: QueryRef<any>;
 
   constructor(private authenticationService: AuthenticationService,
     private apollo: Apollo) { }
@@ -27,6 +29,7 @@ export class UsuarioService {
     });
   }
 
+  // Agrega un usuario
   signup(usuario: UsuariosCreateInput) {
     return this.apollo.mutate({
       mutation: Singup,
@@ -38,9 +41,9 @@ export class UsuarioService {
         apellido: usuario.apellido
       },
       /* update: (store, { data: { signup } }) => {
-        const data: any = store.readQuery({ query: allArticulos });
+        const data: any = store.readQuery({ query: usuarios });
         data.articulos.push(signup);
-        store.writeQuery({ query: allArticulos, data });
+        store.writeQuery({ query: usuarios, data });
       }, */
     });
   }
@@ -66,11 +69,33 @@ export class UsuarioService {
   }
 
   obtenerUsuarios() {
-    return this.apollo.watchQuery({ query: usuarios });
+    this.allUsuariosQuery = this.apollo.watchQuery({ query: usuarios });
+    return this.allUsuariosQuery;
   }
 
   get usuarioLogueadoId(): string | null {
     return this.authenticationService.credentials.id;
+  }
+
+  subscribeToSignup() {
+    this.allUsuariosQuery.subscribeToMore({
+      document: SingupSubscription,
+      updateQuery: (previous, { subscriptionData }) => {
+
+        if (!subscriptionData.data) {
+          return previous;
+        }
+
+        const nuevoUsuario = [
+          subscriptionData.data.usuarios,
+          ...previous.usuarios
+        ];
+        return {
+          ...previous,
+          usuarios: nuevoUsuario
+        };
+      }
+    });
   }
 
 }
