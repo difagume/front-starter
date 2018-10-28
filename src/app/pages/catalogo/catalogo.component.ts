@@ -204,15 +204,6 @@ export class CatalogoComponent implements OnInit {
 
         this.limpiarData();
         swal('Artículo creado 😏', `El artículo: ${createArticulo.nombre} ha sido creado`, 'success');
-
-      }, (error: string) => {
-        console.log(error);
-        if (error.toString().includes('uk_item_nombre')) {
-          swal('Error al crear el artículo 😪', `El artículo con ese nombre ya existe`, 'error');
-        }
-        // else {
-        //  swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
-        // }
       });
   }
 
@@ -248,15 +239,6 @@ export class CatalogoComponent implements OnInit {
 
         this.limpiarData();
         swal('Artículo actualizado 😏', `El artículo: ${updateArticulo.nombre} ha sido actualizado`, 'success');
-
-      }, (error: string) => {
-        console.log(error);
-        /* if (error.toString().includes('uk_item_nombre')) {
-          swal('Error al crear el artículo 😪', `El artículo con ese nombre ya existe`, 'error');
-        } */
-        /* else {
-          swal('Error al crear el artículo 😪', `El artículo ${this.articulo.nombre} no ha sido creado`, 'error');
-        } */
       });
   }
 
@@ -282,9 +264,6 @@ export class CatalogoComponent implements OnInit {
             .subscribe(({ data: { eliminarArticulo } }) => {
 
               swal('Artículo eliminado 😪', `El artículo: ${eliminarArticulo.nombre} ha sido eliminado`, 'success');
-
-            }, (error) => {
-              console.log(error);
             });
         }
       });

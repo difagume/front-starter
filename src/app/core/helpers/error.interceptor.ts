@@ -1,5 +1,5 @@
 
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, throwError as observableThrowError } from 'rxjs';
@@ -14,8 +14,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
     constructor(
         private router: Router,
-        private authenticationService: AuthenticationService,
-        private injector: Injector
+        private authenticationService: AuthenticationService
     ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
