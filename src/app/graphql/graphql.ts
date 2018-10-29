@@ -103,6 +103,31 @@ export const SingupSubscription = gql`
     }
   }
 `;
+
+export const RestablecerPassword = gql`
+  mutation restablecerPassword($usuario: String!, $email: String!) {
+    usuario: restablecerPassword(usuario: $usuario, email: $email) {
+      id
+      usuario
+      email
+      nombre
+      apellido
+    }
+  }
+`;
+
+export const ActualizarPassword = gql`
+  mutation actualizarPassword($token: String!, $password: String!) {
+    usuario: actualizarPassword(token: $token, password: $password) {
+      id
+      usuario
+      email
+      nombre
+      apellido
+    }
+  }
+`;
+
 /* export const SingupSubscription = gql`
   subscription {
     usuarios(where: { mutation_in: [CREATED] }) {

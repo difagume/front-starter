@@ -1,0 +1,35 @@
+<div class="d-flex align-items-stretch min-height-100 h-100">
+  <div class="bg-cover bg-4 d-none d-md-inline-flex col-md-6 col-lg-8"></div>
+  <div class="card card-body mb-0 rounded-0 p-5 col-sm-12 col-md-6 col-lg-4">
+    <form [formGroup]="form" (ngSubmit)="actualizar()">
+      <div class="mb-3">
+        <img src="assets/images/logo.png" class="avatar-xs mb-1" alt="">
+        <p class="ff-headers text-uppercase">Restablecer tu contraseña</p>
+      </div>
+      <fieldset class="form-group">
+        <label for="newPassword" class="form-control-label">
+          Ingresa tu nueva contraseña
+        </label>
+        <input type="password" class="form-control" placeholder="nueva contraseña" [formControl]="form.controls['password']"
+          [ngClass]="{'is-invalid': form.controls['password'].hasError('required') && form.controls['password'].touched}"
+          required>
+        <div class="invalid-feedback" *ngIf="form.controls['password'].hasError('required') && form.controls['password'].touched">Ingresa
+          tu nueva contraseña</div>
+      </fieldset>
+      <fieldset class="form-group">
+        <label for="verifyPassword" class="form-control-label">
+          Confirma tu nueva contraseña
+        </label>
+        <input type="password" class="form-control" placeholder="confirma tu contraseña" [formControl]="form.controls['confirmPassword']"
+          [ngClass]="{'is-invalid': form.controls['confirmPassword'].hasError('required') && form.controls['confirmPassword'].touched || form.controls['confirmPassword'].hasError('equalTo') && form.controls['confirmPassword'].touched}"
+          required>
+        <div class="invalid-feedback" *ngIf="form.controls['confirmPassword'].hasError('required') && form.controls['confirmPassword'].touched">Confirma
+          tu nueva contraseña</div>
+        <div class="invalid-feedback" *ngIf="form.controls['confirmPassword'].hasError('equalTo') && form.controls['confirmPassword'].touched">La
+          contraseña debe coincidir</div>
+      </fieldset>
+      <button class="btn btn-primary waves-effect" type="submit" [disabled]="!form.valid">Actualizar la
+        contraseña</button>
+    </form>
+  </div>
+</div>

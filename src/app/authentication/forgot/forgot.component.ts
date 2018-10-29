@@ -1,8 +1,8 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { URL_SERVICIOS } from '../../config';
+import { Apollo } from 'apollo-angular';
+import { RestablecerPassword } from '../../graphql/graphql';
 
 declare let swal: any;
 
@@ -14,9 +14,11 @@ declare let swal: any;
 export class ForgotComponent implements OnInit {
 
   public form: FormGroup;
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private router: Router,
-    private http: HttpClient) { }
+    private apollo: Apollo
+  ) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -25,11 +27,18 @@ export class ForgotComponent implements OnInit {
   }
 
   restablecerPassword() {
-    const url = `${URL_SERVICIOS}/login/olvido`;
-    this.http.post(url, { usuario: this.form.value.uname })
-      .subscribe((data: any) => {
-        swal(data.name, data.message, 'success');
+    return this.apollo.mutate({
+      mutation: RestablecerPassword,
+      variables: {
+        usuario: this.form.value.uname,
+        email: this.form.value.uname
+      }
+    })
+      .subscribe(({ data: { usuario } }) => {
+        swal('Email enviado 😄',
+          `Se te ha enviado un correo a ${usuario.email} con los pasos para actualizar la contraseña`,
+          'success');
         this.router.navigate(['/login']);
-      }, error => { });
+      });
   }
 }

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { NgbAccordionModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
@@ -21,7 +21,6 @@ import { PagesRoutes } from './pages.routing';
     FormsModule,
     NgxPermissionsModule.forChild(),
     RouterModule.forChild(PagesRoutes),
-    NgbModule,
     NgSelectModule,
     NgbAccordionModule,
     NgxDatatableModule,

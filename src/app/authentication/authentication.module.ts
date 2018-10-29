@@ -7,6 +7,7 @@ import { AuthenticationRoutes } from './authentication.routing';
 import { ForgotComponent } from './forgot/forgot.component';
 import { LockscreenComponent } from './lockscreen/lockscreen.component';
 import { LoginComponent } from './login/login.component';
+import { RestoreComponent } from './restore/restore.component';
 import { SignupComponent } from './signup/signup.component';
 
 @NgModule({
@@ -20,7 +21,8 @@ import { SignupComponent } from './signup/signup.component';
     LoginComponent,
     SignupComponent,
     ForgotComponent,
-    LockscreenComponent
+    LockscreenComponent,
+    RestoreComponent
   ],
   providers: [UsuarioService]
 })

@@ -1,9 +1,8 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
-import { AuthenticationService } from '../../core/authentication/authentication.service';
 
 const Productos = gql`
   query todosProductos($id: ID!) {
@@ -28,8 +27,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   idProducto: String;
   private querySubscription: Subscription;
 
-  constructor(private apollo: Apollo,
-    private authenticationService: AuthenticationService) { }
+  closeResult: string;
+
+  constructor(private apollo: Apollo, private modalService: NgbModal) { }
 
   ngOnInit() {
     this.idProducto = 'cjnhpli2t000l0822cggy3bu1';
@@ -58,4 +58,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.querySubscription.unsubscribe();
   }
+
+  open(content) {
+    this.modalService.open(content, { centered: true, ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
 }
