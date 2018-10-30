@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
 import { map } from 'rxjs/operators';
-import { ArticuloCreateInput, ArticuloUpdateInput } from '../generated/graphql';
+import { ArticuloCreateInput, ArticuloUpdateInput, ProductoCreateInput } from '../generated/graphql';
+import { CrearProducto } from '../graphql/graphql';
 
 @Injectable(/* {
   providedIn: PagesModule
@@ -12,14 +13,7 @@ export class CatalogoService {
   constructor(private apollo: Apollo) { }
 
   allProductos() {
-    return this.apollo.query({ query: allProductos })
-      .pipe(map(({ data }) => {
-        data['productos'].map(producto => {
-          // Agrego a cada producto la propiedad: cantidad
-          producto['cantidad'] = 1;
-        });
-        return data['productos'];
-      }));
+    return this.apollo.watchQuery({ query: allProductos });
   }
 
   allArticulos() {
@@ -79,6 +73,20 @@ export class CatalogoService {
         data: articulo,
         id: id
       }
+    });
+  }
+
+  crearProducto(producto: ProductoCreateInput) {
+    return this.apollo.mutate({
+      mutation: CrearProducto,
+      variables: {
+        data: producto
+      },
+      update: (store, { data: { createProducto } }) => {
+        const data: any = store.readQuery({ query: allProductos });
+        data.productos.push(createProducto);
+        store.writeQuery({ query: allProductos, data });
+      },
     });
   }
 }

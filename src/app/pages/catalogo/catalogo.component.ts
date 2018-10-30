@@ -1,8 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
 import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
-import { ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput, ArticuloUpdateInput } from '../../generated/graphql';
+import {
+  ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput,
+  ArticuloUpdateInput, ProductoCreateInput
+} from '../../generated/graphql';
 import { CatalogoService } from '../../services/catalogo.service';
 declare let swal: any;
 
@@ -19,6 +23,7 @@ export class CatalogoComponent implements OnInit {
   temp = [];
   menus: Observable<any>;
   productos: Observable<any>;
+  nuevoProducto: ProductoCreateInput = { nombre: null, valor: null, stock: null };
   productosSeleccionados: any[] = [];
   valorTotal = 0;
   ganancia = 0;
@@ -30,7 +35,7 @@ export class CatalogoComponent implements OnInit {
   articuloIndex;
   detalle: any = {};
   cargando = true;
-  error: any;
+  //   error: any;
   public keyUp = new Subject<void>();
   /*  columns = [
      { prop: 'nombre' },
@@ -41,6 +46,7 @@ export class CatalogoComponent implements OnInit {
 
   constructor(
     private catalogoService: CatalogoService,
+    private modalService: NgbModal,
     // private ref: ChangeDetectorRef
   ) {
     this.keyUp.pipe(
@@ -52,8 +58,21 @@ export class CatalogoComponent implements OnInit {
 
   ngOnInit() {
     this.obtenerArticulos();
-    this.productos = this.catalogoService.allProductos();
+    this.obtenerProductos();
     this.menus = this.catalogoService.allMenus();
+  }
+
+  obtenerProductos() {
+    this.catalogoService.allProductos()
+      .valueChanges
+      .subscribe(({ data }) => {
+        // .pipe(map(({ data }) => {
+        data['productos'].map(producto => {
+          // Agrego a cada producto la propiedad: cantidad
+          producto['cantidad'] = 1;
+        });
+        this.productos = data['productos'];
+      });
   }
 
   obtenerArticulos() {
@@ -61,7 +80,6 @@ export class CatalogoComponent implements OnInit {
       .valueChanges
       .subscribe(({ data, loading }) => {
         this.cargando = loading;
-        this.error = data['error'];
 
         // Agrego una propiedad al articulo para tener el nombre del menu
         data['articulos'].map(art => {
@@ -73,7 +91,7 @@ export class CatalogoComponent implements OnInit {
 
       }, (err) => {
         console.log(err);
-        this.error = err;
+        // this.error = err;
         this.cargando = false;
       });
   }
@@ -203,7 +221,7 @@ export class CatalogoComponent implements OnInit {
       .subscribe(({ data: { createArticulo } }) => {
 
         this.limpiarData();
-        swal('Artículo creado 😏', `El artículo: ${createArticulo.nombre} ha sido creado`, 'success');
+        swal('Artículo creado 😏', `El artículo ${createArticulo.nombre} ha sido creado`, 'success');
       });
   }
 
@@ -238,7 +256,7 @@ export class CatalogoComponent implements OnInit {
       .subscribe(({ data: { updateArticulo } }) => {
 
         this.limpiarData();
-        swal('Artículo actualizado 😏', `El artículo: ${updateArticulo.nombre} ha sido actualizado`, 'success');
+        swal('Artículo actualizado 😏', `El artículo ${updateArticulo.nombre} ha sido actualizado`, 'success');
       });
   }
 
@@ -263,7 +281,7 @@ export class CatalogoComponent implements OnInit {
           this.catalogoService.eliminarArticulo(this.articuloEliminar)
             .subscribe(({ data: { eliminarArticulo } }) => {
 
-              swal('Artículo eliminado 😪', `El artículo: ${eliminarArticulo.nombre} ha sido eliminado`, 'success');
+              swal('Artículo eliminado 😪', `El artículo ${eliminarArticulo.nombre} ha sido eliminado`, 'success');
             });
         }
       });
@@ -276,7 +294,7 @@ export class CatalogoComponent implements OnInit {
     setTimeout(() => {
       this.scrollTo('editar');
     }, 250);
-    this.articulo = { menu: {} };
+    this.articulo = { tiempo_preparacion: '00:00', menu: {} };
   }
 
   /**
@@ -302,6 +320,21 @@ export class CatalogoComponent implements OnInit {
     this.articulo = null;
     this.articuloCrear = null;
     this.articuloActualizar = null;
+  }
+
+  abrirModal(content) {
+    this.nuevoProducto = { nombre: null, valor: null, stock: null };
+    this.modalService.open(content, { centered: true });
+  }
+
+  crearProducto() {
+    this.catalogoService.crearProducto(this.nuevoProducto)
+      .subscribe(({ data: { createProducto } }) => {
+
+        this.nuevoProducto = { nombre: null, valor: null, stock: null };
+        this.modalService.dismissAll();
+        swal('Producto creado 😏', `El producto ${createProducto.nombre} ha sido creado`, 'success');
+      });
   }
 
 }

@@ -128,6 +128,17 @@ export const ActualizarPassword = gql`
   }
 `;
 
+export const CrearProducto = gql`
+  mutation crearProducto($data: ProductoCreateInput!) {
+    createProducto(data: $data) {
+      id
+      nombre
+      stock
+      valor
+    }
+  }
+`;
+
 /* export const SingupSubscription = gql`
   subscription {
     usuarios(where: { mutation_in: [CREATED] }) {
