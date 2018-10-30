@@ -302,7 +302,7 @@
       <div class="form-group row">
         <label class="col-2 col-form-label">Nombre:</label>
         <div class="col-10">
-          <input id="productoNombre" name="productoNombre" class="form-control" placeholder="nombre del producto"
+          <input ngbAutofocus id="productoNombre" name="productoNombre" class="form-control" placeholder="nombre del producto"
             [(ngModel)]="nuevoProducto.nombre" #productoNombre="ngModel" [ngClass]="{'is-invalid': (productoNombre.dirty || productoNombre.touched) && productoNombre?.errors?.required}"
             required>
           <div class="invalid-feedback" *ngIf="productoNombre.invalid && (productoNombre.dirty || productoNombre.touched) && productoNombre?.errors?.required">Ingresa
