@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import gql from 'graphql-tag';
-import { map } from 'rxjs/operators';
-import { ArticuloCreateInput, ArticuloUpdateInput, ProductoCreateInput } from '../generated/graphql';
-import { CrearProducto } from '../graphql/graphql';
+import { ArticuloCreateInput, ArticuloUpdateInput, MenuCreateInput, ProductoCreateInput } from '../generated/graphql';
+import { CrearMenu, CrearProducto } from '../graphql/graphql';
 
 @Injectable(/* {
   providedIn: PagesModule
@@ -21,8 +20,7 @@ export class CatalogoService {
   }
 
   allMenus() {
-    return this.apollo.query({ query: allMenus })
-      .pipe(map(({ data }) => data['menus']));
+    return this.apollo.watchQuery({ query: allMenus });
   }
 
   crearArticulo(articulo: ArticuloCreateInput) {
@@ -86,6 +84,20 @@ export class CatalogoService {
         const data: any = store.readQuery({ query: allProductos });
         data.productos.push(createProducto);
         store.writeQuery({ query: allProductos, data });
+      },
+    });
+  }
+
+  crearMenu(menu: MenuCreateInput) {
+    return this.apollo.mutate({
+      mutation: CrearMenu,
+      variables: {
+        data: menu
+      },
+      update: (store, { data: { createMenu } }) => {
+        const data: any = store.readQuery({ query: allMenus });
+        data.menus.push(createMenu);
+        store.writeQuery({ query: allMenus, data });
       },
     });
   }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { AuthenticationService, Logger } from '../core';
-import { UsuarioCreateInput, UsuarioUpdateInput } from '../generated/graphql';
-import { ActualizarUsuario, DeleteUsuario, Singup, SingupSubscription, usuarios } from '../graphql/graphql';
+import { RolCreateInput, UsuarioCreateInput, UsuarioUpdateInput } from '../generated/graphql';
+import { ActualizarUsuario, CrearRol, DeleteUsuario, roles, Singup, SingupSubscription, usuarios } from '../graphql/graphql';
 
 const log = new Logger('UsuarioService');
 
@@ -95,6 +95,20 @@ export class UsuarioService {
           usuarios: nuevoUsuario
         };
       }
+    });
+  }
+
+  crearRol(rol: RolCreateInput) {
+    return this.apollo.mutate({
+      mutation: CrearRol,
+      variables: {
+        data: rol
+      },
+      update: (store, { data: { createRol } }) => {
+        const data: any = store.readQuery({ query: roles });
+        data.roles.push(createRol);
+        store.writeQuery({ query: roles, data });
+      },
     });
   }
 

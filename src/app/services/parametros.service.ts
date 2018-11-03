@@ -32,8 +32,7 @@ export class ParametrosService {
   }
 
   obtenerRoles() {
-    return this.apollo.query({ query: roles })
-      .pipe(map(({ data }) => data['roles']));
+    return this.apollo.watchQuery({ query: roles });
   }
 
 }

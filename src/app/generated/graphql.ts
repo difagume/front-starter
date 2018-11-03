@@ -253,6 +253,8 @@ export interface Mutation {
   deleteUsuario?: Usuario | null;
   deleteManyUsuarios: BatchPayload;
   signup: AuthPayload;
+  restablecerPassword: Usuario;
+  actualizarPassword: Usuario;
 }
 
 export interface BatchPayload {
@@ -1408,6 +1410,14 @@ export interface SignupMutationArgs {
   password: string;
   nombre: string;
   apellido: string;
+}
+export interface RestablecerPasswordMutationArgs {
+  usuario: string;
+  email: string;
+}
+export interface ActualizarPasswordMutationArgs {
+  token: string;
+  password: string;
 }
 export interface ArticuloSubscriptionArgs {
   where?: ArticuloSubscriptionWhereInput | null;
@@ -2583,6 +2593,8 @@ export namespace MutationResolvers {
     deleteUsuario?: DeleteUsuarioResolver<Usuario | null, any, Context>;
     deleteManyUsuarios?: DeleteManyUsuariosResolver<BatchPayload, any, Context>;
     signup?: SignupResolver<AuthPayload, any, Context>;
+    restablecerPassword?: RestablecerPasswordResolver<Usuario, any, Context>;
+    actualizarPassword?: ActualizarPasswordResolver<Usuario, any, Context>;
   }
 
   export type CreateArticuloResolver<
@@ -2944,6 +2956,26 @@ export namespace MutationResolvers {
     password: string;
     nombre: string;
     apellido: string;
+  }
+
+  export type RestablecerPasswordResolver<
+    R = Usuario,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, RestablecerPasswordArgs>;
+  export interface RestablecerPasswordArgs {
+    usuario: string;
+    email: string;
+  }
+
+  export type ActualizarPasswordResolver<
+    R = Usuario,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, ActualizarPasswordArgs>;
+  export interface ActualizarPasswordArgs {
+    token: string;
+    password: string;
   }
 }
 

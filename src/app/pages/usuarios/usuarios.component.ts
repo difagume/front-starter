@@ -1,9 +1,10 @@
 // https://www.npmjs.com/package/@swimlane/ngx-datatable
 // https://plnkr.co/edit/2F1Jol1i9BsYYWNat42V?p=info
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subscription } from 'rxjs';
 import { Logger } from '../../core';
-import { Rol, Usuario, UsuarioUpdateInput } from '../../generated/graphql';
+import { Rol, RolCreateInput, Usuario, UsuarioUpdateInput } from '../../generated/graphql';
 import { ParametrosService } from '../../services/parametros.service';
 import { UsuarioService } from '../../services/usuario.service';
 declare let swal: any;
@@ -22,6 +23,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   usuarioEliminar: Usuario;
   usuarioIndex;
   usuarioLogueadoId;
+  nuevoRol: RolCreateInput = { nombre: null };
   roles: Rol[];
   columns = [
     { prop: 'usuario' },
@@ -35,7 +37,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   obtenerUsuariosSubscription: Subscription = new Subscription();
 
   constructor(private usuarioService: UsuarioService,
-    private parametrosService: ParametrosService) { }
+    private parametrosService: ParametrosService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.obtenerUsuarios();
@@ -171,9 +174,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    */
   obtenerRoles() {
     this.parametrosService.obtenerRoles()
-      .subscribe(res => {
-        this.roles = res;
-      });
+      .valueChanges.subscribe(({ data }) => (this.roles = data['roles']));
   }
 
   /**
@@ -203,6 +204,25 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         rol.activo = ckb.checked;
       }
     });
+  }
+
+  abrirModal(content) {
+    this.nuevoRol = { nombre: null };
+    this.modalService.open(content, { centered: true });
+  }
+
+  crearRol() {
+    this.usuarioService
+      .crearRol(this.nuevoRol)
+      .subscribe(({ data: { createRol } }) => {
+        this.nuevoRol = { nombre: null };
+        this.modalService.dismissAll();
+        swal(
+          'Rol creado 😏',
+          `El rol ${createRol.nombre} ha sido creado`,
+          'success'
+        );
+      });
   }
 
 

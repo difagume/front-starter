@@ -5,7 +5,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
 import {
   ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput,
-  ArticuloUpdateInput, ProductoCreateInput
+  ArticuloUpdateInput, MenuCreateInput, ProductoCreateInput
 } from '../../generated/graphql';
 import { CatalogoService } from '../../services/catalogo.service';
 declare let swal: any;
@@ -16,14 +16,19 @@ declare let swal: any;
   styleUrls: ['./catalogo.component.scss']
 })
 export class CatalogoComponent implements OnInit {
-
-  @ViewChild('myTable') table: any;
+  @ViewChild('myTable')
+  table: any;
 
   articulos: any[];
   temp = [];
   menus: Observable<any>;
+  nuevoMenu: MenuCreateInput = { nombre: null };
   productos: Observable<any>;
-  nuevoProducto: ProductoCreateInput = { nombre: null, valor: null, stock: null };
+  nuevoProducto: ProductoCreateInput = {
+    nombre: null,
+    valor: null,
+    stock: null
+  };
   productosSeleccionados: any[] = [];
   valorTotal = 0;
   ganancia = 0;
@@ -46,39 +51,43 @@ export class CatalogoComponent implements OnInit {
 
   constructor(
     private catalogoService: CatalogoService,
-    private modalService: NgbModal,
+    private modalService: NgbModal
     // private ref: ChangeDetectorRef
   ) {
-    this.keyUp.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      flatMap(search => of(search).pipe(delay(300)))
-    ).subscribe(() => this.cambiaPVP());
+    this.keyUp
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        flatMap(search => of(search).pipe(delay(300)))
+      )
+      .subscribe(() => this.cambiaPVP());
   }
 
   ngOnInit() {
     this.obtenerArticulos();
     this.obtenerProductos();
-    this.menus = this.catalogoService.allMenus();
+    this.obtenerMenus();
   }
 
   obtenerProductos() {
-    this.catalogoService.allProductos()
-      .valueChanges
-      .subscribe(({ data }) => {
-        // .pipe(map(({ data }) => {
-        data['productos'].map(producto => {
-          // Agrego a cada producto la propiedad: cantidad
-          producto['cantidad'] = 1;
-        });
-        this.productos = data['productos'];
+    this.catalogoService.allProductos().valueChanges.subscribe(({ data }) => {
+      data['productos'].map(producto => {
+        // Agrego a cada producto la propiedad: cantidad
+        producto['cantidad'] = 1;
       });
+      this.productos = data['productos'];
+    });
+  }
+
+  obtenerMenus() {
+    this.catalogoService
+      .allMenus()
+      .valueChanges.subscribe(({ data }) => (this.menus = data['menus']));
   }
 
   obtenerArticulos() {
-    this.catalogoService.allArticulos()
-      .valueChanges
-      .subscribe(({ data, loading }) => {
+    this.catalogoService.allArticulos().valueChanges.subscribe(
+      ({ data, loading }) => {
         this.cargando = loading;
 
         // Agrego una propiedad al articulo para tener el nombre del menu
@@ -88,18 +97,19 @@ export class CatalogoComponent implements OnInit {
 
         this.temp = [...data['articulos']];
         this.articulos = data && data['articulos'];
-
-      }, (err) => {
+      },
+      err => {
         console.log(err);
         // this.error = err;
         this.cargando = false;
-      });
+      }
+    );
   }
 
   /**
-  * Función que filtra una columna de la tabla
-  * @param event
-  */
+   * Función que filtra una columna de la tabla
+   * @param event
+   */
   /* updateFilter(event) {
     const val = event.target.value;
     // filter our data
@@ -116,10 +126,15 @@ export class CatalogoComponent implements OnInit {
   updateFilter(event) {
     const val = event.target.value;
 
-    const temp = this.temp.filter(
-      item => Object.keys(item).some(
-        k => item[k] != null && item[k].toString().toLowerCase()
-          .includes(val.toLowerCase()))
+    const temp = this.temp.filter(item =>
+      Object.keys(item).some(
+        k =>
+          item[k] != null &&
+          item[k]
+            .toString()
+            .toLowerCase()
+            .includes(val.toLowerCase())
+      )
     );
     this.articulos = temp;
   }
@@ -161,12 +176,13 @@ export class CatalogoComponent implements OnInit {
     this.articulo = this.temp.find(art => art.id === id);
 
     if (this.articulo) {
-
       setTimeout(() => {
         this.scrollTo('editar');
       }, 250);
 
-      this.articulo.tiempo_preparacion = moment.utc(this.articulo.tiempo_preparacion).format('HH:mm');
+      this.articulo.tiempo_preparacion = moment
+        .utc(this.articulo.tiempo_preparacion)
+        .format('HH:mm');
 
       // Lleno productosSeleccionados del artículo que voy a editar
       if (this.articulo.articuloDetalle) {
@@ -175,12 +191,14 @@ export class CatalogoComponent implements OnInit {
 
         this.articulo.articuloDetalle.forEach(articuloDetalle => {
           this.productosSeleccionados.push({
-            ...articuloDetalle.producto, cantidad: articuloDetalle.cantidad
+            ...articuloDetalle.producto,
+            cantidad: articuloDetalle.cantidad
           });
 
           // this.articulos_detalleEliminar.push({ id: articuloDetalle.id });
 
-          this.valorTotal += +articuloDetalle.producto.valor * +articuloDetalle.cantidad;
+          this.valorTotal +=
+            +articuloDetalle.producto.valor * +articuloDetalle.cantidad;
         });
       }
 
@@ -200,7 +218,6 @@ export class CatalogoComponent implements OnInit {
   crearArticulo() {
     const articulosDetalle: ArticuloDetalleCreateWithoutArticuloInput[] = [];
     this.productosSeleccionados.forEach(producto => {
-
       articulosDetalle.push({
         cantidad: producto.cantidad,
         producto: {
@@ -217,11 +234,15 @@ export class CatalogoComponent implements OnInit {
       articulos_detalle: { create: articulosDetalle }
     };
 
-    this.catalogoService.crearArticulo(this.articuloCrear)
+    this.catalogoService
+      .crearArticulo(this.articuloCrear)
       .subscribe(({ data: { createArticulo } }) => {
-
         this.limpiarData();
-        swal('Artículo creado 😏', `El artículo ${createArticulo.nombre} ha sido creado`, 'success');
+        swal(
+          'Artículo creado 😏',
+          `El artículo ${createArticulo.nombre} ha sido creado`,
+          'success'
+        );
       });
   }
 
@@ -244,19 +265,22 @@ export class CatalogoComponent implements OnInit {
       tiempo_preparacion: 'T'.concat(this.articulo.tiempo_preparacion),
       menu: { connect: { id: this.articulo.menu.id } },
       articulos_detalle: {
-        create: articulos_detalleCrear,
+        create: articulos_detalleCrear
         // delete: this.articulos_detalleEliminar
       }
     };
 
-    this.catalogoService.eliminarArticuloDetalles(this.articulo.id)
-      .subscribe();
+    this.catalogoService.eliminarArticuloDetalles(this.articulo.id).subscribe();
 
-    this.catalogoService.actualizarArticulo(this.articuloActualizar, this.articulo.id)
+    this.catalogoService
+      .actualizarArticulo(this.articuloActualizar, this.articulo.id)
       .subscribe(({ data: { updateArticulo } }) => {
-
         this.limpiarData();
-        swal('Artículo actualizado 😏', `El artículo ${updateArticulo.nombre} ha sido actualizado`, 'success');
+        swal(
+          'Artículo actualizado 😏',
+          `El artículo ${updateArticulo.nombre} ha sido actualizado`,
+          'success'
+        );
       });
   }
 
@@ -271,20 +295,25 @@ export class CatalogoComponent implements OnInit {
     this.articuloIndex = this.temp.indexOf(this.articuloEliminar);
     swal({
       title: '¿Estás seguro?',
-      text: 'Estás a punto de eliminar al artículo: ' + this.articuloEliminar.nombre,
+      text:
+        'Estás a punto de eliminar al artículo: ' +
+        this.articuloEliminar.nombre,
       icon: 'warning',
       buttons: ['Cancelar', true],
-      dangerMode: true,
-    })
-      .then(eliminar => {
-        if (eliminar) {
-          this.catalogoService.eliminarArticulo(this.articuloEliminar)
-            .subscribe(({ data: { eliminarArticulo } }) => {
-
-              swal('Artículo eliminado 😪', `El artículo ${eliminarArticulo.nombre} ha sido eliminado`, 'success');
-            });
-        }
-      });
+      dangerMode: true
+    }).then(eliminar => {
+      if (eliminar) {
+        this.catalogoService
+          .eliminarArticulo(this.articuloEliminar)
+          .subscribe(({ data: { eliminarArticulo } }) => {
+            swal(
+              'Artículo eliminado 😪',
+              `El artículo ${eliminarArticulo.nombre} ha sido eliminado`,
+              'success'
+            );
+          });
+      }
+    });
   }
 
   /**
@@ -324,17 +353,35 @@ export class CatalogoComponent implements OnInit {
 
   abrirModal(content) {
     this.nuevoProducto = { nombre: null, valor: null, stock: null };
+    this.nuevoMenu = { nombre: null };
     this.modalService.open(content, { centered: true });
   }
 
   crearProducto() {
-    this.catalogoService.crearProducto(this.nuevoProducto)
+    this.catalogoService
+      .crearProducto(this.nuevoProducto)
       .subscribe(({ data: { createProducto } }) => {
-
         this.nuevoProducto = { nombre: null, valor: null, stock: null };
         this.modalService.dismissAll();
-        swal('Producto creado 😏', `El producto ${createProducto.nombre} ha sido creado`, 'success');
+        swal(
+          'Producto creado 😏',
+          `El producto ${createProducto.nombre} ha sido creado`,
+          'success'
+        );
       });
   }
 
+  crearMenu() {
+    this.catalogoService
+      .crearMenu(this.nuevoMenu)
+      .subscribe(({ data: { createMenu } }) => {
+        this.nuevoMenu = { nombre: null };
+        this.modalService.dismissAll();
+        swal(
+          'Menú creado 😏',
+          `El menú ${createMenu.nombre} ha sido creado`,
+          'success'
+        );
+      });
+  }
 }

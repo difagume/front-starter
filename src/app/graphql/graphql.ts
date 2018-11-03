@@ -139,6 +139,24 @@ export const CrearProducto = gql`
   }
 `;
 
+export const CrearMenu = gql`
+  mutation crearMenu($data: MenuCreateInput!) {
+    createMenu(data: $data) {
+      id
+      nombre
+    }
+  }
+`;
+
+export const CrearRol = gql`
+  mutation crearRol($data: RolCreateInput!) {
+    createRol(data: $data) {
+      id
+      nombre
+    }
+  }
+`;
+
 /* export const SingupSubscription = gql`
   subscription {
     usuarios(where: { mutation_in: [CREATED] }) {

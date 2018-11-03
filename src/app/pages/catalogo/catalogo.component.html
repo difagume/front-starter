@@ -117,22 +117,26 @@
       <form #f="ngForm" ngNativeValidate (ngSubmit)="f.form.valid && crear_actualizarArticulo()">
         <div class="form-group row">
           <label for="cmbMenu" class="col-2 col-form-label">Menú:</label>
-          <div class="col-10">
+          <div class="col-9">
             <select class="form-control" [(ngModel)]="articulo.menu.id" name="menu" #menu="ngModel" [ngClass]="{'is-invalid': menu.invalid && (menu.dirty || menu.touched)}"
               required>
               <!-- (change)="cambiaMenu( $event.target.value )" -->
               <option selected disabled value="null">Seleccione...</option>
-              <option *ngFor="let menu of menus | async" [value]="menu.id">{{
+              <option *ngFor="let menu of menus" [value]="menu.id">{{
                 menu.nombre }}</option>
             </select>
             <div class="invalid-feedback" *ngIf="menu.invalid && (menu.dirty || menu.touched)">Selecciona
               el menú</div>
           </div>
+          <button class="btn btn-outline-info btn-icon-icon waves-effect mr-1 mb-1" type="button" (click)="abrirModal(contentMenu)"
+            placement="top" ngbTooltip="Agregar menú" container="body">
+            <i class="fas fa-plus"></i>
+          </button>
         </div>
 
         <div class="form-group row">
           <label for="txtArticulo" class="col-2 col-form-label">Nombre del artículo:</label>
-          <div class="col-10">
+          <div class="col-9">
             <input class="form-control" type="text" id="txtArticulo" [(ngModel)]="articulo.nombre" name="articuloNombre"
               placeholder="Ingresa el nombre del artículo" #articuloNombre="ngModel" [ngClass]="{'is-invalid': articuloNombre?.errors?.required && (articuloNombre.dirty || articuloNombre.touched)}"
               autocomplete="off" required>
@@ -167,7 +171,7 @@
                             </ng-template> -->
 
           </ng-select>
-          <button class="btn btn-outline-info btn-icon-icon waves-effect mr-1 mb-1" type="button" (click)="abrirModal(content)"
+          <button class="btn btn-outline-info btn-icon-icon waves-effect mr-1 mb-1" type="button" (click)="abrirModal(contentProducto)"
             placement="top" ngbTooltip="Agregar producto" container="body">
             <i class="fas fa-plus"></i>
           </button>
@@ -275,7 +279,7 @@
           <hr>
           <label class="col-2 col-form-label"></label>
           <button type="submit" class="btn col-2 btn-primary waves-effect waves-light">
-            <i class="far fa-save" aria-hidden="true"></i>
+            <i class="fa fa-save" aria-hidden="true"></i>
             Guardar
           </button>
 
@@ -290,7 +294,7 @@
   </div>
 </div>
 
-<ng-template #content let-modal>
+<ng-template #contentProducto let-modal>
   <form #m="ngForm" (ngSubmit)="m.form.valid && crearProducto()">
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Agregar producto</h4>
@@ -325,6 +329,32 @@
             required>
           <div class="invalid-feedback" *ngIf="productoStock.invalid && (productoStock.dirty || productoStock.touched) && productoStock?.errors?.required">Ingresa
             el stock del producto</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-dark" type="submit">Agregar</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #contentMenu let-modal>
+  <form #p="ngForm" (ngSubmit)="p.form.valid && crearMenu()">
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Agregar menú</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group row">
+        <label class="col-2 col-form-label">Nombre:</label>
+        <div class="col-10">
+          <input ngbAutofocus id="menuNombre" name="menuNombre" class="form-control" placeholder="nombre del menú"
+            [(ngModel)]="nuevoMenu.nombre" #menuNombre="ngModel" [ngClass]="{'is-invalid': (menuNombre.dirty || menuNombre.touched) && menuNombre?.errors?.required}"
+            required>
+          <div class="invalid-feedback" *ngIf="menuNombre.invalid && (menuNombre.dirty || menuNombre.touched) && menuNombre?.errors?.required">Ingresa
+            el nombre del menú</div>
         </div>
       </div>
     </div>
