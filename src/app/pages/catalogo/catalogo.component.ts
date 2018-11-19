@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as moment from 'moment';
-import { Observable, of, Subject } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, flatMap } from 'rxjs/operators';
 import {
   ArticuloCreateInput, ArticuloDetalleCreateWithoutArticuloInput,
-  ArticuloUpdateInput, MenuCreateInput, ProductoCreateInput
+  ArticuloUpdateInput, MenuCreateInput, ProductoCreateInput, ArticuloDetalleWhereUniqueInput
 } from '../../generated/graphql';
 import { CatalogoService } from '../../services/catalogo.service';
 declare let swal: any;
@@ -15,7 +15,7 @@ declare let swal: any;
   templateUrl: './catalogo.component.html',
   styleUrls: ['./catalogo.component.scss']
 })
-export class CatalogoComponent implements OnInit {
+export class CatalogoComponent implements OnInit, OnDestroy {
   @ViewChild('myTable')
   table: any;
 
@@ -35,13 +35,13 @@ export class CatalogoComponent implements OnInit {
   articulo: any;
   articuloCrear: ArticuloCreateInput;
   articuloActualizar: ArticuloUpdateInput;
-  // articulos_detalleEliminar: ArticuloDetalleWhereUniqueInput[] = [];
   articuloEliminar: any = {};
+  articulos_detalleEliminar: ArticuloDetalleWhereUniqueInput[] = [];
   articuloIndex;
   detalle: any = {};
   cargando = true;
-  //   error: any;
   public keyUp = new Subject<void>();
+  private subscriptions = new Subscription();
   /*  columns = [
      { prop: 'nombre' },
      { name: 'menu' },
@@ -70,39 +70,41 @@ export class CatalogoComponent implements OnInit {
   }
 
   obtenerProductos() {
-    this.catalogoService.allProductos().valueChanges.subscribe(({ data }) => {
-      data['productos'].map(producto => {
-        // Agrego a cada producto la propiedad: cantidad
-        producto['cantidad'] = 1;
-      });
-      this.productos = data['productos'];
-    });
+    this.subscriptions.add(
+      this.catalogoService.allProductos().valueChanges
+        .subscribe(({ data }) => {
+          data['productos'].map(producto => {
+            // Agrego a cada producto la propiedad: cantidad
+            producto['cantidad'] = 1;
+          });
+          this.productos = data['productos'];
+        })
+    );
   }
 
   obtenerMenus() {
-    this.catalogoService
-      .allMenus()
-      .valueChanges.subscribe(({ data }) => (this.menus = data['menus']));
+    this.subscriptions.add(
+      this.catalogoService.allMenus().valueChanges
+        .subscribe(({ data }) => (this.menus = data['menus']))
+    );
   }
 
   obtenerArticulos() {
-    this.catalogoService.allArticulos().valueChanges.subscribe(
-      ({ data, loading }) => {
-        this.cargando = loading;
+    this.subscriptions.add(
+      this.catalogoService.allArticulos().valueChanges
+        .subscribe(
+          ({ data, loading }) => {
+            this.cargando = loading;
 
-        // Agrego una propiedad al articulo para tener el nombre del menu
-        data['articulos'].map(art => {
-          art['articulo_menu'] = art.menu.nombre;
-        });
+            // Agrego una propiedad al articulo para tener el nombre del menu
+            data['articulos'].map(art => {
+              art['articulo_menu'] = art.menu.nombre;
+            });
 
-        this.temp = [...data['articulos']];
-        this.articulos = data && data['articulos'];
-      },
-      err => {
-        console.log(err);
-        // this.error = err;
-        this.cargando = false;
-      }
+            this.temp = [...data['articulos']];
+            this.articulos = [...this.temp];
+            // this.articulos = data && data['articulos'];
+          })
     );
   }
 
@@ -125,7 +127,7 @@ export class CatalogoComponent implements OnInit {
    */
   updateFilter(event) {
     const val = event.target.value;
-
+    this.cargando = true;
     const temp = this.temp.filter(item =>
       Object.keys(item).some(
         k =>
@@ -136,6 +138,7 @@ export class CatalogoComponent implements OnInit {
             .includes(val.toLowerCase())
       )
     );
+    this.cargando = false;
     this.articulos = temp;
   }
 
@@ -189,13 +192,15 @@ export class CatalogoComponent implements OnInit {
         this.productosSeleccionados = [];
         this.valorTotal = 0;
 
+        this.articulos_detalleEliminar = [];
+
         this.articulo.articuloDetalle.forEach(articuloDetalle => {
           this.productosSeleccionados.push({
             ...articuloDetalle.producto,
             cantidad: articuloDetalle.cantidad
           });
 
-          // this.articulos_detalleEliminar.push({ id: articuloDetalle.id });
+          this.articulos_detalleEliminar.push({ id: articuloDetalle.id });
 
           this.valorTotal +=
             +articuloDetalle.producto.valor * +articuloDetalle.cantidad;
@@ -265,12 +270,12 @@ export class CatalogoComponent implements OnInit {
       tiempo_preparacion: 'T'.concat(this.articulo.tiempo_preparacion),
       menu: { connect: { id: this.articulo.menu.id } },
       articulos_detalle: {
-        create: articulos_detalleCrear
-        // delete: this.articulos_detalleEliminar
+        create: articulos_detalleCrear,
+        delete: this.articulos_detalleEliminar
       }
     };
 
-    this.catalogoService.eliminarArticuloDetalles(this.articulo.id).subscribe();
+    // this.catalogoService.eliminarArticuloDetalles(this.articulo.id).subscribe();
 
     this.catalogoService
       .actualizarArticulo(this.articuloActualizar, this.articulo.id)
@@ -384,4 +389,9 @@ export class CatalogoComponent implements OnInit {
         );
       });
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
 }

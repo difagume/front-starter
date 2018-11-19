@@ -1,0 +1,2296 @@
+type AggregateArticulo {
+  count: Int!
+}
+
+type AggregateArticulo_detalle {
+  count: Int!
+}
+
+type AggregateCliente {
+  count: Int!
+}
+
+type AggregateFactura {
+  count: Int!
+}
+
+type AggregateMenu {
+  count: Int!
+}
+
+type AggregateOrden {
+  count: Int!
+}
+
+type AggregateOrden_detalle {
+  count: Int!
+}
+
+type AggregateProducto {
+  count: Int!
+}
+
+type AggregateRol {
+  count: Int!
+}
+
+type AggregateUsuario {
+  count: Int!
+}
+
+type Articulo {
+  id: ID!
+  nombre: String!
+  valor: Float!
+  tiempo_preparacion: DateTime
+  menu: Menu!
+  articulos_detalle(where: Articulo_detalleWhereInput, orderBy: Articulo_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Articulo_detalle!]
+  activo: Boolean!
+}
+
+type Articulo_detalle {
+  id: ID!
+  cantidad: Int!
+  producto: Producto!
+  articulo: Articulo!
+  activo: Boolean!
+}
+
+type Articulo_detalleConnection {
+  pageInfo: PageInfo!
+  edges: [Articulo_detalleEdge]!
+  aggregate: AggregateArticulo_detalle!
+}
+
+input Articulo_detalleCreateInput {
+  cantidad: Int!
+  producto: ProductoCreateOneInput!
+  articulo: ArticuloCreateOneWithoutArticulos_detalleInput!
+  activo: Boolean
+}
+
+input Articulo_detalleCreateManyWithoutArticuloInput {
+  create: [Articulo_detalleCreateWithoutArticuloInput!]
+  connect: [Articulo_detalleWhereUniqueInput!]
+}
+
+input Articulo_detalleCreateWithoutArticuloInput {
+  cantidad: Int!
+  producto: ProductoCreateOneInput!
+  activo: Boolean
+}
+
+type Articulo_detalleEdge {
+  node: Articulo_detalle!
+  cursor: String!
+}
+
+enum Articulo_detalleOrderByInput {
+  id_ASC
+  id_DESC
+  cantidad_ASC
+  cantidad_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type Articulo_detallePreviousValues {
+  id: ID!
+  cantidad: Int!
+  activo: Boolean!
+}
+
+type Articulo_detalleSubscriptionPayload {
+  mutation: MutationType!
+  node: Articulo_detalle
+  updatedFields: [String!]
+  previousValues: Articulo_detallePreviousValues
+}
+
+input Articulo_detalleSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: Articulo_detalleWhereInput
+  AND: [Articulo_detalleSubscriptionWhereInput!]
+  OR: [Articulo_detalleSubscriptionWhereInput!]
+  NOT: [Articulo_detalleSubscriptionWhereInput!]
+}
+
+input Articulo_detalleUpdateInput {
+  cantidad: Int
+  producto: ProductoUpdateOneRequiredInput
+  articulo: ArticuloUpdateOneRequiredWithoutArticulos_detalleInput
+  activo: Boolean
+}
+
+input Articulo_detalleUpdateManyWithoutArticuloInput {
+  create: [Articulo_detalleCreateWithoutArticuloInput!]
+  delete: [Articulo_detalleWhereUniqueInput!]
+  connect: [Articulo_detalleWhereUniqueInput!]
+  disconnect: [Articulo_detalleWhereUniqueInput!]
+  update: [Articulo_detalleUpdateWithWhereUniqueWithoutArticuloInput!]
+  upsert: [Articulo_detalleUpsertWithWhereUniqueWithoutArticuloInput!]
+}
+
+input Articulo_detalleUpdateWithoutArticuloDataInput {
+  cantidad: Int
+  producto: ProductoUpdateOneRequiredInput
+  activo: Boolean
+}
+
+input Articulo_detalleUpdateWithWhereUniqueWithoutArticuloInput {
+  where: Articulo_detalleWhereUniqueInput!
+  data: Articulo_detalleUpdateWithoutArticuloDataInput!
+}
+
+input Articulo_detalleUpsertWithWhereUniqueWithoutArticuloInput {
+  where: Articulo_detalleWhereUniqueInput!
+  update: Articulo_detalleUpdateWithoutArticuloDataInput!
+  create: Articulo_detalleCreateWithoutArticuloInput!
+}
+
+input Articulo_detalleWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  cantidad: Int
+  cantidad_not: Int
+  cantidad_in: [Int!]
+  cantidad_not_in: [Int!]
+  cantidad_lt: Int
+  cantidad_lte: Int
+  cantidad_gt: Int
+  cantidad_gte: Int
+  producto: ProductoWhereInput
+  articulo: ArticuloWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [Articulo_detalleWhereInput!]
+  OR: [Articulo_detalleWhereInput!]
+  NOT: [Articulo_detalleWhereInput!]
+}
+
+input Articulo_detalleWhereUniqueInput {
+  id: ID
+}
+
+type ArticuloConnection {
+  pageInfo: PageInfo!
+  edges: [ArticuloEdge]!
+  aggregate: AggregateArticulo!
+}
+
+input ArticuloCreateInput {
+  nombre: String!
+  valor: Float!
+  tiempo_preparacion: DateTime
+  menu: MenuCreateOneWithoutArticulosInput!
+  articulos_detalle: Articulo_detalleCreateManyWithoutArticuloInput
+  activo: Boolean
+}
+
+input ArticuloCreateManyWithoutMenuInput {
+  create: [ArticuloCreateWithoutMenuInput!]
+  connect: [ArticuloWhereUniqueInput!]
+}
+
+input ArticuloCreateOneInput {
+  create: ArticuloCreateInput
+  connect: ArticuloWhereUniqueInput
+}
+
+input ArticuloCreateOneWithoutArticulos_detalleInput {
+  create: ArticuloCreateWithoutArticulos_detalleInput
+  connect: ArticuloWhereUniqueInput
+}
+
+input ArticuloCreateWithoutArticulos_detalleInput {
+  nombre: String!
+  valor: Float!
+  tiempo_preparacion: DateTime
+  menu: MenuCreateOneWithoutArticulosInput!
+  activo: Boolean
+}
+
+input ArticuloCreateWithoutMenuInput {
+  nombre: String!
+  valor: Float!
+  tiempo_preparacion: DateTime
+  articulos_detalle: Articulo_detalleCreateManyWithoutArticuloInput
+  activo: Boolean
+}
+
+type ArticuloEdge {
+  node: Articulo!
+  cursor: String!
+}
+
+enum ArticuloOrderByInput {
+  id_ASC
+  id_DESC
+  nombre_ASC
+  nombre_DESC
+  valor_ASC
+  valor_DESC
+  tiempo_preparacion_ASC
+  tiempo_preparacion_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ArticuloPreviousValues {
+  id: ID!
+  nombre: String!
+  valor: Float!
+  tiempo_preparacion: DateTime
+  activo: Boolean!
+}
+
+type ArticuloSubscriptionPayload {
+  mutation: MutationType!
+  node: Articulo
+  updatedFields: [String!]
+  previousValues: ArticuloPreviousValues
+}
+
+input ArticuloSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ArticuloWhereInput
+  AND: [ArticuloSubscriptionWhereInput!]
+  OR: [ArticuloSubscriptionWhereInput!]
+  NOT: [ArticuloSubscriptionWhereInput!]
+}
+
+input ArticuloUpdateDataInput {
+  nombre: String
+  valor: Float
+  tiempo_preparacion: DateTime
+  menu: MenuUpdateOneRequiredWithoutArticulosInput
+  articulos_detalle: Articulo_detalleUpdateManyWithoutArticuloInput
+  activo: Boolean
+}
+
+input ArticuloUpdateInput {
+  nombre: String
+  valor: Float
+  tiempo_preparacion: DateTime
+  menu: MenuUpdateOneRequiredWithoutArticulosInput
+  articulos_detalle: Articulo_detalleUpdateManyWithoutArticuloInput
+  activo: Boolean
+}
+
+input ArticuloUpdateManyWithoutMenuInput {
+  create: [ArticuloCreateWithoutMenuInput!]
+  delete: [ArticuloWhereUniqueInput!]
+  connect: [ArticuloWhereUniqueInput!]
+  disconnect: [ArticuloWhereUniqueInput!]
+  update: [ArticuloUpdateWithWhereUniqueWithoutMenuInput!]
+  upsert: [ArticuloUpsertWithWhereUniqueWithoutMenuInput!]
+}
+
+input ArticuloUpdateOneRequiredInput {
+  create: ArticuloCreateInput
+  update: ArticuloUpdateDataInput
+  upsert: ArticuloUpsertNestedInput
+  connect: ArticuloWhereUniqueInput
+}
+
+input ArticuloUpdateOneRequiredWithoutArticulos_detalleInput {
+  create: ArticuloCreateWithoutArticulos_detalleInput
+  update: ArticuloUpdateWithoutArticulos_detalleDataInput
+  upsert: ArticuloUpsertWithoutArticulos_detalleInput
+  connect: ArticuloWhereUniqueInput
+}
+
+input ArticuloUpdateWithoutArticulos_detalleDataInput {
+  nombre: String
+  valor: Float
+  tiempo_preparacion: DateTime
+  menu: MenuUpdateOneRequiredWithoutArticulosInput
+  activo: Boolean
+}
+
+input ArticuloUpdateWithoutMenuDataInput {
+  nombre: String
+  valor: Float
+  tiempo_preparacion: DateTime
+  articulos_detalle: Articulo_detalleUpdateManyWithoutArticuloInput
+  activo: Boolean
+}
+
+input ArticuloUpdateWithWhereUniqueWithoutMenuInput {
+  where: ArticuloWhereUniqueInput!
+  data: ArticuloUpdateWithoutMenuDataInput!
+}
+
+input ArticuloUpsertNestedInput {
+  update: ArticuloUpdateDataInput!
+  create: ArticuloCreateInput!
+}
+
+input ArticuloUpsertWithoutArticulos_detalleInput {
+  update: ArticuloUpdateWithoutArticulos_detalleDataInput!
+  create: ArticuloCreateWithoutArticulos_detalleInput!
+}
+
+input ArticuloUpsertWithWhereUniqueWithoutMenuInput {
+  where: ArticuloWhereUniqueInput!
+  update: ArticuloUpdateWithoutMenuDataInput!
+  create: ArticuloCreateWithoutMenuInput!
+}
+
+input ArticuloWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  valor: Float
+  valor_not: Float
+  valor_in: [Float!]
+  valor_not_in: [Float!]
+  valor_lt: Float
+  valor_lte: Float
+  valor_gt: Float
+  valor_gte: Float
+  tiempo_preparacion: DateTime
+  tiempo_preparacion_not: DateTime
+  tiempo_preparacion_in: [DateTime!]
+  tiempo_preparacion_not_in: [DateTime!]
+  tiempo_preparacion_lt: DateTime
+  tiempo_preparacion_lte: DateTime
+  tiempo_preparacion_gt: DateTime
+  tiempo_preparacion_gte: DateTime
+  menu: MenuWhereInput
+  articulos_detalle_every: Articulo_detalleWhereInput
+  articulos_detalle_some: Articulo_detalleWhereInput
+  articulos_detalle_none: Articulo_detalleWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [ArticuloWhereInput!]
+  OR: [ArticuloWhereInput!]
+  NOT: [ArticuloWhereInput!]
+}
+
+input ArticuloWhereUniqueInput {
+  id: ID
+  nombre: String
+}
+
+type BatchPayload {
+  count: Long!
+}
+
+type Cliente {
+  id: ID!
+  identificacion: String!
+  nombre: String!
+  direccion: String!
+  telefono: String!
+  email: String
+  facturas(where: FacturaWhereInput, orderBy: FacturaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Factura!]
+  activo: Boolean!
+}
+
+type ClienteConnection {
+  pageInfo: PageInfo!
+  edges: [ClienteEdge]!
+  aggregate: AggregateCliente!
+}
+
+input ClienteCreateInput {
+  identificacion: String!
+  nombre: String!
+  direccion: String!
+  telefono: String!
+  email: String
+  facturas: FacturaCreateManyWithoutClienteInput
+  activo: Boolean
+}
+
+input ClienteCreateOneWithoutFacturasInput {
+  create: ClienteCreateWithoutFacturasInput
+  connect: ClienteWhereUniqueInput
+}
+
+input ClienteCreateWithoutFacturasInput {
+  identificacion: String!
+  nombre: String!
+  direccion: String!
+  telefono: String!
+  email: String
+  activo: Boolean
+}
+
+type ClienteEdge {
+  node: Cliente!
+  cursor: String!
+}
+
+enum ClienteOrderByInput {
+  id_ASC
+  id_DESC
+  identificacion_ASC
+  identificacion_DESC
+  nombre_ASC
+  nombre_DESC
+  direccion_ASC
+  direccion_DESC
+  telefono_ASC
+  telefono_DESC
+  email_ASC
+  email_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ClientePreviousValues {
+  id: ID!
+  identificacion: String!
+  nombre: String!
+  direccion: String!
+  telefono: String!
+  email: String
+  activo: Boolean!
+}
+
+type ClienteSubscriptionPayload {
+  mutation: MutationType!
+  node: Cliente
+  updatedFields: [String!]
+  previousValues: ClientePreviousValues
+}
+
+input ClienteSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ClienteWhereInput
+  AND: [ClienteSubscriptionWhereInput!]
+  OR: [ClienteSubscriptionWhereInput!]
+  NOT: [ClienteSubscriptionWhereInput!]
+}
+
+input ClienteUpdateInput {
+  identificacion: String
+  nombre: String
+  direccion: String
+  telefono: String
+  email: String
+  facturas: FacturaUpdateManyWithoutClienteInput
+  activo: Boolean
+}
+
+input ClienteUpdateOneRequiredWithoutFacturasInput {
+  create: ClienteCreateWithoutFacturasInput
+  update: ClienteUpdateWithoutFacturasDataInput
+  upsert: ClienteUpsertWithoutFacturasInput
+  connect: ClienteWhereUniqueInput
+}
+
+input ClienteUpdateWithoutFacturasDataInput {
+  identificacion: String
+  nombre: String
+  direccion: String
+  telefono: String
+  email: String
+  activo: Boolean
+}
+
+input ClienteUpsertWithoutFacturasInput {
+  update: ClienteUpdateWithoutFacturasDataInput!
+  create: ClienteCreateWithoutFacturasInput!
+}
+
+input ClienteWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  identificacion: String
+  identificacion_not: String
+  identificacion_in: [String!]
+  identificacion_not_in: [String!]
+  identificacion_lt: String
+  identificacion_lte: String
+  identificacion_gt: String
+  identificacion_gte: String
+  identificacion_contains: String
+  identificacion_not_contains: String
+  identificacion_starts_with: String
+  identificacion_not_starts_with: String
+  identificacion_ends_with: String
+  identificacion_not_ends_with: String
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  direccion: String
+  direccion_not: String
+  direccion_in: [String!]
+  direccion_not_in: [String!]
+  direccion_lt: String
+  direccion_lte: String
+  direccion_gt: String
+  direccion_gte: String
+  direccion_contains: String
+  direccion_not_contains: String
+  direccion_starts_with: String
+  direccion_not_starts_with: String
+  direccion_ends_with: String
+  direccion_not_ends_with: String
+  telefono: String
+  telefono_not: String
+  telefono_in: [String!]
+  telefono_not_in: [String!]
+  telefono_lt: String
+  telefono_lte: String
+  telefono_gt: String
+  telefono_gte: String
+  telefono_contains: String
+  telefono_not_contains: String
+  telefono_starts_with: String
+  telefono_not_starts_with: String
+  telefono_ends_with: String
+  telefono_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  facturas_every: FacturaWhereInput
+  facturas_some: FacturaWhereInput
+  facturas_none: FacturaWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [ClienteWhereInput!]
+  OR: [ClienteWhereInput!]
+  NOT: [ClienteWhereInput!]
+}
+
+input ClienteWhereUniqueInput {
+  id: ID
+  identificacion: String
+  nombre: String
+}
+
+scalar DateTime
+
+type Factura {
+  id: ID!
+  numero: String!
+  fecha: DateTime!
+  cajero: Usuario!
+  orden: Orden!
+  cliente: Cliente!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago!
+  estado: Factura_estado!
+  activo: Boolean!
+}
+
+enum Factura_estado {
+  ENTREGADA
+  ANULADA
+}
+
+type FacturaConnection {
+  pageInfo: PageInfo!
+  edges: [FacturaEdge]!
+  aggregate: AggregateFactura!
+}
+
+input FacturaCreateInput {
+  numero: String!
+  fecha: DateTime!
+  cajero: UsuarioCreateOneWithoutFacturasInput!
+  orden: OrdenCreateOneWithoutFacturaInput!
+  cliente: ClienteCreateOneWithoutFacturasInput!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaCreateManyWithoutCajeroInput {
+  create: [FacturaCreateWithoutCajeroInput!]
+  connect: [FacturaWhereUniqueInput!]
+}
+
+input FacturaCreateManyWithoutClienteInput {
+  create: [FacturaCreateWithoutClienteInput!]
+  connect: [FacturaWhereUniqueInput!]
+}
+
+input FacturaCreateOneWithoutOrdenInput {
+  create: FacturaCreateWithoutOrdenInput
+  connect: FacturaWhereUniqueInput
+}
+
+input FacturaCreateWithoutCajeroInput {
+  numero: String!
+  fecha: DateTime!
+  orden: OrdenCreateOneWithoutFacturaInput!
+  cliente: ClienteCreateOneWithoutFacturasInput!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaCreateWithoutClienteInput {
+  numero: String!
+  fecha: DateTime!
+  cajero: UsuarioCreateOneWithoutFacturasInput!
+  orden: OrdenCreateOneWithoutFacturaInput!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaCreateWithoutOrdenInput {
+  numero: String!
+  fecha: DateTime!
+  cajero: UsuarioCreateOneWithoutFacturasInput!
+  cliente: ClienteCreateOneWithoutFacturasInput!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+type FacturaEdge {
+  node: Factura!
+  cursor: String!
+}
+
+enum FacturaOrderByInput {
+  id_ASC
+  id_DESC
+  numero_ASC
+  numero_DESC
+  fecha_ASC
+  fecha_DESC
+  subtotal_ASC
+  subtotal_DESC
+  iva_ASC
+  iva_DESC
+  total_ASC
+  total_DESC
+  forma_pago_ASC
+  forma_pago_DESC
+  estado_ASC
+  estado_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type FacturaPreviousValues {
+  id: ID!
+  numero: String!
+  fecha: DateTime!
+  subtotal: Float!
+  iva: Float!
+  total: Float!
+  forma_pago: Forma_pago!
+  estado: Factura_estado!
+  activo: Boolean!
+}
+
+type FacturaSubscriptionPayload {
+  mutation: MutationType!
+  node: Factura
+  updatedFields: [String!]
+  previousValues: FacturaPreviousValues
+}
+
+input FacturaSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: FacturaWhereInput
+  AND: [FacturaSubscriptionWhereInput!]
+  OR: [FacturaSubscriptionWhereInput!]
+  NOT: [FacturaSubscriptionWhereInput!]
+}
+
+input FacturaUpdateInput {
+  numero: String
+  fecha: DateTime
+  cajero: UsuarioUpdateOneRequiredWithoutFacturasInput
+  orden: OrdenUpdateOneRequiredWithoutFacturaInput
+  cliente: ClienteUpdateOneRequiredWithoutFacturasInput
+  subtotal: Float
+  iva: Float
+  total: Float
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaUpdateManyWithoutCajeroInput {
+  create: [FacturaCreateWithoutCajeroInput!]
+  delete: [FacturaWhereUniqueInput!]
+  connect: [FacturaWhereUniqueInput!]
+  disconnect: [FacturaWhereUniqueInput!]
+  update: [FacturaUpdateWithWhereUniqueWithoutCajeroInput!]
+  upsert: [FacturaUpsertWithWhereUniqueWithoutCajeroInput!]
+}
+
+input FacturaUpdateManyWithoutClienteInput {
+  create: [FacturaCreateWithoutClienteInput!]
+  delete: [FacturaWhereUniqueInput!]
+  connect: [FacturaWhereUniqueInput!]
+  disconnect: [FacturaWhereUniqueInput!]
+  update: [FacturaUpdateWithWhereUniqueWithoutClienteInput!]
+  upsert: [FacturaUpsertWithWhereUniqueWithoutClienteInput!]
+}
+
+input FacturaUpdateOneWithoutOrdenInput {
+  create: FacturaCreateWithoutOrdenInput
+  update: FacturaUpdateWithoutOrdenDataInput
+  upsert: FacturaUpsertWithoutOrdenInput
+  delete: Boolean
+  disconnect: Boolean
+  connect: FacturaWhereUniqueInput
+}
+
+input FacturaUpdateWithoutCajeroDataInput {
+  numero: String
+  fecha: DateTime
+  orden: OrdenUpdateOneRequiredWithoutFacturaInput
+  cliente: ClienteUpdateOneRequiredWithoutFacturasInput
+  subtotal: Float
+  iva: Float
+  total: Float
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaUpdateWithoutClienteDataInput {
+  numero: String
+  fecha: DateTime
+  cajero: UsuarioUpdateOneRequiredWithoutFacturasInput
+  orden: OrdenUpdateOneRequiredWithoutFacturaInput
+  subtotal: Float
+  iva: Float
+  total: Float
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaUpdateWithoutOrdenDataInput {
+  numero: String
+  fecha: DateTime
+  cajero: UsuarioUpdateOneRequiredWithoutFacturasInput
+  cliente: ClienteUpdateOneRequiredWithoutFacturasInput
+  subtotal: Float
+  iva: Float
+  total: Float
+  forma_pago: Forma_pago
+  estado: Factura_estado
+  activo: Boolean
+}
+
+input FacturaUpdateWithWhereUniqueWithoutCajeroInput {
+  where: FacturaWhereUniqueInput!
+  data: FacturaUpdateWithoutCajeroDataInput!
+}
+
+input FacturaUpdateWithWhereUniqueWithoutClienteInput {
+  where: FacturaWhereUniqueInput!
+  data: FacturaUpdateWithoutClienteDataInput!
+}
+
+input FacturaUpsertWithoutOrdenInput {
+  update: FacturaUpdateWithoutOrdenDataInput!
+  create: FacturaCreateWithoutOrdenInput!
+}
+
+input FacturaUpsertWithWhereUniqueWithoutCajeroInput {
+  where: FacturaWhereUniqueInput!
+  update: FacturaUpdateWithoutCajeroDataInput!
+  create: FacturaCreateWithoutCajeroInput!
+}
+
+input FacturaUpsertWithWhereUniqueWithoutClienteInput {
+  where: FacturaWhereUniqueInput!
+  update: FacturaUpdateWithoutClienteDataInput!
+  create: FacturaCreateWithoutClienteInput!
+}
+
+input FacturaWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  numero: String
+  numero_not: String
+  numero_in: [String!]
+  numero_not_in: [String!]
+  numero_lt: String
+  numero_lte: String
+  numero_gt: String
+  numero_gte: String
+  numero_contains: String
+  numero_not_contains: String
+  numero_starts_with: String
+  numero_not_starts_with: String
+  numero_ends_with: String
+  numero_not_ends_with: String
+  fecha: DateTime
+  fecha_not: DateTime
+  fecha_in: [DateTime!]
+  fecha_not_in: [DateTime!]
+  fecha_lt: DateTime
+  fecha_lte: DateTime
+  fecha_gt: DateTime
+  fecha_gte: DateTime
+  cajero: UsuarioWhereInput
+  orden: OrdenWhereInput
+  cliente: ClienteWhereInput
+  subtotal: Float
+  subtotal_not: Float
+  subtotal_in: [Float!]
+  subtotal_not_in: [Float!]
+  subtotal_lt: Float
+  subtotal_lte: Float
+  subtotal_gt: Float
+  subtotal_gte: Float
+  iva: Float
+  iva_not: Float
+  iva_in: [Float!]
+  iva_not_in: [Float!]
+  iva_lt: Float
+  iva_lte: Float
+  iva_gt: Float
+  iva_gte: Float
+  total: Float
+  total_not: Float
+  total_in: [Float!]
+  total_not_in: [Float!]
+  total_lt: Float
+  total_lte: Float
+  total_gt: Float
+  total_gte: Float
+  forma_pago: Forma_pago
+  forma_pago_not: Forma_pago
+  forma_pago_in: [Forma_pago!]
+  forma_pago_not_in: [Forma_pago!]
+  estado: Factura_estado
+  estado_not: Factura_estado
+  estado_in: [Factura_estado!]
+  estado_not_in: [Factura_estado!]
+  activo: Boolean
+  activo_not: Boolean
+  AND: [FacturaWhereInput!]
+  OR: [FacturaWhereInput!]
+  NOT: [FacturaWhereInput!]
+}
+
+input FacturaWhereUniqueInput {
+  id: ID
+  numero: String
+}
+
+enum Forma_pago {
+  EFECTIVO
+  TARJETA
+}
+
+scalar Long
+
+type Menu {
+  id: ID!
+  nombre: String!
+  articulos(where: ArticuloWhereInput, orderBy: ArticuloOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Articulo!]
+  activo: Boolean!
+}
+
+type MenuConnection {
+  pageInfo: PageInfo!
+  edges: [MenuEdge]!
+  aggregate: AggregateMenu!
+}
+
+input MenuCreateInput {
+  nombre: String!
+  articulos: ArticuloCreateManyWithoutMenuInput
+  activo: Boolean
+}
+
+input MenuCreateOneWithoutArticulosInput {
+  create: MenuCreateWithoutArticulosInput
+  connect: MenuWhereUniqueInput
+}
+
+input MenuCreateWithoutArticulosInput {
+  nombre: String!
+  activo: Boolean
+}
+
+type MenuEdge {
+  node: Menu!
+  cursor: String!
+}
+
+enum MenuOrderByInput {
+  id_ASC
+  id_DESC
+  nombre_ASC
+  nombre_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type MenuPreviousValues {
+  id: ID!
+  nombre: String!
+  activo: Boolean!
+}
+
+type MenuSubscriptionPayload {
+  mutation: MutationType!
+  node: Menu
+  updatedFields: [String!]
+  previousValues: MenuPreviousValues
+}
+
+input MenuSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: MenuWhereInput
+  AND: [MenuSubscriptionWhereInput!]
+  OR: [MenuSubscriptionWhereInput!]
+  NOT: [MenuSubscriptionWhereInput!]
+}
+
+input MenuUpdateInput {
+  nombre: String
+  articulos: ArticuloUpdateManyWithoutMenuInput
+  activo: Boolean
+}
+
+input MenuUpdateOneRequiredWithoutArticulosInput {
+  create: MenuCreateWithoutArticulosInput
+  update: MenuUpdateWithoutArticulosDataInput
+  upsert: MenuUpsertWithoutArticulosInput
+  connect: MenuWhereUniqueInput
+}
+
+input MenuUpdateWithoutArticulosDataInput {
+  nombre: String
+  activo: Boolean
+}
+
+input MenuUpsertWithoutArticulosInput {
+  update: MenuUpdateWithoutArticulosDataInput!
+  create: MenuCreateWithoutArticulosInput!
+}
+
+input MenuWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  articulos_every: ArticuloWhereInput
+  articulos_some: ArticuloWhereInput
+  articulos_none: ArticuloWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [MenuWhereInput!]
+  OR: [MenuWhereInput!]
+  NOT: [MenuWhereInput!]
+}
+
+input MenuWhereUniqueInput {
+  id: ID
+  nombre: String
+}
+
+type Mutation {
+  createArticulo(data: ArticuloCreateInput!): Articulo!
+  updateArticulo(data: ArticuloUpdateInput!, where: ArticuloWhereUniqueInput!): Articulo
+  updateManyArticuloes(data: ArticuloUpdateInput!, where: ArticuloWhereInput): BatchPayload!
+  upsertArticulo(where: ArticuloWhereUniqueInput!, create: ArticuloCreateInput!, update: ArticuloUpdateInput!): Articulo!
+  deleteArticulo(where: ArticuloWhereUniqueInput!): Articulo
+  deleteManyArticuloes(where: ArticuloWhereInput): BatchPayload!
+  createArticulo_detalle(data: Articulo_detalleCreateInput!): Articulo_detalle!
+  updateArticulo_detalle(data: Articulo_detalleUpdateInput!, where: Articulo_detalleWhereUniqueInput!): Articulo_detalle
+  updateManyArticulo_detalles(data: Articulo_detalleUpdateInput!, where: Articulo_detalleWhereInput): BatchPayload!
+  upsertArticulo_detalle(where: Articulo_detalleWhereUniqueInput!, create: Articulo_detalleCreateInput!, update: Articulo_detalleUpdateInput!): Articulo_detalle!
+  deleteArticulo_detalle(where: Articulo_detalleWhereUniqueInput!): Articulo_detalle
+  deleteManyArticulo_detalles(where: Articulo_detalleWhereInput): BatchPayload!
+  createCliente(data: ClienteCreateInput!): Cliente!
+  updateCliente(data: ClienteUpdateInput!, where: ClienteWhereUniqueInput!): Cliente
+  updateManyClientes(data: ClienteUpdateInput!, where: ClienteWhereInput): BatchPayload!
+  upsertCliente(where: ClienteWhereUniqueInput!, create: ClienteCreateInput!, update: ClienteUpdateInput!): Cliente!
+  deleteCliente(where: ClienteWhereUniqueInput!): Cliente
+  deleteManyClientes(where: ClienteWhereInput): BatchPayload!
+  createFactura(data: FacturaCreateInput!): Factura!
+  updateFactura(data: FacturaUpdateInput!, where: FacturaWhereUniqueInput!): Factura
+  updateManyFacturas(data: FacturaUpdateInput!, where: FacturaWhereInput): BatchPayload!
+  upsertFactura(where: FacturaWhereUniqueInput!, create: FacturaCreateInput!, update: FacturaUpdateInput!): Factura!
+  deleteFactura(where: FacturaWhereUniqueInput!): Factura
+  deleteManyFacturas(where: FacturaWhereInput): BatchPayload!
+  createMenu(data: MenuCreateInput!): Menu!
+  updateMenu(data: MenuUpdateInput!, where: MenuWhereUniqueInput!): Menu
+  updateManyMenus(data: MenuUpdateInput!, where: MenuWhereInput): BatchPayload!
+  upsertMenu(where: MenuWhereUniqueInput!, create: MenuCreateInput!, update: MenuUpdateInput!): Menu!
+  deleteMenu(where: MenuWhereUniqueInput!): Menu
+  deleteManyMenus(where: MenuWhereInput): BatchPayload!
+  createOrden(data: OrdenCreateInput!): Orden!
+  updateOrden(data: OrdenUpdateInput!, where: OrdenWhereUniqueInput!): Orden
+  updateManyOrdens(data: OrdenUpdateInput!, where: OrdenWhereInput): BatchPayload!
+  upsertOrden(where: OrdenWhereUniqueInput!, create: OrdenCreateInput!, update: OrdenUpdateInput!): Orden!
+  deleteOrden(where: OrdenWhereUniqueInput!): Orden
+  deleteManyOrdens(where: OrdenWhereInput): BatchPayload!
+  createOrden_detalle(data: Orden_detalleCreateInput!): Orden_detalle!
+  updateOrden_detalle(data: Orden_detalleUpdateInput!, where: Orden_detalleWhereUniqueInput!): Orden_detalle
+  updateManyOrden_detalles(data: Orden_detalleUpdateInput!, where: Orden_detalleWhereInput): BatchPayload!
+  upsertOrden_detalle(where: Orden_detalleWhereUniqueInput!, create: Orden_detalleCreateInput!, update: Orden_detalleUpdateInput!): Orden_detalle!
+  deleteOrden_detalle(where: Orden_detalleWhereUniqueInput!): Orden_detalle
+  deleteManyOrden_detalles(where: Orden_detalleWhereInput): BatchPayload!
+  createProducto(data: ProductoCreateInput!): Producto!
+  updateProducto(data: ProductoUpdateInput!, where: ProductoWhereUniqueInput!): Producto
+  updateManyProductoes(data: ProductoUpdateInput!, where: ProductoWhereInput): BatchPayload!
+  upsertProducto(where: ProductoWhereUniqueInput!, create: ProductoCreateInput!, update: ProductoUpdateInput!): Producto!
+  deleteProducto(where: ProductoWhereUniqueInput!): Producto
+  deleteManyProductoes(where: ProductoWhereInput): BatchPayload!
+  createRol(data: RolCreateInput!): Rol!
+  updateRol(data: RolUpdateInput!, where: RolWhereUniqueInput!): Rol
+  updateManyRols(data: RolUpdateInput!, where: RolWhereInput): BatchPayload!
+  upsertRol(where: RolWhereUniqueInput!, create: RolCreateInput!, update: RolUpdateInput!): Rol!
+  deleteRol(where: RolWhereUniqueInput!): Rol
+  deleteManyRols(where: RolWhereInput): BatchPayload!
+  createUsuario(data: UsuarioCreateInput!): Usuario!
+  updateUsuario(data: UsuarioUpdateInput!, where: UsuarioWhereUniqueInput!): Usuario
+  updateManyUsuarios(data: UsuarioUpdateInput!, where: UsuarioWhereInput): BatchPayload!
+  upsertUsuario(where: UsuarioWhereUniqueInput!, create: UsuarioCreateInput!, update: UsuarioUpdateInput!): Usuario!
+  deleteUsuario(where: UsuarioWhereUniqueInput!): Usuario
+  deleteManyUsuarios(where: UsuarioWhereInput): BatchPayload!
+}
+
+enum MutationType {
+  CREATED
+  UPDATED
+  DELETED
+}
+
+interface Node {
+  id: ID!
+}
+
+type Orden {
+  id: ID!
+  fecha: DateTime!
+  mesero: Usuario!
+  orden_detalle(where: Orden_detalleWhereInput, orderBy: Orden_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Orden_detalle!]
+  factura: Factura
+  estado: Orden_estado!
+  activo: Boolean!
+}
+
+type Orden_detalle {
+  id: ID!
+  cantidad: Int!
+  descripcion: Articulo!
+  valor_unitario: Float!
+  gratis: Boolean!
+  orden: Orden!
+  activo: Boolean!
+}
+
+type Orden_detalleConnection {
+  pageInfo: PageInfo!
+  edges: [Orden_detalleEdge]!
+  aggregate: AggregateOrden_detalle!
+}
+
+input Orden_detalleCreateInput {
+  cantidad: Int!
+  descripcion: ArticuloCreateOneInput!
+  valor_unitario: Float!
+  gratis: Boolean
+  orden: OrdenCreateOneWithoutOrden_detalleInput!
+  activo: Boolean
+}
+
+input Orden_detalleCreateManyWithoutOrdenInput {
+  create: [Orden_detalleCreateWithoutOrdenInput!]
+  connect: [Orden_detalleWhereUniqueInput!]
+}
+
+input Orden_detalleCreateWithoutOrdenInput {
+  cantidad: Int!
+  descripcion: ArticuloCreateOneInput!
+  valor_unitario: Float!
+  gratis: Boolean
+  activo: Boolean
+}
+
+type Orden_detalleEdge {
+  node: Orden_detalle!
+  cursor: String!
+}
+
+enum Orden_detalleOrderByInput {
+  id_ASC
+  id_DESC
+  cantidad_ASC
+  cantidad_DESC
+  valor_unitario_ASC
+  valor_unitario_DESC
+  gratis_ASC
+  gratis_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type Orden_detallePreviousValues {
+  id: ID!
+  cantidad: Int!
+  valor_unitario: Float!
+  gratis: Boolean!
+  activo: Boolean!
+}
+
+type Orden_detalleSubscriptionPayload {
+  mutation: MutationType!
+  node: Orden_detalle
+  updatedFields: [String!]
+  previousValues: Orden_detallePreviousValues
+}
+
+input Orden_detalleSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: Orden_detalleWhereInput
+  AND: [Orden_detalleSubscriptionWhereInput!]
+  OR: [Orden_detalleSubscriptionWhereInput!]
+  NOT: [Orden_detalleSubscriptionWhereInput!]
+}
+
+input Orden_detalleUpdateInput {
+  cantidad: Int
+  descripcion: ArticuloUpdateOneRequiredInput
+  valor_unitario: Float
+  gratis: Boolean
+  orden: OrdenUpdateOneRequiredWithoutOrden_detalleInput
+  activo: Boolean
+}
+
+input Orden_detalleUpdateManyWithoutOrdenInput {
+  create: [Orden_detalleCreateWithoutOrdenInput!]
+  delete: [Orden_detalleWhereUniqueInput!]
+  connect: [Orden_detalleWhereUniqueInput!]
+  disconnect: [Orden_detalleWhereUniqueInput!]
+  update: [Orden_detalleUpdateWithWhereUniqueWithoutOrdenInput!]
+  upsert: [Orden_detalleUpsertWithWhereUniqueWithoutOrdenInput!]
+}
+
+input Orden_detalleUpdateWithoutOrdenDataInput {
+  cantidad: Int
+  descripcion: ArticuloUpdateOneRequiredInput
+  valor_unitario: Float
+  gratis: Boolean
+  activo: Boolean
+}
+
+input Orden_detalleUpdateWithWhereUniqueWithoutOrdenInput {
+  where: Orden_detalleWhereUniqueInput!
+  data: Orden_detalleUpdateWithoutOrdenDataInput!
+}
+
+input Orden_detalleUpsertWithWhereUniqueWithoutOrdenInput {
+  where: Orden_detalleWhereUniqueInput!
+  update: Orden_detalleUpdateWithoutOrdenDataInput!
+  create: Orden_detalleCreateWithoutOrdenInput!
+}
+
+input Orden_detalleWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  cantidad: Int
+  cantidad_not: Int
+  cantidad_in: [Int!]
+  cantidad_not_in: [Int!]
+  cantidad_lt: Int
+  cantidad_lte: Int
+  cantidad_gt: Int
+  cantidad_gte: Int
+  descripcion: ArticuloWhereInput
+  valor_unitario: Float
+  valor_unitario_not: Float
+  valor_unitario_in: [Float!]
+  valor_unitario_not_in: [Float!]
+  valor_unitario_lt: Float
+  valor_unitario_lte: Float
+  valor_unitario_gt: Float
+  valor_unitario_gte: Float
+  gratis: Boolean
+  gratis_not: Boolean
+  orden: OrdenWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [Orden_detalleWhereInput!]
+  OR: [Orden_detalleWhereInput!]
+  NOT: [Orden_detalleWhereInput!]
+}
+
+input Orden_detalleWhereUniqueInput {
+  id: ID
+}
+
+enum Orden_estado {
+  TOMADA
+  ENTREGADA
+  PAGADA
+}
+
+type OrdenConnection {
+  pageInfo: PageInfo!
+  edges: [OrdenEdge]!
+  aggregate: AggregateOrden!
+}
+
+input OrdenCreateInput {
+  fecha: DateTime!
+  mesero: UsuarioCreateOneWithoutOrdenesInput!
+  orden_detalle: Orden_detalleCreateManyWithoutOrdenInput
+  factura: FacturaCreateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenCreateManyWithoutMeseroInput {
+  create: [OrdenCreateWithoutMeseroInput!]
+  connect: [OrdenWhereUniqueInput!]
+}
+
+input OrdenCreateOneWithoutFacturaInput {
+  create: OrdenCreateWithoutFacturaInput
+  connect: OrdenWhereUniqueInput
+}
+
+input OrdenCreateOneWithoutOrden_detalleInput {
+  create: OrdenCreateWithoutOrden_detalleInput
+  connect: OrdenWhereUniqueInput
+}
+
+input OrdenCreateWithoutFacturaInput {
+  fecha: DateTime!
+  mesero: UsuarioCreateOneWithoutOrdenesInput!
+  orden_detalle: Orden_detalleCreateManyWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenCreateWithoutMeseroInput {
+  fecha: DateTime!
+  orden_detalle: Orden_detalleCreateManyWithoutOrdenInput
+  factura: FacturaCreateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenCreateWithoutOrden_detalleInput {
+  fecha: DateTime!
+  mesero: UsuarioCreateOneWithoutOrdenesInput!
+  factura: FacturaCreateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+type OrdenEdge {
+  node: Orden!
+  cursor: String!
+}
+
+enum OrdenOrderByInput {
+  id_ASC
+  id_DESC
+  fecha_ASC
+  fecha_DESC
+  estado_ASC
+  estado_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type OrdenPreviousValues {
+  id: ID!
+  fecha: DateTime!
+  estado: Orden_estado!
+  activo: Boolean!
+}
+
+type OrdenSubscriptionPayload {
+  mutation: MutationType!
+  node: Orden
+  updatedFields: [String!]
+  previousValues: OrdenPreviousValues
+}
+
+input OrdenSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: OrdenWhereInput
+  AND: [OrdenSubscriptionWhereInput!]
+  OR: [OrdenSubscriptionWhereInput!]
+  NOT: [OrdenSubscriptionWhereInput!]
+}
+
+input OrdenUpdateInput {
+  fecha: DateTime
+  mesero: UsuarioUpdateOneRequiredWithoutOrdenesInput
+  orden_detalle: Orden_detalleUpdateManyWithoutOrdenInput
+  factura: FacturaUpdateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenUpdateManyWithoutMeseroInput {
+  create: [OrdenCreateWithoutMeseroInput!]
+  delete: [OrdenWhereUniqueInput!]
+  connect: [OrdenWhereUniqueInput!]
+  disconnect: [OrdenWhereUniqueInput!]
+  update: [OrdenUpdateWithWhereUniqueWithoutMeseroInput!]
+  upsert: [OrdenUpsertWithWhereUniqueWithoutMeseroInput!]
+}
+
+input OrdenUpdateOneRequiredWithoutFacturaInput {
+  create: OrdenCreateWithoutFacturaInput
+  update: OrdenUpdateWithoutFacturaDataInput
+  upsert: OrdenUpsertWithoutFacturaInput
+  connect: OrdenWhereUniqueInput
+}
+
+input OrdenUpdateOneRequiredWithoutOrden_detalleInput {
+  create: OrdenCreateWithoutOrden_detalleInput
+  update: OrdenUpdateWithoutOrden_detalleDataInput
+  upsert: OrdenUpsertWithoutOrden_detalleInput
+  connect: OrdenWhereUniqueInput
+}
+
+input OrdenUpdateWithoutFacturaDataInput {
+  fecha: DateTime
+  mesero: UsuarioUpdateOneRequiredWithoutOrdenesInput
+  orden_detalle: Orden_detalleUpdateManyWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenUpdateWithoutMeseroDataInput {
+  fecha: DateTime
+  orden_detalle: Orden_detalleUpdateManyWithoutOrdenInput
+  factura: FacturaUpdateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenUpdateWithoutOrden_detalleDataInput {
+  fecha: DateTime
+  mesero: UsuarioUpdateOneRequiredWithoutOrdenesInput
+  factura: FacturaUpdateOneWithoutOrdenInput
+  estado: Orden_estado
+  activo: Boolean
+}
+
+input OrdenUpdateWithWhereUniqueWithoutMeseroInput {
+  where: OrdenWhereUniqueInput!
+  data: OrdenUpdateWithoutMeseroDataInput!
+}
+
+input OrdenUpsertWithoutFacturaInput {
+  update: OrdenUpdateWithoutFacturaDataInput!
+  create: OrdenCreateWithoutFacturaInput!
+}
+
+input OrdenUpsertWithoutOrden_detalleInput {
+  update: OrdenUpdateWithoutOrden_detalleDataInput!
+  create: OrdenCreateWithoutOrden_detalleInput!
+}
+
+input OrdenUpsertWithWhereUniqueWithoutMeseroInput {
+  where: OrdenWhereUniqueInput!
+  update: OrdenUpdateWithoutMeseroDataInput!
+  create: OrdenCreateWithoutMeseroInput!
+}
+
+input OrdenWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  fecha: DateTime
+  fecha_not: DateTime
+  fecha_in: [DateTime!]
+  fecha_not_in: [DateTime!]
+  fecha_lt: DateTime
+  fecha_lte: DateTime
+  fecha_gt: DateTime
+  fecha_gte: DateTime
+  mesero: UsuarioWhereInput
+  orden_detalle_every: Orden_detalleWhereInput
+  orden_detalle_some: Orden_detalleWhereInput
+  orden_detalle_none: Orden_detalleWhereInput
+  factura: FacturaWhereInput
+  estado: Orden_estado
+  estado_not: Orden_estado
+  estado_in: [Orden_estado!]
+  estado_not_in: [Orden_estado!]
+  activo: Boolean
+  activo_not: Boolean
+  AND: [OrdenWhereInput!]
+  OR: [OrdenWhereInput!]
+  NOT: [OrdenWhereInput!]
+}
+
+input OrdenWhereUniqueInput {
+  id: ID
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+type Producto {
+  id: ID!
+  nombre: String!
+  valor: Float!
+  stock: Int!
+  activo: Boolean!
+}
+
+type ProductoConnection {
+  pageInfo: PageInfo!
+  edges: [ProductoEdge]!
+  aggregate: AggregateProducto!
+}
+
+input ProductoCreateInput {
+  nombre: String!
+  valor: Float!
+  stock: Int!
+  activo: Boolean
+}
+
+input ProductoCreateOneInput {
+  create: ProductoCreateInput
+  connect: ProductoWhereUniqueInput
+}
+
+type ProductoEdge {
+  node: Producto!
+  cursor: String!
+}
+
+enum ProductoOrderByInput {
+  id_ASC
+  id_DESC
+  nombre_ASC
+  nombre_DESC
+  valor_ASC
+  valor_DESC
+  stock_ASC
+  stock_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type ProductoPreviousValues {
+  id: ID!
+  nombre: String!
+  valor: Float!
+  stock: Int!
+  activo: Boolean!
+}
+
+type ProductoSubscriptionPayload {
+  mutation: MutationType!
+  node: Producto
+  updatedFields: [String!]
+  previousValues: ProductoPreviousValues
+}
+
+input ProductoSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: ProductoWhereInput
+  AND: [ProductoSubscriptionWhereInput!]
+  OR: [ProductoSubscriptionWhereInput!]
+  NOT: [ProductoSubscriptionWhereInput!]
+}
+
+input ProductoUpdateDataInput {
+  nombre: String
+  valor: Float
+  stock: Int
+  activo: Boolean
+}
+
+input ProductoUpdateInput {
+  nombre: String
+  valor: Float
+  stock: Int
+  activo: Boolean
+}
+
+input ProductoUpdateOneRequiredInput {
+  create: ProductoCreateInput
+  update: ProductoUpdateDataInput
+  upsert: ProductoUpsertNestedInput
+  connect: ProductoWhereUniqueInput
+}
+
+input ProductoUpsertNestedInput {
+  update: ProductoUpdateDataInput!
+  create: ProductoCreateInput!
+}
+
+input ProductoWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  valor: Float
+  valor_not: Float
+  valor_in: [Float!]
+  valor_not_in: [Float!]
+  valor_lt: Float
+  valor_lte: Float
+  valor_gt: Float
+  valor_gte: Float
+  stock: Int
+  stock_not: Int
+  stock_in: [Int!]
+  stock_not_in: [Int!]
+  stock_lt: Int
+  stock_lte: Int
+  stock_gt: Int
+  stock_gte: Int
+  activo: Boolean
+  activo_not: Boolean
+  AND: [ProductoWhereInput!]
+  OR: [ProductoWhereInput!]
+  NOT: [ProductoWhereInput!]
+}
+
+input ProductoWhereUniqueInput {
+  id: ID
+  nombre: String
+}
+
+type Query {
+  articulo(where: ArticuloWhereUniqueInput!): Articulo
+  articuloes(where: ArticuloWhereInput, orderBy: ArticuloOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Articulo]!
+  articuloesConnection(where: ArticuloWhereInput, orderBy: ArticuloOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ArticuloConnection!
+  articulo_detalle(where: Articulo_detalleWhereUniqueInput!): Articulo_detalle
+  articulo_detalles(where: Articulo_detalleWhereInput, orderBy: Articulo_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Articulo_detalle]!
+  articulo_detallesConnection(where: Articulo_detalleWhereInput, orderBy: Articulo_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Articulo_detalleConnection!
+  cliente(where: ClienteWhereUniqueInput!): Cliente
+  clientes(where: ClienteWhereInput, orderBy: ClienteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Cliente]!
+  clientesConnection(where: ClienteWhereInput, orderBy: ClienteOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ClienteConnection!
+  factura(where: FacturaWhereUniqueInput!): Factura
+  facturas(where: FacturaWhereInput, orderBy: FacturaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Factura]!
+  facturasConnection(where: FacturaWhereInput, orderBy: FacturaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): FacturaConnection!
+  menu(where: MenuWhereUniqueInput!): Menu
+  menus(where: MenuWhereInput, orderBy: MenuOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Menu]!
+  menusConnection(where: MenuWhereInput, orderBy: MenuOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): MenuConnection!
+  orden(where: OrdenWhereUniqueInput!): Orden
+  ordens(where: OrdenWhereInput, orderBy: OrdenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Orden]!
+  ordensConnection(where: OrdenWhereInput, orderBy: OrdenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): OrdenConnection!
+  orden_detalle(where: Orden_detalleWhereUniqueInput!): Orden_detalle
+  orden_detalles(where: Orden_detalleWhereInput, orderBy: Orden_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Orden_detalle]!
+  orden_detallesConnection(where: Orden_detalleWhereInput, orderBy: Orden_detalleOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): Orden_detalleConnection!
+  producto(where: ProductoWhereUniqueInput!): Producto
+  productoes(where: ProductoWhereInput, orderBy: ProductoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Producto]!
+  productoesConnection(where: ProductoWhereInput, orderBy: ProductoOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): ProductoConnection!
+  rol(where: RolWhereUniqueInput!): Rol
+  rols(where: RolWhereInput, orderBy: RolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Rol]!
+  rolsConnection(where: RolWhereInput, orderBy: RolOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): RolConnection!
+  usuario(where: UsuarioWhereUniqueInput!): Usuario
+  usuarios(where: UsuarioWhereInput, orderBy: UsuarioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Usuario]!
+  usuariosConnection(where: UsuarioWhereInput, orderBy: UsuarioOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UsuarioConnection!
+  node(id: ID!): Node
+}
+
+type Rol {
+  id: ID!
+  nombre: String!
+  activo: Boolean!
+}
+
+type RolConnection {
+  pageInfo: PageInfo!
+  edges: [RolEdge]!
+  aggregate: AggregateRol!
+}
+
+input RolCreateInput {
+  nombre: String!
+  activo: Boolean
+}
+
+type RolEdge {
+  node: Rol!
+  cursor: String!
+}
+
+enum RolOrderByInput {
+  id_ASC
+  id_DESC
+  nombre_ASC
+  nombre_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type RolPreviousValues {
+  id: ID!
+  nombre: String!
+  activo: Boolean!
+}
+
+type RolSubscriptionPayload {
+  mutation: MutationType!
+  node: Rol
+  updatedFields: [String!]
+  previousValues: RolPreviousValues
+}
+
+input RolSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: RolWhereInput
+  AND: [RolSubscriptionWhereInput!]
+  OR: [RolSubscriptionWhereInput!]
+  NOT: [RolSubscriptionWhereInput!]
+}
+
+input RolUpdateInput {
+  nombre: String
+  activo: Boolean
+}
+
+input RolWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  activo: Boolean
+  activo_not: Boolean
+  AND: [RolWhereInput!]
+  OR: [RolWhereInput!]
+  NOT: [RolWhereInput!]
+}
+
+input RolWhereUniqueInput {
+  id: ID
+}
+
+type Subscription {
+  articulo(where: ArticuloSubscriptionWhereInput): ArticuloSubscriptionPayload
+  articulo_detalle(where: Articulo_detalleSubscriptionWhereInput): Articulo_detalleSubscriptionPayload
+  cliente(where: ClienteSubscriptionWhereInput): ClienteSubscriptionPayload
+  factura(where: FacturaSubscriptionWhereInput): FacturaSubscriptionPayload
+  menu(where: MenuSubscriptionWhereInput): MenuSubscriptionPayload
+  orden(where: OrdenSubscriptionWhereInput): OrdenSubscriptionPayload
+  orden_detalle(where: Orden_detalleSubscriptionWhereInput): Orden_detalleSubscriptionPayload
+  producto(where: ProductoSubscriptionWhereInput): ProductoSubscriptionPayload
+  rol(where: RolSubscriptionWhereInput): RolSubscriptionPayload
+  usuario(where: UsuarioSubscriptionWhereInput): UsuarioSubscriptionPayload
+}
+
+type Usuario {
+  id: ID!
+  usuario: String!
+  email: String!
+  password: String!
+  rol: String!
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String!
+  ordenes(where: OrdenWhereInput, orderBy: OrdenOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Orden!]
+  facturas(where: FacturaWhereInput, orderBy: FacturaOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Factura!]
+  activo: Boolean!
+}
+
+type UsuarioConnection {
+  pageInfo: PageInfo!
+  edges: [UsuarioEdge]!
+  aggregate: AggregateUsuario!
+}
+
+input UsuarioCreateInput {
+  usuario: String!
+  email: String!
+  password: String!
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  ordenes: OrdenCreateManyWithoutMeseroInput
+  facturas: FacturaCreateManyWithoutCajeroInput
+  activo: Boolean
+}
+
+input UsuarioCreateOneWithoutFacturasInput {
+  create: UsuarioCreateWithoutFacturasInput
+  connect: UsuarioWhereUniqueInput
+}
+
+input UsuarioCreateOneWithoutOrdenesInput {
+  create: UsuarioCreateWithoutOrdenesInput
+  connect: UsuarioWhereUniqueInput
+}
+
+input UsuarioCreateWithoutFacturasInput {
+  usuario: String!
+  email: String!
+  password: String!
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  ordenes: OrdenCreateManyWithoutMeseroInput
+  activo: Boolean
+}
+
+input UsuarioCreateWithoutOrdenesInput {
+  usuario: String!
+  email: String!
+  password: String!
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  facturas: FacturaCreateManyWithoutCajeroInput
+  activo: Boolean
+}
+
+type UsuarioEdge {
+  node: Usuario!
+  cursor: String!
+}
+
+enum UsuarioOrderByInput {
+  id_ASC
+  id_DESC
+  usuario_ASC
+  usuario_DESC
+  email_ASC
+  email_DESC
+  password_ASC
+  password_DESC
+  rol_ASC
+  rol_DESC
+  img_ASC
+  img_DESC
+  social_ASC
+  social_DESC
+  nombre_ASC
+  nombre_DESC
+  apellido_ASC
+  apellido_DESC
+  estado_ASC
+  estado_DESC
+  activo_ASC
+  activo_DESC
+  createdAt_ASC
+  createdAt_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+type UsuarioPreviousValues {
+  id: ID!
+  usuario: String!
+  email: String!
+  password: String!
+  rol: String!
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String!
+  activo: Boolean!
+}
+
+type UsuarioSubscriptionPayload {
+  mutation: MutationType!
+  node: Usuario
+  updatedFields: [String!]
+  previousValues: UsuarioPreviousValues
+}
+
+input UsuarioSubscriptionWhereInput {
+  mutation_in: [MutationType!]
+  updatedFields_contains: String
+  updatedFields_contains_every: [String!]
+  updatedFields_contains_some: [String!]
+  node: UsuarioWhereInput
+  AND: [UsuarioSubscriptionWhereInput!]
+  OR: [UsuarioSubscriptionWhereInput!]
+  NOT: [UsuarioSubscriptionWhereInput!]
+}
+
+input UsuarioUpdateInput {
+  usuario: String
+  email: String
+  password: String
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  ordenes: OrdenUpdateManyWithoutMeseroInput
+  facturas: FacturaUpdateManyWithoutCajeroInput
+  activo: Boolean
+}
+
+input UsuarioUpdateOneRequiredWithoutFacturasInput {
+  create: UsuarioCreateWithoutFacturasInput
+  update: UsuarioUpdateWithoutFacturasDataInput
+  upsert: UsuarioUpsertWithoutFacturasInput
+  connect: UsuarioWhereUniqueInput
+}
+
+input UsuarioUpdateOneRequiredWithoutOrdenesInput {
+  create: UsuarioCreateWithoutOrdenesInput
+  update: UsuarioUpdateWithoutOrdenesDataInput
+  upsert: UsuarioUpsertWithoutOrdenesInput
+  connect: UsuarioWhereUniqueInput
+}
+
+input UsuarioUpdateWithoutFacturasDataInput {
+  usuario: String
+  email: String
+  password: String
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  ordenes: OrdenUpdateManyWithoutMeseroInput
+  activo: Boolean
+}
+
+input UsuarioUpdateWithoutOrdenesDataInput {
+  usuario: String
+  email: String
+  password: String
+  rol: String
+  img: String
+  social: Boolean
+  nombre: String
+  apellido: String
+  estado: String
+  facturas: FacturaUpdateManyWithoutCajeroInput
+  activo: Boolean
+}
+
+input UsuarioUpsertWithoutFacturasInput {
+  update: UsuarioUpdateWithoutFacturasDataInput!
+  create: UsuarioCreateWithoutFacturasInput!
+}
+
+input UsuarioUpsertWithoutOrdenesInput {
+  update: UsuarioUpdateWithoutOrdenesDataInput!
+  create: UsuarioCreateWithoutOrdenesInput!
+}
+
+input UsuarioWhereInput {
+  id: ID
+  id_not: ID
+  id_in: [ID!]
+  id_not_in: [ID!]
+  id_lt: ID
+  id_lte: ID
+  id_gt: ID
+  id_gte: ID
+  id_contains: ID
+  id_not_contains: ID
+  id_starts_with: ID
+  id_not_starts_with: ID
+  id_ends_with: ID
+  id_not_ends_with: ID
+  usuario: String
+  usuario_not: String
+  usuario_in: [String!]
+  usuario_not_in: [String!]
+  usuario_lt: String
+  usuario_lte: String
+  usuario_gt: String
+  usuario_gte: String
+  usuario_contains: String
+  usuario_not_contains: String
+  usuario_starts_with: String
+  usuario_not_starts_with: String
+  usuario_ends_with: String
+  usuario_not_ends_with: String
+  email: String
+  email_not: String
+  email_in: [String!]
+  email_not_in: [String!]
+  email_lt: String
+  email_lte: String
+  email_gt: String
+  email_gte: String
+  email_contains: String
+  email_not_contains: String
+  email_starts_with: String
+  email_not_starts_with: String
+  email_ends_with: String
+  email_not_ends_with: String
+  password: String
+  password_not: String
+  password_in: [String!]
+  password_not_in: [String!]
+  password_lt: String
+  password_lte: String
+  password_gt: String
+  password_gte: String
+  password_contains: String
+  password_not_contains: String
+  password_starts_with: String
+  password_not_starts_with: String
+  password_ends_with: String
+  password_not_ends_with: String
+  rol: String
+  rol_not: String
+  rol_in: [String!]
+  rol_not_in: [String!]
+  rol_lt: String
+  rol_lte: String
+  rol_gt: String
+  rol_gte: String
+  rol_contains: String
+  rol_not_contains: String
+  rol_starts_with: String
+  rol_not_starts_with: String
+  rol_ends_with: String
+  rol_not_ends_with: String
+  img: String
+  img_not: String
+  img_in: [String!]
+  img_not_in: [String!]
+  img_lt: String
+  img_lte: String
+  img_gt: String
+  img_gte: String
+  img_contains: String
+  img_not_contains: String
+  img_starts_with: String
+  img_not_starts_with: String
+  img_ends_with: String
+  img_not_ends_with: String
+  social: Boolean
+  social_not: Boolean
+  nombre: String
+  nombre_not: String
+  nombre_in: [String!]
+  nombre_not_in: [String!]
+  nombre_lt: String
+  nombre_lte: String
+  nombre_gt: String
+  nombre_gte: String
+  nombre_contains: String
+  nombre_not_contains: String
+  nombre_starts_with: String
+  nombre_not_starts_with: String
+  nombre_ends_with: String
+  nombre_not_ends_with: String
+  apellido: String
+  apellido_not: String
+  apellido_in: [String!]
+  apellido_not_in: [String!]
+  apellido_lt: String
+  apellido_lte: String
+  apellido_gt: String
+  apellido_gte: String
+  apellido_contains: String
+  apellido_not_contains: String
+  apellido_starts_with: String
+  apellido_not_starts_with: String
+  apellido_ends_with: String
+  apellido_not_ends_with: String
+  estado: String
+  estado_not: String
+  estado_in: [String!]
+  estado_not_in: [String!]
+  estado_lt: String
+  estado_lte: String
+  estado_gt: String
+  estado_gte: String
+  estado_contains: String
+  estado_not_contains: String
+  estado_starts_with: String
+  estado_not_starts_with: String
+  estado_ends_with: String
+  estado_not_ends_with: String
+  ordenes_every: OrdenWhereInput
+  ordenes_some: OrdenWhereInput
+  ordenes_none: OrdenWhereInput
+  facturas_every: FacturaWhereInput
+  facturas_some: FacturaWhereInput
+  facturas_none: FacturaWhereInput
+  activo: Boolean
+  activo_not: Boolean
+  AND: [UsuarioWhereInput!]
+  OR: [UsuarioWhereInput!]
+  NOT: [UsuarioWhereInput!]
+}
+
+input UsuarioWhereUniqueInput {
+  id: ID
+  usuario: String
+  email: String
+}

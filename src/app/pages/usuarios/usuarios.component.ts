@@ -34,7 +34,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   ];
 
   cargando = true;
-  obtenerUsuariosSubscription: Subscription = new Subscription();
+  private subscriptions = new Subscription();
 
   constructor(private usuarioService: UsuarioService,
     private parametrosService: ParametrosService,
@@ -48,18 +48,16 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.usuarioService.subscribeToSignup();
   }
 
-  ngOnDestroy() {
-    this.obtenerUsuariosSubscription.unsubscribe();
-  }
-
   obtenerUsuarios() {
-    this.obtenerUsuariosSubscription = this.usuarioService.obtenerUsuarios()
-      .valueChanges
-      .subscribe(({ data, loading }) => {
-        this.cargando = loading;
-        this.temp = [...data['usuarios']];
-        this.usuarios = data && data['usuarios'];
-      });
+    this.subscriptions.add(
+      this.usuarioService.obtenerUsuarios()
+        .valueChanges
+        .subscribe(({ data, loading }) => {
+          this.cargando = loading;
+          this.temp = [...data['usuarios']];
+          this.usuarios = data && data['usuarios'];
+        })
+    );
   }
 
   /**
@@ -173,8 +171,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    * Obtengo todos los roles activos
    */
   obtenerRoles() {
-    this.parametrosService.obtenerRoles()
-      .valueChanges.subscribe(({ data }) => (this.roles = data['roles']));
+    this.subscriptions.add(
+      this.parametrosService.obtenerRoles()
+        .valueChanges.subscribe(({ data }) => (this.roles = data['roles']))
+    );
   }
 
   /**
@@ -223,6 +223,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
           'success'
         );
       });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
 

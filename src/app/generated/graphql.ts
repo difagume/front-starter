@@ -858,6 +858,13 @@ export interface ArticuloDetalleUpsertWithWhereUniqueWithoutArticuloInput {
   create: ArticuloDetalleCreateWithoutArticuloInput;
 }
 
+export interface ArticuloUpdateManyMutationInput {
+  nombre?: string | null;
+  valor?: number | null;
+  tiempo_preparacion?: DateTime | null;
+  activo?: boolean | null;
+}
+
 export interface ArticuloDetalleCreateInput {
   cantidad: number;
   producto: ProductoCreateOneWithoutArticulosDetalleInput;
@@ -903,6 +910,11 @@ export interface ArticuloUpdateWithoutArticulosDetalleDataInput {
 export interface ArticuloUpsertWithoutArticulosDetalleInput {
   update: ArticuloUpdateWithoutArticulosDetalleDataInput;
   create: ArticuloCreateWithoutArticulosDetalleInput;
+}
+
+export interface ArticuloDetalleUpdateManyMutationInput {
+  cantidad?: number | null;
+  activo?: boolean | null;
 }
 
 export interface MenuCreateInput {
@@ -958,6 +970,11 @@ export interface ArticuloUpsertWithWhereUniqueWithoutMenuInput {
   create: ArticuloCreateWithoutMenuInput;
 }
 
+export interface MenuUpdateManyMutationInput {
+  nombre?: string | null;
+  activo?: boolean | null;
+}
+
 export interface ProductoCreateInput {
   nombre: string;
   valor: number;
@@ -1011,12 +1028,24 @@ export interface ArticuloDetalleUpsertWithWhereUniqueWithoutProductoInput {
   create: ArticuloDetalleCreateWithoutProductoInput;
 }
 
+export interface ProductoUpdateManyMutationInput {
+  nombre?: string | null;
+  valor?: number | null;
+  stock?: number | null;
+  activo?: boolean | null;
+}
+
 export interface RolCreateInput {
   nombre: string;
   activo?: boolean | null;
 }
 
 export interface RolUpdateInput {
+  nombre?: string | null;
+  activo?: boolean | null;
+}
+
+export interface RolUpdateManyMutationInput {
   nombre?: string | null;
   activo?: boolean | null;
 }
@@ -1035,6 +1064,19 @@ export interface UsuarioCreateInput {
 }
 
 export interface UsuarioUpdateInput {
+  usuario?: string | null;
+  email?: string | null;
+  password?: string | null;
+  rol?: string | null;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado?: string | null;
+  activo?: boolean | null;
+}
+
+export interface UsuarioUpdateManyMutationInput {
   usuario?: string | null;
   email?: string | null;
   password?: string | null;
@@ -1280,7 +1322,7 @@ export interface UpdateArticuloMutationArgs {
   where: ArticuloWhereUniqueInput;
 }
 export interface UpdateManyArticuloesMutationArgs {
-  data: ArticuloUpdateInput;
+  data: ArticuloUpdateManyMutationInput;
   where?: ArticuloWhereInput | null;
 }
 export interface UpsertArticuloMutationArgs {
@@ -1302,7 +1344,7 @@ export interface UpdateArticuloDetalleMutationArgs {
   where: ArticuloDetalleWhereUniqueInput;
 }
 export interface UpdateManyArticuloDetallesMutationArgs {
-  data: ArticuloDetalleUpdateInput;
+  data: ArticuloDetalleUpdateManyMutationInput;
   where?: ArticuloDetalleWhereInput | null;
 }
 export interface UpsertArticuloDetalleMutationArgs {
@@ -1324,7 +1366,7 @@ export interface UpdateMenuMutationArgs {
   where: MenuWhereUniqueInput;
 }
 export interface UpdateManyMenusMutationArgs {
-  data: MenuUpdateInput;
+  data: MenuUpdateManyMutationInput;
   where?: MenuWhereInput | null;
 }
 export interface UpsertMenuMutationArgs {
@@ -1346,7 +1388,7 @@ export interface UpdateProductoMutationArgs {
   where: ProductoWhereUniqueInput;
 }
 export interface UpdateManyProductoesMutationArgs {
-  data: ProductoUpdateInput;
+  data: ProductoUpdateManyMutationInput;
   where?: ProductoWhereInput | null;
 }
 export interface UpsertProductoMutationArgs {
@@ -1368,7 +1410,7 @@ export interface UpdateRolMutationArgs {
   where: RolWhereUniqueInput;
 }
 export interface UpdateManyRolsMutationArgs {
-  data: RolUpdateInput;
+  data: RolUpdateManyMutationInput;
   where?: RolWhereInput | null;
 }
 export interface UpsertRolMutationArgs {
@@ -1390,7 +1432,7 @@ export interface UpdateUsuarioMutationArgs {
   where: UsuarioWhereUniqueInput;
 }
 export interface UpdateManyUsuariosMutationArgs {
-  data: UsuarioUpdateInput;
+  data: UsuarioUpdateManyMutationInput;
   where?: UsuarioWhereInput | null;
 }
 export interface UpsertUsuarioMutationArgs {
@@ -2622,7 +2664,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyArticuloesArgs>;
   export interface UpdateManyArticuloesArgs {
-    data: ArticuloUpdateInput;
+    data: ArticuloUpdateManyMutationInput;
     where?: ArticuloWhereInput | null;
   }
 
@@ -2680,7 +2722,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyArticuloDetallesArgs>;
   export interface UpdateManyArticuloDetallesArgs {
-    data: ArticuloDetalleUpdateInput;
+    data: ArticuloDetalleUpdateManyMutationInput;
     where?: ArticuloDetalleWhereInput | null;
   }
 
@@ -2738,7 +2780,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyMenusArgs>;
   export interface UpdateManyMenusArgs {
-    data: MenuUpdateInput;
+    data: MenuUpdateManyMutationInput;
     where?: MenuWhereInput | null;
   }
 
@@ -2796,7 +2838,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyProductoesArgs>;
   export interface UpdateManyProductoesArgs {
-    data: ProductoUpdateInput;
+    data: ProductoUpdateManyMutationInput;
     where?: ProductoWhereInput | null;
   }
 
@@ -2854,7 +2896,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyRolsArgs>;
   export interface UpdateManyRolsArgs {
-    data: RolUpdateInput;
+    data: RolUpdateManyMutationInput;
     where?: RolWhereInput | null;
   }
 
@@ -2912,7 +2954,7 @@ export namespace MutationResolvers {
     Context = any
   > = Resolver<R, Parent, Context, UpdateManyUsuariosArgs>;
   export interface UpdateManyUsuariosArgs {
-    data: UsuarioUpdateInput;
+    data: UsuarioUpdateManyMutationInput;
     where?: UsuarioWhereInput | null;
   }
 

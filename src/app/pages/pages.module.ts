@@ -8,10 +8,13 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxCurrencyModule } from 'ngx-currency';
 import { NgxPermissionsModule } from 'ngx-permissions';
 import { AboutComponent, CatalogoComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
+import { SinimagenPipe } from '../pipes/sinimagen.pipe';
 import { CatalogoService } from '../services/catalogo.service';
 import { ParametrosService } from '../services/parametros.service';
+import { PedidoService } from '../services/pedido.service';
 import { UsuarioService } from '../services/usuario.service';
 import { PagesRoutes } from './pages.routing';
+import { PedidoComponent } from './pedido/pedido.component';
 
 @NgModule({
   imports: [
@@ -30,12 +33,15 @@ import { PagesRoutes } from './pages.routing';
     DocsComponent,
     PerfilComponent,
     UsuariosComponent,
-    CatalogoComponent
+    CatalogoComponent,
+    PedidoComponent,
+    SinimagenPipe
   ],
   providers: [
     UsuarioService,
     ParametrosService,
     CatalogoService,
+    PedidoService
   ]
 })
 

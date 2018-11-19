@@ -128,6 +128,117 @@ export const ActualizarPassword = gql`
   }
 `;
 
+export const articulos = gql`
+  query Articulos {
+    articulos: articuloes(orderBy: id_ASC, where: { activo: true }) {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
+        id
+        nombre
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
+          id
+          nombre
+          valor
+          stock
+        }
+      }
+    }
+  }
+`;
+
+export const AllMenus = gql`
+  {
+    menus(where: { activo: true }, orderBy: id_ASC) {
+      id
+      nombre
+    }
+  }
+`;
+
+export const AllProductos = gql`
+  {
+    productos: productoes(where: { activo: true }, orderBy: id_ASC) {
+      id
+      nombre
+      valor
+    }
+  }
+`;
+
+export const CreateArticulo = gql`
+  mutation createArticulo( $data: ArticuloCreateInput! ) {
+    createArticulo( data: $data ) {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
+        id
+        nombre
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
+          id
+          nombre
+          valor
+          stock
+        }
+      }
+    }
+  }
+`;
+
+export const DeleteArticulo = gql`
+  mutation eliminarArticulo($id: ID!) {
+    eliminarArticulo: deleteArticulo(where: { id: $id }) {
+      id
+      nombre
+    }
+  }
+`;
+
+/* export const DeleteManyArticulo_detalles = gql`
+  mutation deleteManyArticulo_detalles($id: ID!) {
+    eliminarArticuloDetalles: deleteManyArticulo_detalles(where: { articulo: { id: $id } }) {
+      count
+    }
+  }
+`; */
+
+export const UpdateArticulo = gql`
+  mutation updateArticulo($data: ArticuloUpdateInput!, $id: ID!) {
+    updateArticulo(data: $data, where: { id: $id }) {
+      id
+      nombre
+      valor
+      tiempo_preparacion
+      menu {
+        id
+        nombre
+      }
+      articuloDetalle: articulos_detalle {
+        id
+        cantidad
+        producto {
+          id
+          nombre
+          valor
+          stock
+        }
+      }
+    }
+  }
+`;
+
 export const CrearProducto = gql`
   mutation crearProducto($data: ProductoCreateInput!) {
     createProducto(data: $data) {
@@ -153,6 +264,31 @@ export const CrearRol = gql`
     createRol(data: $data) {
       id
       nombre
+    }
+  }
+`;
+
+export const menusArticulos = gql`
+  query MenusArticulos {
+    menusArticulos {
+      id
+      nombre
+      articulos(where: { activo: true }) {
+        id
+        nombre
+        valor
+        tiempo_preparacion
+        articulos_detalle(where: { activo: true }) {
+          id
+          cantidad
+          producto {
+            id
+            nombre
+            valor
+            stock
+          }
+        }
+      }
     }
   }
 `;

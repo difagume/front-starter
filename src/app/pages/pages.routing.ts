@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { NgxPermissionsGuard } from 'ngx-permissions';
-import { AboutComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent, CatalogoComponent } from '.';
+import { AboutComponent, CatalogoComponent, DashboardComponent, DocsComponent, PerfilComponent, UsuariosComponent } from '.';
+import { PedidoComponent } from './pedido/pedido.component';
 
 export const PagesRoutes: Routes = [
   {
@@ -23,7 +24,8 @@ export const PagesRoutes: Routes = [
         data: {
           permissions: { only: ['ADMIN'], redirectTo: '/' }
         }
-      }
+      },
+      { path: 'pedido', component: PedidoComponent },
     ]
   }
 ];

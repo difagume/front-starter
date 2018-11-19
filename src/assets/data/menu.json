@@ -10,6 +10,16 @@
         ]
     },
     {
+        "state": "pedido",
+        "name": "PEDIDO",
+        "type": "link",
+        "icon": "basic-info",
+        "roles": [
+            "ADMIN",
+            "USUARIO"
+        ]
+    },
+    {
         "state": "",
         "name": "ADMINISTRACION",
         "type": "sub",
