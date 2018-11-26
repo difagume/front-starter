@@ -1,0 +1,167 @@
+  /**
+  * 1. Avoid the WebKit bug in Android 4.0.* where (2) destroys native `audio`
+  *    and `video` controls.
+  * 2. Correct inability to style clickable `input` types in iOS.
+  * 3. Improve usability and consistency of cursor style between image-type
+  *    `input` and others.
+  */
+ 
+  button,
+ html input[type="button"], /* 1 */
+ input[type="reset"],
+ input[type="submit"] {
+   -webkit-appearance: button; /* 2 */
+   cursor: pointer; /* 3 */
+ }
+ 
+  /**
+  * Re-set default cursor for disabled elements.
+  */
+ 
+  button[disabled],
+ html input[disabled] {
+   cursor: not-allowed;
+ }
+ 
+  /**
+  * Remove inner padding and border in Firefox 4+.
+  */
+ 
+  button::-moz-focus-inner,
+ input::-moz-focus-inner {
+   border: 0;
+   padding: 0;
+ }
+ 
+  button {
+   background: transparent;
+   border: 0;
+   padding: 0;
+   border-radius: 0;
+ }
+ 
+  /**
+  * Work around a Firefox/IE bug where the transparent `button` background
+  * results in a loss of the default `button` focus styles.
+  */
+ 
+  button:focus {
+   outline: 1px dotted;
+   outline: none;
+ }
+  /**
+  * Suppress the focus outline on links that cannot be accessed via keyboard.
+  * This prevents an unwanted focus outline from appearing around elements that
+  * might still respond to pointer events.
+  */
+
+/* This is a generated file. See "Shared JS/CSS Variables" in README.md */
+.sb-frap {
+  position:fixed;
+	bottom:40px;
+	right:40px;
+  //position: relative;
+  //display: inline-block;
+  /* Provide stacking context for touch target enhancing pseudo-elements */
+  z-index: 1;
+  /* Height of 56px achieved with y-padding plus line-height */
+  padding: 18px 2.4rem;
+  background: #00a862;
+  -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .24), 0 8px 12px rgba(0, 0, 0, .14);
+          box-shadow: 0 0 6px rgba(0, 0, 0, .24), 0 8px 12px rgba(0, 0, 0, .14);
+  border-radius: 500px;
+  color: rgba(255, 255, 255, 1);
+  //font-size: 19px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow: hidden;
+  text-align: center;
+  text-decoration: none;
+  -webkit-transition-duration: 200ms;
+          transition-duration: 200ms;
+  -webkit-transition-property: width, height, -webkit-transform, -webkit-box-shadow;
+  transition-property: width, height, -webkit-transform, -webkit-box-shadow;
+  //transition-property: transform, box-shadow, width, height;
+  transition-property: transform, box-shadow, width, height, -webkit-transform, -webkit-box-shadow;
+  -webkit-transition-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+          transition-timing-function: cubic-bezier(0.25,0.1,0.25,1);
+}
+.sb-frap:not(.sb-frap--disabled):not(.sb-frap--loading):active {
+  -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, .24), 0 8px 12px rgba(0, 0, 0, 0);
+          box-shadow: 0 0 6px rgba(0, 0, 0, .24), 0 8px 12px rgba(0, 0, 0, 0);
+  -webkit-transform: translateY(4px);
+          transform: translateY(4px);
+}
+.sb-frap--disabled {
+  background: #cccccc;
+}
+.sb-frap--mini {
+  padding: 10px 1.6rem;
+  background: #ffffff;
+  color: rgba(0, 0, 0, .87);
+  font-size: 17px;
+  font-size: 1.7rem;
+}
+.sb-frap--mini.sb-frap--disabled {
+  background: #cccccc;
+  color: rgba(0, 0, 0, .56);
+}
+.sb-frap--mini::before {
+  /* Provides invisible extra touch target */
+  content: '';
+  position: absolute;
+  top: -0.8rem;
+  right: -0.8rem;
+  bottom: -0.8rem;
+  left: -0.8rem;
+  z-index: -1;
+}
+.sb-frap--circular {
+  width: 5.6rem;
+  height: 5.6rem;
+  padding: 0;
+  /* vertically center text with line height */
+  line-height: 5.6rem;
+}
+.sb-frap--circular.sb-frap--mini {
+  width: 4rem;
+  height: 4rem;
+  /* vertically center text with line height */
+  line-height: 4rem;
+}
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  50% { -webkit-transform: rotate(270deg); transform: rotate(270deg); }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@keyframes spin {
+  0% { -webkit-transform: rotate(0deg); transform: rotate(0deg); }
+  50% { -webkit-transform: rotate(270deg); transform: rotate(270deg); }
+  100% { -webkit-transform: rotate(360deg); transform: rotate(360deg); }
+}
+@-webkit-keyframes fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.sb-frap--loading {
+  width: 5.6rem;
+  height: 5.6rem;
+  padding: 0;
+}
+.sb-frap--loadingCircle {
+  margin: auto;
+  border: 3px solid rgba(255, 255, 255, .2);
+  border: .3rem solid rgba(255, 255, 255, .2);
+  border-right: 3px solid #ffffff;
+  border-right: .3rem solid #ffffff;
+  width: 75%;
+  height: 75%;
+  border-radius: 500px;
+  -webkit-animation: spin 750ms linear infinite, fade 100ms;
+          animation: spin 750ms linear infinite, fade 100ms;
+}

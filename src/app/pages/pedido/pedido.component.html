@@ -3,7 +3,7 @@
   <ngb-tabset>
     <ngb-tab title="Menú">
       <ng-template ngbTabContent>
-
+        <br>
         <div *ngIf="menusArticulos">
           <div *ngFor="let menu of menusArticulos">
             <p>{{menu.nombre}}</p>
@@ -32,3 +32,5 @@
 <div *ngIf="cargando">
   Cargando...
 </div>
+
+<button class="sb-frap waves-effect">Ver pedido</button>

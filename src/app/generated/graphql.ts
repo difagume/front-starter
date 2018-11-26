@@ -43,9 +43,21 @@ export interface Query {
   articulo_detalle?: ArticuloDetalle | null;
   articulo_detalles: (ArticuloDetalle | null)[];
   articulo_detallesConnection: ArticuloDetalleConnection;
+  cliente?: Cliente | null;
+  clientes: (Cliente | null)[];
+  clientesConnection: ClienteConnection;
+  factura?: Factura | null;
+  facturas: (Factura | null)[];
+  facturasConnection: FacturaConnection;
   menu?: Menu | null;
   menus: (Menu | null)[];
   menusConnection: MenuConnection;
+  orden?: Orden | null;
+  ordens: (Orden | null)[];
+  ordensConnection: OrdenConnection;
+  orden_detalle?: OrdenDetalle | null;
+  orden_detalles: (OrdenDetalle | null)[];
+  orden_detallesConnection: OrdenDetalleConnection;
   producto?: Producto | null;
   productoes: (Producto | null)[];
   productoesConnection: ProductoConnection;
@@ -57,6 +69,7 @@ export interface Query {
   usuariosConnection: UsuarioConnection;
   node?: Node | null;
   login: AuthPayload;
+  menusArticulos: Menu[];
 }
 
 export interface Articulo {
@@ -130,6 +143,98 @@ export interface AggregateArticuloDetalle {
   count: number;
 }
 
+export interface Cliente {
+  id: string;
+  identificacion: string;
+  nombre: string;
+  direccion: string;
+  telefono: string;
+  email?: string | null;
+  facturas?: Factura[] | null;
+  activo: boolean;
+}
+
+export interface Factura {
+  id: string;
+  numero: string;
+  fecha: DateTime;
+  cajero: Usuario;
+  orden: Orden;
+  cliente: Cliente;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago: FormaPago;
+  estado: FacturaEstado;
+  activo: boolean;
+}
+
+export interface Usuario {
+  id: string;
+  usuario: string;
+  email: string;
+  password: string;
+  rol: string;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado: string;
+  ordenes?: Orden[] | null;
+  facturas?: Factura[] | null;
+  activo: boolean;
+}
+
+export interface Orden {
+  id: string;
+  fecha: DateTime;
+  mesero: Usuario;
+  orden_detalle?: OrdenDetalle[] | null;
+  factura?: Factura | null;
+  estado: OrdenEstado;
+  activo: boolean;
+}
+
+export interface OrdenDetalle {
+  id: string;
+  cantidad: number;
+  descripcion: Articulo;
+  valor_unitario: number;
+  gratis: boolean;
+  orden: Orden;
+  activo: boolean;
+}
+
+export interface ClienteConnection {
+  pageInfo: PageInfo;
+  edges: (ClienteEdge | null)[];
+  aggregate: AggregateCliente;
+}
+
+export interface ClienteEdge {
+  node: Cliente;
+  cursor: string;
+}
+
+export interface AggregateCliente {
+  count: number;
+}
+
+export interface FacturaConnection {
+  pageInfo: PageInfo;
+  edges: (FacturaEdge | null)[];
+  aggregate: AggregateFactura;
+}
+
+export interface FacturaEdge {
+  node: Factura;
+  cursor: string;
+}
+
+export interface AggregateFactura {
+  count: number;
+}
+
 export interface MenuConnection {
   pageInfo: PageInfo;
   edges: (MenuEdge | null)[];
@@ -142,6 +247,36 @@ export interface MenuEdge {
 }
 
 export interface AggregateMenu {
+  count: number;
+}
+
+export interface OrdenConnection {
+  pageInfo: PageInfo;
+  edges: (OrdenEdge | null)[];
+  aggregate: AggregateOrden;
+}
+
+export interface OrdenEdge {
+  node: Orden;
+  cursor: string;
+}
+
+export interface AggregateOrden {
+  count: number;
+}
+
+export interface OrdenDetalleConnection {
+  pageInfo: PageInfo;
+  edges: (OrdenDetalleEdge | null)[];
+  aggregate: AggregateOrdenDetalle;
+}
+
+export interface OrdenDetalleEdge {
+  node: OrdenDetalle;
+  cursor: string;
+}
+
+export interface AggregateOrdenDetalle {
   count: number;
 }
 
@@ -181,20 +316,6 @@ export interface AggregateRol {
   count: number;
 }
 
-export interface Usuario {
-  id: string;
-  usuario: string;
-  email: string;
-  password: string;
-  rol: string;
-  img?: string | null;
-  social?: boolean | null;
-  nombre?: string | null;
-  apellido?: string | null;
-  estado: string;
-  activo: boolean;
-}
-
 export interface UsuarioConnection {
   pageInfo: PageInfo;
   edges: (UsuarioEdge | null)[];
@@ -228,12 +349,36 @@ export interface Mutation {
   upsertArticulo_detalle: ArticuloDetalle;
   deleteArticulo_detalle?: ArticuloDetalle | null;
   deleteManyArticulo_detalles: BatchPayload;
+  createCliente: Cliente;
+  updateCliente?: Cliente | null;
+  updateManyClientes: BatchPayload;
+  upsertCliente: Cliente;
+  deleteCliente?: Cliente | null;
+  deleteManyClientes: BatchPayload;
+  createFactura: Factura;
+  updateFactura?: Factura | null;
+  updateManyFacturas: BatchPayload;
+  upsertFactura: Factura;
+  deleteFactura?: Factura | null;
+  deleteManyFacturas: BatchPayload;
   createMenu: Menu;
   updateMenu?: Menu | null;
   updateManyMenus: BatchPayload;
   upsertMenu: Menu;
   deleteMenu?: Menu | null;
   deleteManyMenus: BatchPayload;
+  createOrden: Orden;
+  updateOrden?: Orden | null;
+  updateManyOrdens: BatchPayload;
+  upsertOrden: Orden;
+  deleteOrden?: Orden | null;
+  deleteManyOrdens: BatchPayload;
+  createOrden_detalle: OrdenDetalle;
+  updateOrden_detalle?: OrdenDetalle | null;
+  updateManyOrden_detalles: BatchPayload;
+  upsertOrden_detalle: OrdenDetalle;
+  deleteOrden_detalle?: OrdenDetalle | null;
+  deleteManyOrden_detalles: BatchPayload;
   createProducto: Producto;
   updateProducto?: Producto | null;
   updateManyProductoes: BatchPayload;
@@ -264,7 +409,11 @@ export interface BatchPayload {
 export interface Subscription {
   articulo?: ArticuloSubscriptionPayload | null;
   articulo_detalle?: ArticuloDetalleSubscriptionPayload | null;
+  cliente?: ClienteSubscriptionPayload | null;
+  factura?: FacturaSubscriptionPayload | null;
   menu?: MenuSubscriptionPayload | null;
+  orden?: OrdenSubscriptionPayload | null;
+  orden_detalle?: OrdenDetalleSubscriptionPayload | null;
   producto?: ProductoSubscriptionPayload | null;
   rol?: RolSubscriptionPayload | null;
   usuario?: UsuarioSubscriptionPayload | null;
@@ -300,6 +449,42 @@ export interface ArticuloDetallePreviousValues {
   activo: boolean;
 }
 
+export interface ClienteSubscriptionPayload {
+  mutation: MutationType;
+  node?: Cliente | null;
+  updatedFields?: string[] | null;
+  previousValues?: ClientePreviousValues | null;
+}
+
+export interface ClientePreviousValues {
+  id: string;
+  identificacion: string;
+  nombre: string;
+  direccion: string;
+  telefono: string;
+  email?: string | null;
+  activo: boolean;
+}
+
+export interface FacturaSubscriptionPayload {
+  mutation: MutationType;
+  node?: Factura | null;
+  updatedFields?: string[] | null;
+  previousValues?: FacturaPreviousValues | null;
+}
+
+export interface FacturaPreviousValues {
+  id: string;
+  numero: string;
+  fecha: DateTime;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago: FormaPago;
+  estado: FacturaEstado;
+  activo: boolean;
+}
+
 export interface MenuSubscriptionPayload {
   mutation: MutationType;
   node?: Menu | null;
@@ -310,6 +495,35 @@ export interface MenuSubscriptionPayload {
 export interface MenuPreviousValues {
   id: string;
   nombre: string;
+  activo: boolean;
+}
+
+export interface OrdenSubscriptionPayload {
+  mutation: MutationType;
+  node?: Orden | null;
+  updatedFields?: string[] | null;
+  previousValues?: OrdenPreviousValues | null;
+}
+
+export interface OrdenPreviousValues {
+  id: string;
+  fecha: DateTime;
+  estado: OrdenEstado;
+  activo: boolean;
+}
+
+export interface OrdenDetalleSubscriptionPayload {
+  mutation: MutationType;
+  node?: OrdenDetalle | null;
+  updatedFields?: string[] | null;
+  previousValues?: OrdenDetallePreviousValues | null;
+}
+
+export interface OrdenDetallePreviousValues {
+  id: string;
+  cantidad: number;
+  valor_unitario: number;
+  gratis: boolean;
   activo: boolean;
 }
 
@@ -553,21 +767,13 @@ export interface ArticuloDetalleWhereUniqueInput {
   id?: string | null;
 }
 
-export interface MenuWhereUniqueInput {
+export interface ClienteWhereUniqueInput {
   id?: string | null;
+  identificacion?: string | null;
   nombre?: string | null;
 }
 
-export interface ProductoWhereUniqueInput {
-  id?: string | null;
-  nombre?: string | null;
-}
-
-export interface RolWhereUniqueInput {
-  id?: string | null;
-}
-
-export interface RolWhereInput {
+export interface FacturaWhereInput {
   id?: string | null;
   id_not?: string | null;
   id_in?: string[] | null;
@@ -582,31 +788,68 @@ export interface RolWhereInput {
   id_not_starts_with?: string | null;
   id_ends_with?: string | null;
   id_not_ends_with?: string | null;
-  nombre?: string | null;
-  nombre_not?: string | null;
-  nombre_in?: string[] | null;
-  nombre_not_in?: string[] | null;
-  nombre_lt?: string | null;
-  nombre_lte?: string | null;
-  nombre_gt?: string | null;
-  nombre_gte?: string | null;
-  nombre_contains?: string | null;
-  nombre_not_contains?: string | null;
-  nombre_starts_with?: string | null;
-  nombre_not_starts_with?: string | null;
-  nombre_ends_with?: string | null;
-  nombre_not_ends_with?: string | null;
+  numero?: string | null;
+  numero_not?: string | null;
+  numero_in?: string[] | null;
+  numero_not_in?: string[] | null;
+  numero_lt?: string | null;
+  numero_lte?: string | null;
+  numero_gt?: string | null;
+  numero_gte?: string | null;
+  numero_contains?: string | null;
+  numero_not_contains?: string | null;
+  numero_starts_with?: string | null;
+  numero_not_starts_with?: string | null;
+  numero_ends_with?: string | null;
+  numero_not_ends_with?: string | null;
+  fecha?: DateTime | null;
+  fecha_not?: DateTime | null;
+  fecha_in?: DateTime[] | null;
+  fecha_not_in?: DateTime[] | null;
+  fecha_lt?: DateTime | null;
+  fecha_lte?: DateTime | null;
+  fecha_gt?: DateTime | null;
+  fecha_gte?: DateTime | null;
+  cajero?: UsuarioWhereInput | null;
+  orden?: OrdenWhereInput | null;
+  cliente?: ClienteWhereInput | null;
+  subtotal?: number | null;
+  subtotal_not?: number | null;
+  subtotal_in?: number[] | null;
+  subtotal_not_in?: number[] | null;
+  subtotal_lt?: number | null;
+  subtotal_lte?: number | null;
+  subtotal_gt?: number | null;
+  subtotal_gte?: number | null;
+  iva?: number | null;
+  iva_not?: number | null;
+  iva_in?: number[] | null;
+  iva_not_in?: number[] | null;
+  iva_lt?: number | null;
+  iva_lte?: number | null;
+  iva_gt?: number | null;
+  iva_gte?: number | null;
+  total?: number | null;
+  total_not?: number | null;
+  total_in?: number[] | null;
+  total_not_in?: number[] | null;
+  total_lt?: number | null;
+  total_lte?: number | null;
+  total_gt?: number | null;
+  total_gte?: number | null;
+  forma_pago?: FormaPago | null;
+  forma_pago_not?: FormaPago | null;
+  forma_pago_in?: FormaPago[] | null;
+  forma_pago_not_in?: FormaPago[] | null;
+  estado?: FacturaEstado | null;
+  estado_not?: FacturaEstado | null;
+  estado_in?: FacturaEstado[] | null;
+  estado_not_in?: FacturaEstado[] | null;
   activo?: boolean | null;
   activo_not?: boolean | null;
-  AND?: RolWhereInput[] | null;
-  OR?: RolWhereInput[] | null;
-  NOT?: RolWhereInput[] | null;
-}
-
-export interface UsuarioWhereUniqueInput {
-  id?: string | null;
-  usuario?: string | null;
-  email?: string | null;
+  AND?: FacturaWhereInput[] | null;
+  OR?: FacturaWhereInput[] | null;
+  NOT?: FacturaWhereInput[] | null;
 }
 
 export interface UsuarioWhereInput {
@@ -738,11 +981,263 @@ export interface UsuarioWhereInput {
   estado_not_starts_with?: string | null;
   estado_ends_with?: string | null;
   estado_not_ends_with?: string | null;
+  ordenes_every?: OrdenWhereInput | null;
+  ordenes_some?: OrdenWhereInput | null;
+  ordenes_none?: OrdenWhereInput | null;
+  facturas_every?: FacturaWhereInput | null;
+  facturas_some?: FacturaWhereInput | null;
+  facturas_none?: FacturaWhereInput | null;
   activo?: boolean | null;
   activo_not?: boolean | null;
   AND?: UsuarioWhereInput[] | null;
   OR?: UsuarioWhereInput[] | null;
   NOT?: UsuarioWhereInput[] | null;
+}
+
+export interface OrdenWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  fecha?: DateTime | null;
+  fecha_not?: DateTime | null;
+  fecha_in?: DateTime[] | null;
+  fecha_not_in?: DateTime[] | null;
+  fecha_lt?: DateTime | null;
+  fecha_lte?: DateTime | null;
+  fecha_gt?: DateTime | null;
+  fecha_gte?: DateTime | null;
+  mesero?: UsuarioWhereInput | null;
+  orden_detalle_every?: OrdenDetalleWhereInput | null;
+  orden_detalle_some?: OrdenDetalleWhereInput | null;
+  orden_detalle_none?: OrdenDetalleWhereInput | null;
+  factura?: FacturaWhereInput | null;
+  estado?: OrdenEstado | null;
+  estado_not?: OrdenEstado | null;
+  estado_in?: OrdenEstado[] | null;
+  estado_not_in?: OrdenEstado[] | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: OrdenWhereInput[] | null;
+  OR?: OrdenWhereInput[] | null;
+  NOT?: OrdenWhereInput[] | null;
+}
+
+export interface OrdenDetalleWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  cantidad?: number | null;
+  cantidad_not?: number | null;
+  cantidad_in?: number[] | null;
+  cantidad_not_in?: number[] | null;
+  cantidad_lt?: number | null;
+  cantidad_lte?: number | null;
+  cantidad_gt?: number | null;
+  cantidad_gte?: number | null;
+  descripcion?: ArticuloWhereInput | null;
+  valor_unitario?: number | null;
+  valor_unitario_not?: number | null;
+  valor_unitario_in?: number[] | null;
+  valor_unitario_not_in?: number[] | null;
+  valor_unitario_lt?: number | null;
+  valor_unitario_lte?: number | null;
+  valor_unitario_gt?: number | null;
+  valor_unitario_gte?: number | null;
+  gratis?: boolean | null;
+  gratis_not?: boolean | null;
+  orden?: OrdenWhereInput | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: OrdenDetalleWhereInput[] | null;
+  OR?: OrdenDetalleWhereInput[] | null;
+  NOT?: OrdenDetalleWhereInput[] | null;
+}
+
+export interface ClienteWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  identificacion?: string | null;
+  identificacion_not?: string | null;
+  identificacion_in?: string[] | null;
+  identificacion_not_in?: string[] | null;
+  identificacion_lt?: string | null;
+  identificacion_lte?: string | null;
+  identificacion_gt?: string | null;
+  identificacion_gte?: string | null;
+  identificacion_contains?: string | null;
+  identificacion_not_contains?: string | null;
+  identificacion_starts_with?: string | null;
+  identificacion_not_starts_with?: string | null;
+  identificacion_ends_with?: string | null;
+  identificacion_not_ends_with?: string | null;
+  nombre?: string | null;
+  nombre_not?: string | null;
+  nombre_in?: string[] | null;
+  nombre_not_in?: string[] | null;
+  nombre_lt?: string | null;
+  nombre_lte?: string | null;
+  nombre_gt?: string | null;
+  nombre_gte?: string | null;
+  nombre_contains?: string | null;
+  nombre_not_contains?: string | null;
+  nombre_starts_with?: string | null;
+  nombre_not_starts_with?: string | null;
+  nombre_ends_with?: string | null;
+  nombre_not_ends_with?: string | null;
+  direccion?: string | null;
+  direccion_not?: string | null;
+  direccion_in?: string[] | null;
+  direccion_not_in?: string[] | null;
+  direccion_lt?: string | null;
+  direccion_lte?: string | null;
+  direccion_gt?: string | null;
+  direccion_gte?: string | null;
+  direccion_contains?: string | null;
+  direccion_not_contains?: string | null;
+  direccion_starts_with?: string | null;
+  direccion_not_starts_with?: string | null;
+  direccion_ends_with?: string | null;
+  direccion_not_ends_with?: string | null;
+  telefono?: string | null;
+  telefono_not?: string | null;
+  telefono_in?: string[] | null;
+  telefono_not_in?: string[] | null;
+  telefono_lt?: string | null;
+  telefono_lte?: string | null;
+  telefono_gt?: string | null;
+  telefono_gte?: string | null;
+  telefono_contains?: string | null;
+  telefono_not_contains?: string | null;
+  telefono_starts_with?: string | null;
+  telefono_not_starts_with?: string | null;
+  telefono_ends_with?: string | null;
+  telefono_not_ends_with?: string | null;
+  email?: string | null;
+  email_not?: string | null;
+  email_in?: string[] | null;
+  email_not_in?: string[] | null;
+  email_lt?: string | null;
+  email_lte?: string | null;
+  email_gt?: string | null;
+  email_gte?: string | null;
+  email_contains?: string | null;
+  email_not_contains?: string | null;
+  email_starts_with?: string | null;
+  email_not_starts_with?: string | null;
+  email_ends_with?: string | null;
+  email_not_ends_with?: string | null;
+  facturas_every?: FacturaWhereInput | null;
+  facturas_some?: FacturaWhereInput | null;
+  facturas_none?: FacturaWhereInput | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: ClienteWhereInput[] | null;
+  OR?: ClienteWhereInput[] | null;
+  NOT?: ClienteWhereInput[] | null;
+}
+
+export interface FacturaWhereUniqueInput {
+  id?: string | null;
+  numero?: string | null;
+}
+
+export interface MenuWhereUniqueInput {
+  id?: string | null;
+  nombre?: string | null;
+}
+
+export interface OrdenWhereUniqueInput {
+  id?: string | null;
+}
+
+export interface OrdenDetalleWhereUniqueInput {
+  id?: string | null;
+}
+
+export interface ProductoWhereUniqueInput {
+  id?: string | null;
+  nombre?: string | null;
+}
+
+export interface RolWhereUniqueInput {
+  id?: string | null;
+  nombre?: string | null;
+}
+
+export interface RolWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  nombre?: string | null;
+  nombre_not?: string | null;
+  nombre_in?: string[] | null;
+  nombre_not_in?: string[] | null;
+  nombre_lt?: string | null;
+  nombre_lte?: string | null;
+  nombre_gt?: string | null;
+  nombre_gte?: string | null;
+  nombre_contains?: string | null;
+  nombre_not_contains?: string | null;
+  nombre_starts_with?: string | null;
+  nombre_not_starts_with?: string | null;
+  nombre_ends_with?: string | null;
+  nombre_not_ends_with?: string | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: RolWhereInput[] | null;
+  OR?: RolWhereInput[] | null;
+  NOT?: RolWhereInput[] | null;
+}
+
+export interface UsuarioWhereUniqueInput {
+  id?: string | null;
+  usuario?: string | null;
+  email?: string | null;
 }
 
 export interface ArticuloCreateInput {
@@ -917,6 +1412,487 @@ export interface ArticuloDetalleUpdateManyMutationInput {
   activo?: boolean | null;
 }
 
+export interface ClienteCreateInput {
+  identificacion: string;
+  nombre: string;
+  direccion: string;
+  telefono: string;
+  email?: string | null;
+  facturas?: FacturaCreateManyWithoutClienteInput | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaCreateManyWithoutClienteInput {
+  create?: FacturaCreateWithoutClienteInput[] | null;
+  connect?: FacturaWhereUniqueInput[] | null;
+}
+
+export interface FacturaCreateWithoutClienteInput {
+  numero: string;
+  fecha: DateTime;
+  cajero: UsuarioCreateOneWithoutFacturasInput;
+  orden: OrdenCreateOneWithoutFacturaInput;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface UsuarioCreateOneWithoutFacturasInput {
+  create?: UsuarioCreateWithoutFacturasInput | null;
+  connect?: UsuarioWhereUniqueInput | null;
+}
+
+export interface UsuarioCreateWithoutFacturasInput {
+  usuario: string;
+  email: string;
+  password: string;
+  rol?: string | null;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado?: string | null;
+  ordenes?: OrdenCreateManyWithoutMeseroInput | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenCreateManyWithoutMeseroInput {
+  create?: OrdenCreateWithoutMeseroInput[] | null;
+  connect?: OrdenWhereUniqueInput[] | null;
+}
+
+export interface OrdenCreateWithoutMeseroInput {
+  fecha: DateTime;
+  orden_detalle?: OrdenDetalleCreateManyWithoutOrdenInput | null;
+  factura?: FacturaCreateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenDetalleCreateManyWithoutOrdenInput {
+  create?: OrdenDetalleCreateWithoutOrdenInput[] | null;
+  connect?: OrdenDetalleWhereUniqueInput[] | null;
+}
+
+export interface OrdenDetalleCreateWithoutOrdenInput {
+  cantidad: number;
+  descripcion: ArticuloCreateOneInput;
+  valor_unitario: number;
+  gratis?: boolean | null;
+  activo?: boolean | null;
+}
+
+export interface ArticuloCreateOneInput {
+  create?: ArticuloCreateInput | null;
+  connect?: ArticuloWhereUniqueInput | null;
+}
+
+export interface FacturaCreateOneWithoutOrdenInput {
+  create?: FacturaCreateWithoutOrdenInput | null;
+  connect?: FacturaWhereUniqueInput | null;
+}
+
+export interface FacturaCreateWithoutOrdenInput {
+  numero: string;
+  fecha: DateTime;
+  cajero: UsuarioCreateOneWithoutFacturasInput;
+  cliente: ClienteCreateOneWithoutFacturasInput;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface ClienteCreateOneWithoutFacturasInput {
+  create?: ClienteCreateWithoutFacturasInput | null;
+  connect?: ClienteWhereUniqueInput | null;
+}
+
+export interface ClienteCreateWithoutFacturasInput {
+  identificacion: string;
+  nombre: string;
+  direccion: string;
+  telefono: string;
+  email?: string | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenCreateOneWithoutFacturaInput {
+  create?: OrdenCreateWithoutFacturaInput | null;
+  connect?: OrdenWhereUniqueInput | null;
+}
+
+export interface OrdenCreateWithoutFacturaInput {
+  fecha: DateTime;
+  mesero: UsuarioCreateOneWithoutOrdenesInput;
+  orden_detalle?: OrdenDetalleCreateManyWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface UsuarioCreateOneWithoutOrdenesInput {
+  create?: UsuarioCreateWithoutOrdenesInput | null;
+  connect?: UsuarioWhereUniqueInput | null;
+}
+
+export interface UsuarioCreateWithoutOrdenesInput {
+  usuario: string;
+  email: string;
+  password: string;
+  rol?: string | null;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado?: string | null;
+  facturas?: FacturaCreateManyWithoutCajeroInput | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaCreateManyWithoutCajeroInput {
+  create?: FacturaCreateWithoutCajeroInput[] | null;
+  connect?: FacturaWhereUniqueInput[] | null;
+}
+
+export interface FacturaCreateWithoutCajeroInput {
+  numero: string;
+  fecha: DateTime;
+  orden: OrdenCreateOneWithoutFacturaInput;
+  cliente: ClienteCreateOneWithoutFacturasInput;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface ClienteUpdateInput {
+  identificacion?: string | null;
+  nombre?: string | null;
+  direccion?: string | null;
+  telefono?: string | null;
+  email?: string | null;
+  facturas?: FacturaUpdateManyWithoutClienteInput | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaUpdateManyWithoutClienteInput {
+  create?: FacturaCreateWithoutClienteInput[] | null;
+  delete?: FacturaWhereUniqueInput[] | null;
+  connect?: FacturaWhereUniqueInput[] | null;
+  disconnect?: FacturaWhereUniqueInput[] | null;
+  update?: FacturaUpdateWithWhereUniqueWithoutClienteInput[] | null;
+  upsert?: FacturaUpsertWithWhereUniqueWithoutClienteInput[] | null;
+}
+
+export interface FacturaUpdateWithWhereUniqueWithoutClienteInput {
+  where: FacturaWhereUniqueInput;
+  data: FacturaUpdateWithoutClienteDataInput;
+}
+
+export interface FacturaUpdateWithoutClienteDataInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  cajero?: UsuarioUpdateOneRequiredWithoutFacturasInput | null;
+  orden?: OrdenUpdateOneRequiredWithoutFacturaInput | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface UsuarioUpdateOneRequiredWithoutFacturasInput {
+  create?: UsuarioCreateWithoutFacturasInput | null;
+  update?: UsuarioUpdateWithoutFacturasDataInput | null;
+  upsert?: UsuarioUpsertWithoutFacturasInput | null;
+  connect?: UsuarioWhereUniqueInput | null;
+}
+
+export interface UsuarioUpdateWithoutFacturasDataInput {
+  usuario?: string | null;
+  email?: string | null;
+  password?: string | null;
+  rol?: string | null;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado?: string | null;
+  ordenes?: OrdenUpdateManyWithoutMeseroInput | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenUpdateManyWithoutMeseroInput {
+  create?: OrdenCreateWithoutMeseroInput[] | null;
+  delete?: OrdenWhereUniqueInput[] | null;
+  connect?: OrdenWhereUniqueInput[] | null;
+  disconnect?: OrdenWhereUniqueInput[] | null;
+  update?: OrdenUpdateWithWhereUniqueWithoutMeseroInput[] | null;
+  upsert?: OrdenUpsertWithWhereUniqueWithoutMeseroInput[] | null;
+}
+
+export interface OrdenUpdateWithWhereUniqueWithoutMeseroInput {
+  where: OrdenWhereUniqueInput;
+  data: OrdenUpdateWithoutMeseroDataInput;
+}
+
+export interface OrdenUpdateWithoutMeseroDataInput {
+  fecha?: DateTime | null;
+  orden_detalle?: OrdenDetalleUpdateManyWithoutOrdenInput | null;
+  factura?: FacturaUpdateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenDetalleUpdateManyWithoutOrdenInput {
+  create?: OrdenDetalleCreateWithoutOrdenInput[] | null;
+  delete?: OrdenDetalleWhereUniqueInput[] | null;
+  connect?: OrdenDetalleWhereUniqueInput[] | null;
+  disconnect?: OrdenDetalleWhereUniqueInput[] | null;
+  update?: OrdenDetalleUpdateWithWhereUniqueWithoutOrdenInput[] | null;
+  upsert?: OrdenDetalleUpsertWithWhereUniqueWithoutOrdenInput[] | null;
+}
+
+export interface OrdenDetalleUpdateWithWhereUniqueWithoutOrdenInput {
+  where: OrdenDetalleWhereUniqueInput;
+  data: OrdenDetalleUpdateWithoutOrdenDataInput;
+}
+
+export interface OrdenDetalleUpdateWithoutOrdenDataInput {
+  cantidad?: number | null;
+  descripcion?: ArticuloUpdateOneRequiredInput | null;
+  valor_unitario?: number | null;
+  gratis?: boolean | null;
+  activo?: boolean | null;
+}
+
+export interface ArticuloUpdateOneRequiredInput {
+  create?: ArticuloCreateInput | null;
+  update?: ArticuloUpdateDataInput | null;
+  upsert?: ArticuloUpsertNestedInput | null;
+  connect?: ArticuloWhereUniqueInput | null;
+}
+
+export interface ArticuloUpdateDataInput {
+  nombre?: string | null;
+  valor?: number | null;
+  tiempo_preparacion?: DateTime | null;
+  menu?: MenuUpdateOneRequiredWithoutArticulosInput | null;
+  articulos_detalle?: ArticuloDetalleUpdateManyWithoutArticuloInput | null;
+  activo?: boolean | null;
+}
+
+export interface ArticuloUpsertNestedInput {
+  update: ArticuloUpdateDataInput;
+  create: ArticuloCreateInput;
+}
+
+export interface OrdenDetalleUpsertWithWhereUniqueWithoutOrdenInput {
+  where: OrdenDetalleWhereUniqueInput;
+  update: OrdenDetalleUpdateWithoutOrdenDataInput;
+  create: OrdenDetalleCreateWithoutOrdenInput;
+}
+
+export interface FacturaUpdateOneWithoutOrdenInput {
+  create?: FacturaCreateWithoutOrdenInput | null;
+  update?: FacturaUpdateWithoutOrdenDataInput | null;
+  upsert?: FacturaUpsertWithoutOrdenInput | null;
+  delete?: boolean | null;
+  disconnect?: boolean | null;
+  connect?: FacturaWhereUniqueInput | null;
+}
+
+export interface FacturaUpdateWithoutOrdenDataInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  cajero?: UsuarioUpdateOneRequiredWithoutFacturasInput | null;
+  cliente?: ClienteUpdateOneRequiredWithoutFacturasInput | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface ClienteUpdateOneRequiredWithoutFacturasInput {
+  create?: ClienteCreateWithoutFacturasInput | null;
+  update?: ClienteUpdateWithoutFacturasDataInput | null;
+  upsert?: ClienteUpsertWithoutFacturasInput | null;
+  connect?: ClienteWhereUniqueInput | null;
+}
+
+export interface ClienteUpdateWithoutFacturasDataInput {
+  identificacion?: string | null;
+  nombre?: string | null;
+  direccion?: string | null;
+  telefono?: string | null;
+  email?: string | null;
+  activo?: boolean | null;
+}
+
+export interface ClienteUpsertWithoutFacturasInput {
+  update: ClienteUpdateWithoutFacturasDataInput;
+  create: ClienteCreateWithoutFacturasInput;
+}
+
+export interface FacturaUpsertWithoutOrdenInput {
+  update: FacturaUpdateWithoutOrdenDataInput;
+  create: FacturaCreateWithoutOrdenInput;
+}
+
+export interface OrdenUpsertWithWhereUniqueWithoutMeseroInput {
+  where: OrdenWhereUniqueInput;
+  update: OrdenUpdateWithoutMeseroDataInput;
+  create: OrdenCreateWithoutMeseroInput;
+}
+
+export interface UsuarioUpsertWithoutFacturasInput {
+  update: UsuarioUpdateWithoutFacturasDataInput;
+  create: UsuarioCreateWithoutFacturasInput;
+}
+
+export interface OrdenUpdateOneRequiredWithoutFacturaInput {
+  create?: OrdenCreateWithoutFacturaInput | null;
+  update?: OrdenUpdateWithoutFacturaDataInput | null;
+  upsert?: OrdenUpsertWithoutFacturaInput | null;
+  connect?: OrdenWhereUniqueInput | null;
+}
+
+export interface OrdenUpdateWithoutFacturaDataInput {
+  fecha?: DateTime | null;
+  mesero?: UsuarioUpdateOneRequiredWithoutOrdenesInput | null;
+  orden_detalle?: OrdenDetalleUpdateManyWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface UsuarioUpdateOneRequiredWithoutOrdenesInput {
+  create?: UsuarioCreateWithoutOrdenesInput | null;
+  update?: UsuarioUpdateWithoutOrdenesDataInput | null;
+  upsert?: UsuarioUpsertWithoutOrdenesInput | null;
+  connect?: UsuarioWhereUniqueInput | null;
+}
+
+export interface UsuarioUpdateWithoutOrdenesDataInput {
+  usuario?: string | null;
+  email?: string | null;
+  password?: string | null;
+  rol?: string | null;
+  img?: string | null;
+  social?: boolean | null;
+  nombre?: string | null;
+  apellido?: string | null;
+  estado?: string | null;
+  facturas?: FacturaUpdateManyWithoutCajeroInput | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaUpdateManyWithoutCajeroInput {
+  create?: FacturaCreateWithoutCajeroInput[] | null;
+  delete?: FacturaWhereUniqueInput[] | null;
+  connect?: FacturaWhereUniqueInput[] | null;
+  disconnect?: FacturaWhereUniqueInput[] | null;
+  update?: FacturaUpdateWithWhereUniqueWithoutCajeroInput[] | null;
+  upsert?: FacturaUpsertWithWhereUniqueWithoutCajeroInput[] | null;
+}
+
+export interface FacturaUpdateWithWhereUniqueWithoutCajeroInput {
+  where: FacturaWhereUniqueInput;
+  data: FacturaUpdateWithoutCajeroDataInput;
+}
+
+export interface FacturaUpdateWithoutCajeroDataInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  orden?: OrdenUpdateOneRequiredWithoutFacturaInput | null;
+  cliente?: ClienteUpdateOneRequiredWithoutFacturasInput | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaUpsertWithWhereUniqueWithoutCajeroInput {
+  where: FacturaWhereUniqueInput;
+  update: FacturaUpdateWithoutCajeroDataInput;
+  create: FacturaCreateWithoutCajeroInput;
+}
+
+export interface UsuarioUpsertWithoutOrdenesInput {
+  update: UsuarioUpdateWithoutOrdenesDataInput;
+  create: UsuarioCreateWithoutOrdenesInput;
+}
+
+export interface OrdenUpsertWithoutFacturaInput {
+  update: OrdenUpdateWithoutFacturaDataInput;
+  create: OrdenCreateWithoutFacturaInput;
+}
+
+export interface FacturaUpsertWithWhereUniqueWithoutClienteInput {
+  where: FacturaWhereUniqueInput;
+  update: FacturaUpdateWithoutClienteDataInput;
+  create: FacturaCreateWithoutClienteInput;
+}
+
+export interface ClienteUpdateManyMutationInput {
+  identificacion?: string | null;
+  nombre?: string | null;
+  direccion?: string | null;
+  telefono?: string | null;
+  email?: string | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaCreateInput {
+  numero: string;
+  fecha: DateTime;
+  cajero: UsuarioCreateOneWithoutFacturasInput;
+  orden: OrdenCreateOneWithoutFacturaInput;
+  cliente: ClienteCreateOneWithoutFacturasInput;
+  subtotal: number;
+  iva: number;
+  total: number;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaUpdateInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  cajero?: UsuarioUpdateOneRequiredWithoutFacturasInput | null;
+  orden?: OrdenUpdateOneRequiredWithoutFacturaInput | null;
+  cliente?: ClienteUpdateOneRequiredWithoutFacturasInput | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
+export interface FacturaUpdateManyMutationInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
+}
+
 export interface MenuCreateInput {
   nombre: string;
   articulos?: ArticuloCreateManyWithoutMenuInput | null;
@@ -972,6 +1948,88 @@ export interface ArticuloUpsertWithWhereUniqueWithoutMenuInput {
 
 export interface MenuUpdateManyMutationInput {
   nombre?: string | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenCreateInput {
+  fecha: DateTime;
+  mesero: UsuarioCreateOneWithoutOrdenesInput;
+  orden_detalle?: OrdenDetalleCreateManyWithoutOrdenInput | null;
+  factura?: FacturaCreateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenUpdateInput {
+  fecha?: DateTime | null;
+  mesero?: UsuarioUpdateOneRequiredWithoutOrdenesInput | null;
+  orden_detalle?: OrdenDetalleUpdateManyWithoutOrdenInput | null;
+  factura?: FacturaUpdateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenUpdateManyMutationInput {
+  fecha?: DateTime | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenDetalleCreateInput {
+  cantidad: number;
+  descripcion: ArticuloCreateOneInput;
+  valor_unitario: number;
+  gratis?: boolean | null;
+  orden: OrdenCreateOneWithoutOrdenDetalleInput;
+  activo?: boolean | null;
+}
+
+export interface OrdenCreateOneWithoutOrdenDetalleInput {
+  create?: OrdenCreateWithoutOrdenDetalleInput | null;
+  connect?: OrdenWhereUniqueInput | null;
+}
+
+export interface OrdenCreateWithoutOrdenDetalleInput {
+  fecha: DateTime;
+  mesero: UsuarioCreateOneWithoutOrdenesInput;
+  factura?: FacturaCreateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenDetalleUpdateInput {
+  cantidad?: number | null;
+  descripcion?: ArticuloUpdateOneRequiredInput | null;
+  valor_unitario?: number | null;
+  gratis?: boolean | null;
+  orden?: OrdenUpdateOneRequiredWithoutOrdenDetalleInput | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenUpdateOneRequiredWithoutOrdenDetalleInput {
+  create?: OrdenCreateWithoutOrdenDetalleInput | null;
+  update?: OrdenUpdateWithoutOrdenDetalleDataInput | null;
+  upsert?: OrdenUpsertWithoutOrdenDetalleInput | null;
+  connect?: OrdenWhereUniqueInput | null;
+}
+
+export interface OrdenUpdateWithoutOrdenDetalleDataInput {
+  fecha?: DateTime | null;
+  mesero?: UsuarioUpdateOneRequiredWithoutOrdenesInput | null;
+  factura?: FacturaUpdateOneWithoutOrdenInput | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
+export interface OrdenUpsertWithoutOrdenDetalleInput {
+  update: OrdenUpdateWithoutOrdenDetalleDataInput;
+  create: OrdenCreateWithoutOrdenDetalleInput;
+}
+
+export interface OrdenDetalleUpdateManyMutationInput {
+  cantidad?: number | null;
+  valor_unitario?: number | null;
+  gratis?: boolean | null;
   activo?: boolean | null;
 }
 
@@ -1060,6 +2118,8 @@ export interface UsuarioCreateInput {
   nombre?: string | null;
   apellido?: string | null;
   estado?: string | null;
+  ordenes?: OrdenCreateManyWithoutMeseroInput | null;
+  facturas?: FacturaCreateManyWithoutCajeroInput | null;
   activo?: boolean | null;
 }
 
@@ -1073,6 +2133,8 @@ export interface UsuarioUpdateInput {
   nombre?: string | null;
   apellido?: string | null;
   estado?: string | null;
+  ordenes?: OrdenUpdateManyWithoutMeseroInput | null;
+  facturas?: FacturaUpdateManyWithoutCajeroInput | null;
   activo?: boolean | null;
 }
 
@@ -1111,6 +2173,28 @@ export interface ArticuloDetalleSubscriptionWhereInput {
   NOT?: ArticuloDetalleSubscriptionWhereInput[] | null;
 }
 
+export interface ClienteSubscriptionWhereInput {
+  mutation_in?: MutationType[] | null;
+  updatedFields_contains?: string | null;
+  updatedFields_contains_every?: string[] | null;
+  updatedFields_contains_some?: string[] | null;
+  node?: ClienteWhereInput | null;
+  AND?: ClienteSubscriptionWhereInput[] | null;
+  OR?: ClienteSubscriptionWhereInput[] | null;
+  NOT?: ClienteSubscriptionWhereInput[] | null;
+}
+
+export interface FacturaSubscriptionWhereInput {
+  mutation_in?: MutationType[] | null;
+  updatedFields_contains?: string | null;
+  updatedFields_contains_every?: string[] | null;
+  updatedFields_contains_some?: string[] | null;
+  node?: FacturaWhereInput | null;
+  AND?: FacturaSubscriptionWhereInput[] | null;
+  OR?: FacturaSubscriptionWhereInput[] | null;
+  NOT?: FacturaSubscriptionWhereInput[] | null;
+}
+
 export interface MenuSubscriptionWhereInput {
   mutation_in?: MutationType[] | null;
   updatedFields_contains?: string | null;
@@ -1120,6 +2204,28 @@ export interface MenuSubscriptionWhereInput {
   AND?: MenuSubscriptionWhereInput[] | null;
   OR?: MenuSubscriptionWhereInput[] | null;
   NOT?: MenuSubscriptionWhereInput[] | null;
+}
+
+export interface OrdenSubscriptionWhereInput {
+  mutation_in?: MutationType[] | null;
+  updatedFields_contains?: string | null;
+  updatedFields_contains_every?: string[] | null;
+  updatedFields_contains_some?: string[] | null;
+  node?: OrdenWhereInput | null;
+  AND?: OrdenSubscriptionWhereInput[] | null;
+  OR?: OrdenSubscriptionWhereInput[] | null;
+  NOT?: OrdenSubscriptionWhereInput[] | null;
+}
+
+export interface OrdenDetalleSubscriptionWhereInput {
+  mutation_in?: MutationType[] | null;
+  updatedFields_contains?: string | null;
+  updatedFields_contains_every?: string[] | null;
+  updatedFields_contains_some?: string[] | null;
+  node?: OrdenDetalleWhereInput | null;
+  AND?: OrdenDetalleSubscriptionWhereInput[] | null;
+  OR?: OrdenDetalleSubscriptionWhereInput[] | null;
+  NOT?: OrdenDetalleSubscriptionWhereInput[] | null;
 }
 
 export interface ProductoSubscriptionWhereInput {
@@ -1196,6 +2302,48 @@ export interface ArticuloDetallesConnectionQueryArgs {
   first?: number | null;
   last?: number | null;
 }
+export interface ClienteQueryArgs {
+  where: ClienteWhereUniqueInput;
+}
+export interface ClientesQueryArgs {
+  where?: ClienteWhereInput | null;
+  orderBy?: ClienteOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface ClientesConnectionQueryArgs {
+  where?: ClienteWhereInput | null;
+  orderBy?: ClienteOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface FacturaQueryArgs {
+  where: FacturaWhereUniqueInput;
+}
+export interface FacturasQueryArgs {
+  where?: FacturaWhereInput | null;
+  orderBy?: FacturaOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface FacturasConnectionQueryArgs {
+  where?: FacturaWhereInput | null;
+  orderBy?: FacturaOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
 export interface MenuQueryArgs {
   where: MenuWhereUniqueInput;
 }
@@ -1211,6 +2359,48 @@ export interface MenusQueryArgs {
 export interface MenusConnectionQueryArgs {
   where?: MenuWhereInput | null;
   orderBy?: MenuOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdenQueryArgs {
+  where: OrdenWhereUniqueInput;
+}
+export interface OrdensQueryArgs {
+  where?: OrdenWhereInput | null;
+  orderBy?: OrdenOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdensConnectionQueryArgs {
+  where?: OrdenWhereInput | null;
+  orderBy?: OrdenOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdenDetalleQueryArgs {
+  where: OrdenDetalleWhereUniqueInput;
+}
+export interface OrdenDetallesQueryArgs {
+  where?: OrdenDetalleWhereInput | null;
+  orderBy?: OrdenDetalleOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdenDetallesConnectionQueryArgs {
+  where?: OrdenDetalleWhereInput | null;
+  orderBy?: OrdenDetalleOrderByInput | null;
   skip?: number | null;
   after?: string | null;
   before?: string | null;
@@ -1314,6 +2504,42 @@ export interface ArticulosDetalleProductoArgs {
   first?: number | null;
   last?: number | null;
 }
+export interface FacturasClienteArgs {
+  where?: FacturaWhereInput | null;
+  orderBy?: FacturaOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdenesUsuarioArgs {
+  where?: OrdenWhereInput | null;
+  orderBy?: OrdenOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface FacturasUsuarioArgs {
+  where?: FacturaWhereInput | null;
+  orderBy?: FacturaOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
+export interface OrdenDetalleOrdenArgs {
+  where?: OrdenDetalleWhereInput | null;
+  orderBy?: OrdenDetalleOrderByInput | null;
+  skip?: number | null;
+  after?: string | null;
+  before?: string | null;
+  first?: number | null;
+  last?: number | null;
+}
 export interface CreateArticuloMutationArgs {
   data: ArticuloCreateInput;
 }
@@ -1358,6 +2584,50 @@ export interface DeleteArticuloDetalleMutationArgs {
 export interface DeleteManyArticuloDetallesMutationArgs {
   where?: ArticuloDetalleWhereInput | null;
 }
+export interface CreateClienteMutationArgs {
+  data: ClienteCreateInput;
+}
+export interface UpdateClienteMutationArgs {
+  data: ClienteUpdateInput;
+  where: ClienteWhereUniqueInput;
+}
+export interface UpdateManyClientesMutationArgs {
+  data: ClienteUpdateManyMutationInput;
+  where?: ClienteWhereInput | null;
+}
+export interface UpsertClienteMutationArgs {
+  where: ClienteWhereUniqueInput;
+  create: ClienteCreateInput;
+  update: ClienteUpdateInput;
+}
+export interface DeleteClienteMutationArgs {
+  where: ClienteWhereUniqueInput;
+}
+export interface DeleteManyClientesMutationArgs {
+  where?: ClienteWhereInput | null;
+}
+export interface CreateFacturaMutationArgs {
+  data: FacturaCreateInput;
+}
+export interface UpdateFacturaMutationArgs {
+  data: FacturaUpdateInput;
+  where: FacturaWhereUniqueInput;
+}
+export interface UpdateManyFacturasMutationArgs {
+  data: FacturaUpdateManyMutationInput;
+  where?: FacturaWhereInput | null;
+}
+export interface UpsertFacturaMutationArgs {
+  where: FacturaWhereUniqueInput;
+  create: FacturaCreateInput;
+  update: FacturaUpdateInput;
+}
+export interface DeleteFacturaMutationArgs {
+  where: FacturaWhereUniqueInput;
+}
+export interface DeleteManyFacturasMutationArgs {
+  where?: FacturaWhereInput | null;
+}
 export interface CreateMenuMutationArgs {
   data: MenuCreateInput;
 }
@@ -1379,6 +2649,50 @@ export interface DeleteMenuMutationArgs {
 }
 export interface DeleteManyMenusMutationArgs {
   where?: MenuWhereInput | null;
+}
+export interface CreateOrdenMutationArgs {
+  data: OrdenCreateInput;
+}
+export interface UpdateOrdenMutationArgs {
+  data: OrdenUpdateInput;
+  where: OrdenWhereUniqueInput;
+}
+export interface UpdateManyOrdensMutationArgs {
+  data: OrdenUpdateManyMutationInput;
+  where?: OrdenWhereInput | null;
+}
+export interface UpsertOrdenMutationArgs {
+  where: OrdenWhereUniqueInput;
+  create: OrdenCreateInput;
+  update: OrdenUpdateInput;
+}
+export interface DeleteOrdenMutationArgs {
+  where: OrdenWhereUniqueInput;
+}
+export interface DeleteManyOrdensMutationArgs {
+  where?: OrdenWhereInput | null;
+}
+export interface CreateOrdenDetalleMutationArgs {
+  data: OrdenDetalleCreateInput;
+}
+export interface UpdateOrdenDetalleMutationArgs {
+  data: OrdenDetalleUpdateInput;
+  where: OrdenDetalleWhereUniqueInput;
+}
+export interface UpdateManyOrdenDetallesMutationArgs {
+  data: OrdenDetalleUpdateManyMutationInput;
+  where?: OrdenDetalleWhereInput | null;
+}
+export interface UpsertOrdenDetalleMutationArgs {
+  where: OrdenDetalleWhereUniqueInput;
+  create: OrdenDetalleCreateInput;
+  update: OrdenDetalleUpdateInput;
+}
+export interface DeleteOrdenDetalleMutationArgs {
+  where: OrdenDetalleWhereUniqueInput;
+}
+export interface DeleteManyOrdenDetallesMutationArgs {
+  where?: OrdenDetalleWhereInput | null;
 }
 export interface CreateProductoMutationArgs {
   data: ProductoCreateInput;
@@ -1467,8 +2781,20 @@ export interface ArticuloSubscriptionArgs {
 export interface ArticuloDetalleSubscriptionArgs {
   where?: ArticuloDetalleSubscriptionWhereInput | null;
 }
+export interface ClienteSubscriptionArgs {
+  where?: ClienteSubscriptionWhereInput | null;
+}
+export interface FacturaSubscriptionArgs {
+  where?: FacturaSubscriptionWhereInput | null;
+}
 export interface MenuSubscriptionArgs {
   where?: MenuSubscriptionWhereInput | null;
+}
+export interface OrdenSubscriptionArgs {
+  where?: OrdenSubscriptionWhereInput | null;
+}
+export interface OrdenDetalleSubscriptionArgs {
+  where?: OrdenDetalleSubscriptionWhereInput | null;
 }
 export interface ProductoSubscriptionArgs {
   where?: ProductoSubscriptionWhereInput | null;
@@ -1502,6 +2828,100 @@ export enum ArticuloDetalleOrderByInput {
   id_DESC = "id_DESC",
   cantidad_ASC = "cantidad_ASC",
   cantidad_DESC = "cantidad_DESC",
+  activo_ASC = "activo_ASC",
+  activo_DESC = "activo_DESC",
+  createdAt_ASC = "createdAt_ASC",
+  createdAt_DESC = "createdAt_DESC",
+  updatedAt_ASC = "updatedAt_ASC",
+  updatedAt_DESC = "updatedAt_DESC"
+}
+
+export enum OrdenEstado {
+  TOMADA = "TOMADA",
+  ENTREGADA = "ENTREGADA",
+  PAGADA = "PAGADA"
+}
+
+export enum FormaPago {
+  EFECTIVO = "EFECTIVO",
+  TARJETA = "TARJETA"
+}
+
+export enum FacturaEstado {
+  ENTREGADA = "ENTREGADA",
+  ANULADA = "ANULADA"
+}
+
+export enum FacturaOrderByInput {
+  id_ASC = "id_ASC",
+  id_DESC = "id_DESC",
+  numero_ASC = "numero_ASC",
+  numero_DESC = "numero_DESC",
+  fecha_ASC = "fecha_ASC",
+  fecha_DESC = "fecha_DESC",
+  subtotal_ASC = "subtotal_ASC",
+  subtotal_DESC = "subtotal_DESC",
+  iva_ASC = "iva_ASC",
+  iva_DESC = "iva_DESC",
+  total_ASC = "total_ASC",
+  total_DESC = "total_DESC",
+  forma_pago_ASC = "forma_pago_ASC",
+  forma_pago_DESC = "forma_pago_DESC",
+  estado_ASC = "estado_ASC",
+  estado_DESC = "estado_DESC",
+  activo_ASC = "activo_ASC",
+  activo_DESC = "activo_DESC",
+  createdAt_ASC = "createdAt_ASC",
+  createdAt_DESC = "createdAt_DESC",
+  updatedAt_ASC = "updatedAt_ASC",
+  updatedAt_DESC = "updatedAt_DESC"
+}
+
+export enum OrdenOrderByInput {
+  id_ASC = "id_ASC",
+  id_DESC = "id_DESC",
+  fecha_ASC = "fecha_ASC",
+  fecha_DESC = "fecha_DESC",
+  estado_ASC = "estado_ASC",
+  estado_DESC = "estado_DESC",
+  activo_ASC = "activo_ASC",
+  activo_DESC = "activo_DESC",
+  createdAt_ASC = "createdAt_ASC",
+  createdAt_DESC = "createdAt_DESC",
+  updatedAt_ASC = "updatedAt_ASC",
+  updatedAt_DESC = "updatedAt_DESC"
+}
+
+export enum OrdenDetalleOrderByInput {
+  id_ASC = "id_ASC",
+  id_DESC = "id_DESC",
+  cantidad_ASC = "cantidad_ASC",
+  cantidad_DESC = "cantidad_DESC",
+  valor_unitario_ASC = "valor_unitario_ASC",
+  valor_unitario_DESC = "valor_unitario_DESC",
+  gratis_ASC = "gratis_ASC",
+  gratis_DESC = "gratis_DESC",
+  activo_ASC = "activo_ASC",
+  activo_DESC = "activo_DESC",
+  createdAt_ASC = "createdAt_ASC",
+  createdAt_DESC = "createdAt_DESC",
+  updatedAt_ASC = "updatedAt_ASC",
+  updatedAt_DESC = "updatedAt_DESC"
+}
+
+export enum ClienteOrderByInput {
+  id_ASC = "id_ASC",
+  id_DESC = "id_DESC",
+  identificacion_ASC = "identificacion_ASC",
+  identificacion_DESC = "identificacion_DESC",
+  nombre_ASC = "nombre_ASC",
+  nombre_DESC = "nombre_DESC",
+  direccion_ASC = "direccion_ASC",
+  direccion_DESC = "direccion_DESC",
+  telefono_ASC = "telefono_ASC",
+  telefono_DESC = "telefono_DESC",
+  email_ASC = "email_ASC",
+  email_DESC = "email_DESC",
   activo_ASC = "activo_ASC",
   activo_DESC = "activo_DESC",
   createdAt_ASC = "createdAt_ASC",
@@ -1612,9 +3032,37 @@ export namespace QueryResolvers {
       any,
       Context
     >;
+    cliente?: ClienteResolver<Cliente | null, any, Context>;
+    clientes?: ClientesResolver<(Cliente | null)[], any, Context>;
+    clientesConnection?: ClientesConnectionResolver<
+      ClienteConnection,
+      any,
+      Context
+    >;
+    factura?: FacturaResolver<Factura | null, any, Context>;
+    facturas?: FacturasResolver<(Factura | null)[], any, Context>;
+    facturasConnection?: FacturasConnectionResolver<
+      FacturaConnection,
+      any,
+      Context
+    >;
     menu?: MenuResolver<Menu | null, any, Context>;
     menus?: MenusResolver<(Menu | null)[], any, Context>;
     menusConnection?: MenusConnectionResolver<MenuConnection, any, Context>;
+    orden?: OrdenResolver<Orden | null, any, Context>;
+    ordens?: OrdensResolver<(Orden | null)[], any, Context>;
+    ordensConnection?: OrdensConnectionResolver<OrdenConnection, any, Context>;
+    orden_detalle?: OrdenDetalleResolver<OrdenDetalle | null, any, Context>;
+    orden_detalles?: OrdenDetallesResolver<
+      (OrdenDetalle | null)[],
+      any,
+      Context
+    >;
+    orden_detallesConnection?: OrdenDetallesConnectionResolver<
+      OrdenDetalleConnection,
+      any,
+      Context
+    >;
     producto?: ProductoResolver<Producto | null, any, Context>;
     productoes?: ProductoesResolver<(Producto | null)[], any, Context>;
     productoesConnection?: ProductoesConnectionResolver<
@@ -1634,6 +3082,7 @@ export namespace QueryResolvers {
     >;
     node?: NodeResolver<Node | null, any, Context>;
     login?: LoginResolver<AuthPayload, any, Context>;
+    menusArticulos?: MenusArticulosResolver<Menu[], any, Context>;
   }
 
   export type ArticuloResolver<
@@ -1714,6 +3163,84 @@ export namespace QueryResolvers {
     last?: number | null;
   }
 
+  export type ClienteResolver<
+    R = Cliente | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, ClienteArgs>;
+  export interface ClienteArgs {
+    where: ClienteWhereUniqueInput;
+  }
+
+  export type ClientesResolver<
+    R = (Cliente | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, ClientesArgs>;
+  export interface ClientesArgs {
+    where?: ClienteWhereInput | null;
+    orderBy?: ClienteOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type ClientesConnectionResolver<
+    R = ClienteConnection,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, ClientesConnectionArgs>;
+  export interface ClientesConnectionArgs {
+    where?: ClienteWhereInput | null;
+    orderBy?: ClienteOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type FacturaResolver<
+    R = Factura | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturaArgs>;
+  export interface FacturaArgs {
+    where: FacturaWhereUniqueInput;
+  }
+
+  export type FacturasResolver<
+    R = (Factura | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturasArgs>;
+  export interface FacturasArgs {
+    where?: FacturaWhereInput | null;
+    orderBy?: FacturaOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type FacturasConnectionResolver<
+    R = FacturaConnection,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturasConnectionArgs>;
+  export interface FacturasConnectionArgs {
+    where?: FacturaWhereInput | null;
+    orderBy?: FacturaOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
   export type MenuResolver<
     R = Menu | null,
     Parent = any,
@@ -1746,6 +3273,84 @@ export namespace QueryResolvers {
   export interface MenusConnectionArgs {
     where?: MenuWhereInput | null;
     orderBy?: MenuOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type OrdenResolver<
+    R = Orden | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenArgs>;
+  export interface OrdenArgs {
+    where: OrdenWhereUniqueInput;
+  }
+
+  export type OrdensResolver<
+    R = (Orden | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdensArgs>;
+  export interface OrdensArgs {
+    where?: OrdenWhereInput | null;
+    orderBy?: OrdenOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type OrdensConnectionResolver<
+    R = OrdenConnection,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdensConnectionArgs>;
+  export interface OrdensConnectionArgs {
+    where?: OrdenWhereInput | null;
+    orderBy?: OrdenOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type OrdenDetalleResolver<
+    R = OrdenDetalle | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenDetalleArgs>;
+  export interface OrdenDetalleArgs {
+    where: OrdenDetalleWhereUniqueInput;
+  }
+
+  export type OrdenDetallesResolver<
+    R = (OrdenDetalle | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenDetallesArgs>;
+  export interface OrdenDetallesArgs {
+    where?: OrdenDetalleWhereInput | null;
+    orderBy?: OrdenDetalleOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type OrdenDetallesConnectionResolver<
+    R = OrdenDetalleConnection,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenDetallesConnectionArgs>;
+  export interface OrdenDetallesConnectionArgs {
+    where?: OrdenDetalleWhereInput | null;
+    orderBy?: OrdenDetalleOrderByInput | null;
     skip?: number | null;
     after?: string | null;
     before?: string | null;
@@ -1888,6 +3493,12 @@ export namespace QueryResolvers {
     usuario: string;
     password: string;
   }
+
+  export type MenusArticulosResolver<
+    R = Menu[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
 }
 
 export namespace ArticuloResolvers {
@@ -2226,6 +3837,466 @@ export namespace AggregateArticuloDetalleResolvers {
   >;
 }
 
+export namespace ClienteResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    identificacion?: IdentificacionResolver<string, any, Context>;
+    nombre?: NombreResolver<string, any, Context>;
+    direccion?: DireccionResolver<string, any, Context>;
+    telefono?: TelefonoResolver<string, any, Context>;
+    email?: EmailResolver<string | null, any, Context>;
+    facturas?: FacturasResolver<Factura[] | null, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type IdentificacionResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NombreResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type DireccionResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type TelefonoResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EmailResolver<
+    R = string | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type FacturasResolver<
+    R = Factura[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturasArgs>;
+  export interface FacturasArgs {
+    where?: FacturaWhereInput | null;
+    orderBy?: FacturaOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace FacturaResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    numero?: NumeroResolver<string, any, Context>;
+    fecha?: FechaResolver<DateTime, any, Context>;
+    cajero?: CajeroResolver<Usuario, any, Context>;
+    orden?: OrdenResolver<Orden, any, Context>;
+    cliente?: ClienteResolver<Cliente, any, Context>;
+    subtotal?: SubtotalResolver<number, any, Context>;
+    iva?: IvaResolver<number, any, Context>;
+    total?: TotalResolver<number, any, Context>;
+    forma_pago?: FormaPagoResolver<FormaPago, any, Context>;
+    estado?: EstadoResolver<FacturaEstado, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type NumeroResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type FechaResolver<
+    R = DateTime,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type CajeroResolver<
+    R = Usuario,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type OrdenResolver<R = Orden, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type ClienteResolver<
+    R = Cliente,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type SubtotalResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type IvaResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type TotalResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type FormaPagoResolver<
+    R = FormaPago,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EstadoResolver<
+    R = FacturaEstado,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace UsuarioResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    usuario?: UsuarioResolver<string, any, Context>;
+    email?: EmailResolver<string, any, Context>;
+    password?: PasswordResolver<string, any, Context>;
+    rol?: RolResolver<string, any, Context>;
+    img?: ImgResolver<string | null, any, Context>;
+    social?: SocialResolver<boolean | null, any, Context>;
+    nombre?: NombreResolver<string | null, any, Context>;
+    apellido?: ApellidoResolver<string | null, any, Context>;
+    estado?: EstadoResolver<string, any, Context>;
+    ordenes?: OrdenesResolver<Orden[] | null, any, Context>;
+    facturas?: FacturasResolver<Factura[] | null, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type UsuarioResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EmailResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type PasswordResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type RolResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type ImgResolver<
+    R = string | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type SocialResolver<
+    R = boolean | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NombreResolver<
+    R = string | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ApellidoResolver<
+    R = string | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EstadoResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type OrdenesResolver<
+    R = Orden[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenesArgs>;
+  export interface OrdenesArgs {
+    where?: OrdenWhereInput | null;
+    orderBy?: OrdenOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type FacturasResolver<
+    R = Factura[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturasArgs>;
+  export interface FacturasArgs {
+    where?: FacturaWhereInput | null;
+    orderBy?: FacturaOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    fecha?: FechaResolver<DateTime, any, Context>;
+    mesero?: MeseroResolver<Usuario, any, Context>;
+    orden_detalle?: OrdenDetalleResolver<OrdenDetalle[] | null, any, Context>;
+    factura?: FacturaResolver<Factura | null, any, Context>;
+    estado?: EstadoResolver<OrdenEstado, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type FechaResolver<
+    R = DateTime,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type MeseroResolver<
+    R = Usuario,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type OrdenDetalleResolver<
+    R = OrdenDetalle[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenDetalleArgs>;
+  export interface OrdenDetalleArgs {
+    where?: OrdenDetalleWhereInput | null;
+    orderBy?: OrdenDetalleOrderByInput | null;
+    skip?: number | null;
+    after?: string | null;
+    before?: string | null;
+    first?: number | null;
+    last?: number | null;
+  }
+
+  export type FacturaResolver<
+    R = Factura | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EstadoResolver<
+    R = OrdenEstado,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenDetalleResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    cantidad?: CantidadResolver<number, any, Context>;
+    descripcion?: DescripcionResolver<Articulo, any, Context>;
+    valor_unitario?: ValorUnitarioResolver<number, any, Context>;
+    gratis?: GratisResolver<boolean, any, Context>;
+    orden?: OrdenResolver<Orden, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type CantidadResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type DescripcionResolver<
+    R = Articulo,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ValorUnitarioResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type GratisResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type OrdenResolver<R = Orden, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace ClienteConnectionResolvers {
+  export interface Resolvers<Context = any> {
+    pageInfo?: PageInfoResolver<PageInfo, any, Context>;
+    edges?: EdgesResolver<(ClienteEdge | null)[], any, Context>;
+    aggregate?: AggregateResolver<AggregateCliente, any, Context>;
+  }
+
+  export type PageInfoResolver<
+    R = PageInfo,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EdgesResolver<
+    R = (ClienteEdge | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type AggregateResolver<
+    R = AggregateCliente,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace ClienteEdgeResolvers {
+  export interface Resolvers<Context = any> {
+    node?: NodeResolver<Cliente, any, Context>;
+    cursor?: CursorResolver<string, any, Context>;
+  }
+
+  export type NodeResolver<R = Cliente, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type CursorResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace AggregateClienteResolvers {
+  export interface Resolvers<Context = any> {
+    count?: CountResolver<number, any, Context>;
+  }
+
+  export type CountResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+}
+
+export namespace FacturaConnectionResolvers {
+  export interface Resolvers<Context = any> {
+    pageInfo?: PageInfoResolver<PageInfo, any, Context>;
+    edges?: EdgesResolver<(FacturaEdge | null)[], any, Context>;
+    aggregate?: AggregateResolver<AggregateFactura, any, Context>;
+  }
+
+  export type PageInfoResolver<
+    R = PageInfo,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EdgesResolver<
+    R = (FacturaEdge | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type AggregateResolver<
+    R = AggregateFactura,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace FacturaEdgeResolvers {
+  export interface Resolvers<Context = any> {
+    node?: NodeResolver<Factura, any, Context>;
+    cursor?: CursorResolver<string, any, Context>;
+  }
+
+  export type NodeResolver<R = Factura, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type CursorResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace AggregateFacturaResolvers {
+  export interface Resolvers<Context = any> {
+    count?: CountResolver<number, any, Context>;
+  }
+
+  export type CountResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+}
+
 export namespace MenuConnectionResolvers {
   export interface Resolvers<Context = any> {
     pageInfo?: PageInfoResolver<PageInfo, any, Context>;
@@ -2269,6 +4340,114 @@ export namespace MenuEdgeResolvers {
 }
 
 export namespace AggregateMenuResolvers {
+  export interface Resolvers<Context = any> {
+    count?: CountResolver<number, any, Context>;
+  }
+
+  export type CountResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+}
+
+export namespace OrdenConnectionResolvers {
+  export interface Resolvers<Context = any> {
+    pageInfo?: PageInfoResolver<PageInfo, any, Context>;
+    edges?: EdgesResolver<(OrdenEdge | null)[], any, Context>;
+    aggregate?: AggregateResolver<AggregateOrden, any, Context>;
+  }
+
+  export type PageInfoResolver<
+    R = PageInfo,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EdgesResolver<
+    R = (OrdenEdge | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type AggregateResolver<
+    R = AggregateOrden,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenEdgeResolvers {
+  export interface Resolvers<Context = any> {
+    node?: NodeResolver<Orden, any, Context>;
+    cursor?: CursorResolver<string, any, Context>;
+  }
+
+  export type NodeResolver<R = Orden, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type CursorResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace AggregateOrdenResolvers {
+  export interface Resolvers<Context = any> {
+    count?: CountResolver<number, any, Context>;
+  }
+
+  export type CountResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+}
+
+export namespace OrdenDetalleConnectionResolvers {
+  export interface Resolvers<Context = any> {
+    pageInfo?: PageInfoResolver<PageInfo, any, Context>;
+    edges?: EdgesResolver<(OrdenDetalleEdge | null)[], any, Context>;
+    aggregate?: AggregateResolver<AggregateOrdenDetalle, any, Context>;
+  }
+
+  export type PageInfoResolver<
+    R = PageInfo,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EdgesResolver<
+    R = (OrdenDetalleEdge | null)[],
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type AggregateResolver<
+    R = AggregateOrdenDetalle,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenDetalleEdgeResolvers {
+  export interface Resolvers<Context = any> {
+    node?: NodeResolver<OrdenDetalle, any, Context>;
+    cursor?: CursorResolver<string, any, Context>;
+  }
+
+  export type NodeResolver<
+    R = OrdenDetalle,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type CursorResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace AggregateOrdenDetalleResolvers {
   export interface Resolvers<Context = any> {
     count?: CountResolver<number, any, Context>;
   }
@@ -2412,78 +4591,6 @@ export namespace AggregateRolResolvers {
   >;
 }
 
-export namespace UsuarioResolvers {
-  export interface Resolvers<Context = any> {
-    id?: IdResolver<string, any, Context>;
-    usuario?: UsuarioResolver<string, any, Context>;
-    email?: EmailResolver<string, any, Context>;
-    password?: PasswordResolver<string, any, Context>;
-    rol?: RolResolver<string, any, Context>;
-    img?: ImgResolver<string | null, any, Context>;
-    social?: SocialResolver<boolean | null, any, Context>;
-    nombre?: NombreResolver<string | null, any, Context>;
-    apellido?: ApellidoResolver<string | null, any, Context>;
-    estado?: EstadoResolver<string, any, Context>;
-    activo?: ActivoResolver<boolean, any, Context>;
-  }
-
-  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type UsuarioResolver<
-    R = string,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type EmailResolver<R = string, Parent = any, Context = any> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type PasswordResolver<
-    R = string,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type RolResolver<R = string, Parent = any, Context = any> = Resolver<
-    R,
-    Parent,
-    Context
-  >;
-  export type ImgResolver<
-    R = string | null,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type SocialResolver<
-    R = boolean | null,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type NombreResolver<
-    R = string | null,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type ApellidoResolver<
-    R = string | null,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type EstadoResolver<
-    R = string,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-  export type ActivoResolver<
-    R = boolean,
-    Parent = any,
-    Context = any
-  > = Resolver<R, Parent, Context>;
-}
-
 export namespace UsuarioConnectionResolvers {
   export interface Resolvers<Context = any> {
     pageInfo?: PageInfoResolver<PageInfo, any, Context>;
@@ -2602,12 +4709,60 @@ export namespace MutationResolvers {
       any,
       Context
     >;
+    createCliente?: CreateClienteResolver<Cliente, any, Context>;
+    updateCliente?: UpdateClienteResolver<Cliente | null, any, Context>;
+    updateManyClientes?: UpdateManyClientesResolver<BatchPayload, any, Context>;
+    upsertCliente?: UpsertClienteResolver<Cliente, any, Context>;
+    deleteCliente?: DeleteClienteResolver<Cliente | null, any, Context>;
+    deleteManyClientes?: DeleteManyClientesResolver<BatchPayload, any, Context>;
+    createFactura?: CreateFacturaResolver<Factura, any, Context>;
+    updateFactura?: UpdateFacturaResolver<Factura | null, any, Context>;
+    updateManyFacturas?: UpdateManyFacturasResolver<BatchPayload, any, Context>;
+    upsertFactura?: UpsertFacturaResolver<Factura, any, Context>;
+    deleteFactura?: DeleteFacturaResolver<Factura | null, any, Context>;
+    deleteManyFacturas?: DeleteManyFacturasResolver<BatchPayload, any, Context>;
     createMenu?: CreateMenuResolver<Menu, any, Context>;
     updateMenu?: UpdateMenuResolver<Menu | null, any, Context>;
     updateManyMenus?: UpdateManyMenusResolver<BatchPayload, any, Context>;
     upsertMenu?: UpsertMenuResolver<Menu, any, Context>;
     deleteMenu?: DeleteMenuResolver<Menu | null, any, Context>;
     deleteManyMenus?: DeleteManyMenusResolver<BatchPayload, any, Context>;
+    createOrden?: CreateOrdenResolver<Orden, any, Context>;
+    updateOrden?: UpdateOrdenResolver<Orden | null, any, Context>;
+    updateManyOrdens?: UpdateManyOrdensResolver<BatchPayload, any, Context>;
+    upsertOrden?: UpsertOrdenResolver<Orden, any, Context>;
+    deleteOrden?: DeleteOrdenResolver<Orden | null, any, Context>;
+    deleteManyOrdens?: DeleteManyOrdensResolver<BatchPayload, any, Context>;
+    createOrden_detalle?: CreateOrdenDetalleResolver<
+      OrdenDetalle,
+      any,
+      Context
+    >;
+    updateOrden_detalle?: UpdateOrdenDetalleResolver<
+      OrdenDetalle | null,
+      any,
+      Context
+    >;
+    updateManyOrden_detalles?: UpdateManyOrdenDetallesResolver<
+      BatchPayload,
+      any,
+      Context
+    >;
+    upsertOrden_detalle?: UpsertOrdenDetalleResolver<
+      OrdenDetalle,
+      any,
+      Context
+    >;
+    deleteOrden_detalle?: DeleteOrdenDetalleResolver<
+      OrdenDetalle | null,
+      any,
+      Context
+    >;
+    deleteManyOrden_detalles?: DeleteManyOrdenDetallesResolver<
+      BatchPayload,
+      any,
+      Context
+    >;
     createProducto?: CreateProductoResolver<Producto, any, Context>;
     updateProducto?: UpdateProductoResolver<Producto | null, any, Context>;
     updateManyProductoes?: UpdateManyProductoesResolver<
@@ -2755,6 +4910,122 @@ export namespace MutationResolvers {
     where?: ArticuloDetalleWhereInput | null;
   }
 
+  export type CreateClienteResolver<
+    R = Cliente,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, CreateClienteArgs>;
+  export interface CreateClienteArgs {
+    data: ClienteCreateInput;
+  }
+
+  export type UpdateClienteResolver<
+    R = Cliente | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateClienteArgs>;
+  export interface UpdateClienteArgs {
+    data: ClienteUpdateInput;
+    where: ClienteWhereUniqueInput;
+  }
+
+  export type UpdateManyClientesResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateManyClientesArgs>;
+  export interface UpdateManyClientesArgs {
+    data: ClienteUpdateManyMutationInput;
+    where?: ClienteWhereInput | null;
+  }
+
+  export type UpsertClienteResolver<
+    R = Cliente,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpsertClienteArgs>;
+  export interface UpsertClienteArgs {
+    where: ClienteWhereUniqueInput;
+    create: ClienteCreateInput;
+    update: ClienteUpdateInput;
+  }
+
+  export type DeleteClienteResolver<
+    R = Cliente | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteClienteArgs>;
+  export interface DeleteClienteArgs {
+    where: ClienteWhereUniqueInput;
+  }
+
+  export type DeleteManyClientesResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteManyClientesArgs>;
+  export interface DeleteManyClientesArgs {
+    where?: ClienteWhereInput | null;
+  }
+
+  export type CreateFacturaResolver<
+    R = Factura,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, CreateFacturaArgs>;
+  export interface CreateFacturaArgs {
+    data: FacturaCreateInput;
+  }
+
+  export type UpdateFacturaResolver<
+    R = Factura | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateFacturaArgs>;
+  export interface UpdateFacturaArgs {
+    data: FacturaUpdateInput;
+    where: FacturaWhereUniqueInput;
+  }
+
+  export type UpdateManyFacturasResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateManyFacturasArgs>;
+  export interface UpdateManyFacturasArgs {
+    data: FacturaUpdateManyMutationInput;
+    where?: FacturaWhereInput | null;
+  }
+
+  export type UpsertFacturaResolver<
+    R = Factura,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpsertFacturaArgs>;
+  export interface UpsertFacturaArgs {
+    where: FacturaWhereUniqueInput;
+    create: FacturaCreateInput;
+    update: FacturaUpdateInput;
+  }
+
+  export type DeleteFacturaResolver<
+    R = Factura | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteFacturaArgs>;
+  export interface DeleteFacturaArgs {
+    where: FacturaWhereUniqueInput;
+  }
+
+  export type DeleteManyFacturasResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteManyFacturasArgs>;
+  export interface DeleteManyFacturasArgs {
+    where?: FacturaWhereInput | null;
+  }
+
   export type CreateMenuResolver<
     R = Menu,
     Parent = any,
@@ -2811,6 +5082,122 @@ export namespace MutationResolvers {
   > = Resolver<R, Parent, Context, DeleteManyMenusArgs>;
   export interface DeleteManyMenusArgs {
     where?: MenuWhereInput | null;
+  }
+
+  export type CreateOrdenResolver<
+    R = Orden,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, CreateOrdenArgs>;
+  export interface CreateOrdenArgs {
+    data: OrdenCreateInput;
+  }
+
+  export type UpdateOrdenResolver<
+    R = Orden | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateOrdenArgs>;
+  export interface UpdateOrdenArgs {
+    data: OrdenUpdateInput;
+    where: OrdenWhereUniqueInput;
+  }
+
+  export type UpdateManyOrdensResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateManyOrdensArgs>;
+  export interface UpdateManyOrdensArgs {
+    data: OrdenUpdateManyMutationInput;
+    where?: OrdenWhereInput | null;
+  }
+
+  export type UpsertOrdenResolver<
+    R = Orden,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpsertOrdenArgs>;
+  export interface UpsertOrdenArgs {
+    where: OrdenWhereUniqueInput;
+    create: OrdenCreateInput;
+    update: OrdenUpdateInput;
+  }
+
+  export type DeleteOrdenResolver<
+    R = Orden | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteOrdenArgs>;
+  export interface DeleteOrdenArgs {
+    where: OrdenWhereUniqueInput;
+  }
+
+  export type DeleteManyOrdensResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteManyOrdensArgs>;
+  export interface DeleteManyOrdensArgs {
+    where?: OrdenWhereInput | null;
+  }
+
+  export type CreateOrdenDetalleResolver<
+    R = OrdenDetalle,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, CreateOrdenDetalleArgs>;
+  export interface CreateOrdenDetalleArgs {
+    data: OrdenDetalleCreateInput;
+  }
+
+  export type UpdateOrdenDetalleResolver<
+    R = OrdenDetalle | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateOrdenDetalleArgs>;
+  export interface UpdateOrdenDetalleArgs {
+    data: OrdenDetalleUpdateInput;
+    where: OrdenDetalleWhereUniqueInput;
+  }
+
+  export type UpdateManyOrdenDetallesResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpdateManyOrdenDetallesArgs>;
+  export interface UpdateManyOrdenDetallesArgs {
+    data: OrdenDetalleUpdateManyMutationInput;
+    where?: OrdenDetalleWhereInput | null;
+  }
+
+  export type UpsertOrdenDetalleResolver<
+    R = OrdenDetalle,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, UpsertOrdenDetalleArgs>;
+  export interface UpsertOrdenDetalleArgs {
+    where: OrdenDetalleWhereUniqueInput;
+    create: OrdenDetalleCreateInput;
+    update: OrdenDetalleUpdateInput;
+  }
+
+  export type DeleteOrdenDetalleResolver<
+    R = OrdenDetalle | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteOrdenDetalleArgs>;
+  export interface DeleteOrdenDetalleArgs {
+    where: OrdenDetalleWhereUniqueInput;
+  }
+
+  export type DeleteManyOrdenDetallesResolver<
+    R = BatchPayload,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, DeleteManyOrdenDetallesArgs>;
+  export interface DeleteManyOrdenDetallesArgs {
+    where?: OrdenDetalleWhereInput | null;
   }
 
   export type CreateProductoResolver<
@@ -3045,7 +5432,15 @@ export namespace SubscriptionResolvers {
       any,
       Context
     >;
+    cliente?: ClienteResolver<ClienteSubscriptionPayload | null, any, Context>;
+    factura?: FacturaResolver<FacturaSubscriptionPayload | null, any, Context>;
     menu?: MenuResolver<MenuSubscriptionPayload | null, any, Context>;
+    orden?: OrdenResolver<OrdenSubscriptionPayload | null, any, Context>;
+    orden_detalle?: OrdenDetalleResolver<
+      OrdenDetalleSubscriptionPayload | null,
+      any,
+      Context
+    >;
     producto?: ProductoResolver<
       ProductoSubscriptionPayload | null,
       any,
@@ -3075,6 +5470,24 @@ export namespace SubscriptionResolvers {
     where?: ArticuloDetalleSubscriptionWhereInput | null;
   }
 
+  export type ClienteResolver<
+    R = ClienteSubscriptionPayload | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, ClienteArgs>;
+  export interface ClienteArgs {
+    where?: ClienteSubscriptionWhereInput | null;
+  }
+
+  export type FacturaResolver<
+    R = FacturaSubscriptionPayload | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, FacturaArgs>;
+  export interface FacturaArgs {
+    where?: FacturaSubscriptionWhereInput | null;
+  }
+
   export type MenuResolver<
     R = MenuSubscriptionPayload | null,
     Parent = any,
@@ -3082,6 +5495,24 @@ export namespace SubscriptionResolvers {
   > = Resolver<R, Parent, Context, MenuArgs>;
   export interface MenuArgs {
     where?: MenuSubscriptionWhereInput | null;
+  }
+
+  export type OrdenResolver<
+    R = OrdenSubscriptionPayload | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenArgs>;
+  export interface OrdenArgs {
+    where?: OrdenSubscriptionWhereInput | null;
+  }
+
+  export type OrdenDetalleResolver<
+    R = OrdenDetalleSubscriptionPayload | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context, OrdenDetalleArgs>;
+  export interface OrdenDetalleArgs {
+    where?: OrdenDetalleSubscriptionWhereInput | null;
   }
 
   export type ProductoResolver<
@@ -3255,6 +5686,182 @@ export namespace ArticuloDetallePreviousValuesResolvers {
   > = Resolver<R, Parent, Context>;
 }
 
+export namespace ClienteSubscriptionPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    mutation?: MutationResolver<MutationType, any, Context>;
+    node?: NodeResolver<Cliente | null, any, Context>;
+    updatedFields?: UpdatedFieldsResolver<string[] | null, any, Context>;
+    previousValues?: PreviousValuesResolver<
+      ClientePreviousValues | null,
+      any,
+      Context
+    >;
+  }
+
+  export type MutationResolver<
+    R = MutationType,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NodeResolver<
+    R = Cliente | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UpdatedFieldsResolver<
+    R = string[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type PreviousValuesResolver<
+    R = ClientePreviousValues | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace ClientePreviousValuesResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    identificacion?: IdentificacionResolver<string, any, Context>;
+    nombre?: NombreResolver<string, any, Context>;
+    direccion?: DireccionResolver<string, any, Context>;
+    telefono?: TelefonoResolver<string, any, Context>;
+    email?: EmailResolver<string | null, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type IdentificacionResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NombreResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type DireccionResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type TelefonoResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EmailResolver<
+    R = string | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace FacturaSubscriptionPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    mutation?: MutationResolver<MutationType, any, Context>;
+    node?: NodeResolver<Factura | null, any, Context>;
+    updatedFields?: UpdatedFieldsResolver<string[] | null, any, Context>;
+    previousValues?: PreviousValuesResolver<
+      FacturaPreviousValues | null,
+      any,
+      Context
+    >;
+  }
+
+  export type MutationResolver<
+    R = MutationType,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NodeResolver<
+    R = Factura | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UpdatedFieldsResolver<
+    R = string[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type PreviousValuesResolver<
+    R = FacturaPreviousValues | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace FacturaPreviousValuesResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    numero?: NumeroResolver<string, any, Context>;
+    fecha?: FechaResolver<DateTime, any, Context>;
+    subtotal?: SubtotalResolver<number, any, Context>;
+    iva?: IvaResolver<number, any, Context>;
+    total?: TotalResolver<number, any, Context>;
+    forma_pago?: FormaPagoResolver<FormaPago, any, Context>;
+    estado?: EstadoResolver<FacturaEstado, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type NumeroResolver<
+    R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type FechaResolver<
+    R = DateTime,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type SubtotalResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type IvaResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type TotalResolver<R = number, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type FormaPagoResolver<
+    R = FormaPago,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EstadoResolver<
+    R = FacturaEstado,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
 export namespace MenuSubscriptionPayloadResolvers {
   export interface Resolvers<Context = any> {
     mutation?: MutationResolver<MutationType, any, Context>;
@@ -3303,6 +5910,140 @@ export namespace MenuPreviousValuesResolvers {
   >;
   export type NombreResolver<
     R = string,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenSubscriptionPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    mutation?: MutationResolver<MutationType, any, Context>;
+    node?: NodeResolver<Orden | null, any, Context>;
+    updatedFields?: UpdatedFieldsResolver<string[] | null, any, Context>;
+    previousValues?: PreviousValuesResolver<
+      OrdenPreviousValues | null,
+      any,
+      Context
+    >;
+  }
+
+  export type MutationResolver<
+    R = MutationType,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NodeResolver<
+    R = Orden | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UpdatedFieldsResolver<
+    R = string[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type PreviousValuesResolver<
+    R = OrdenPreviousValues | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenPreviousValuesResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    fecha?: FechaResolver<DateTime, any, Context>;
+    estado?: EstadoResolver<OrdenEstado, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type FechaResolver<
+    R = DateTime,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type EstadoResolver<
+    R = OrdenEstado,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ActivoResolver<
+    R = boolean,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenDetalleSubscriptionPayloadResolvers {
+  export interface Resolvers<Context = any> {
+    mutation?: MutationResolver<MutationType, any, Context>;
+    node?: NodeResolver<OrdenDetalle | null, any, Context>;
+    updatedFields?: UpdatedFieldsResolver<string[] | null, any, Context>;
+    previousValues?: PreviousValuesResolver<
+      OrdenDetallePreviousValues | null,
+      any,
+      Context
+    >;
+  }
+
+  export type MutationResolver<
+    R = MutationType,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type NodeResolver<
+    R = OrdenDetalle | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type UpdatedFieldsResolver<
+    R = string[] | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type PreviousValuesResolver<
+    R = OrdenDetallePreviousValues | null,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+}
+
+export namespace OrdenDetallePreviousValuesResolvers {
+  export interface Resolvers<Context = any> {
+    id?: IdResolver<string, any, Context>;
+    cantidad?: CantidadResolver<number, any, Context>;
+    valor_unitario?: ValorUnitarioResolver<number, any, Context>;
+    gratis?: GratisResolver<boolean, any, Context>;
+    activo?: ActivoResolver<boolean, any, Context>;
+  }
+
+  export type IdResolver<R = string, Parent = any, Context = any> = Resolver<
+    R,
+    Parent,
+    Context
+  >;
+  export type CantidadResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type ValorUnitarioResolver<
+    R = number,
+    Parent = any,
+    Context = any
+  > = Resolver<R, Parent, Context>;
+  export type GratisResolver<
+    R = boolean,
     Parent = any,
     Context = any
   > = Resolver<R, Parent, Context>;
