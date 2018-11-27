@@ -153,14 +153,14 @@ export const articulos = gql`
   }
 `;
 
-export const AllMenus = gql`
+/* export const AllMenus = gql`
   {
     menus(where: { activo: true }, orderBy: id_ASC) {
       id
       nombre
     }
   }
-`;
+`; */
 
 export const AllProductos = gql`
   {
@@ -268,9 +268,9 @@ export const CrearRol = gql`
   }
 `;
 
-export const menusArticulos = gql`
-  query MenusArticulos {
-    menusArticulos {
+export const AllMenus = gql`
+  query allMenus {
+    menus: menusArticulos {
       id
       nombre
       articulos(where: { activo: true }) {

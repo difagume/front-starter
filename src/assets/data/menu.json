@@ -13,7 +13,7 @@
         "state": "pedido",
         "name": "PEDIDO",
         "type": "link",
-        "icon": "basic-info",
+        "icon": "ecommerce-basket-plus",
         "roles": [
             "ADMIN",
             "USUARIO"

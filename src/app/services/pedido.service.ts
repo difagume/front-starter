@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo, QueryRef } from 'apollo-angular';
 import { Logger } from '../core';
-import { menusArticulos } from '../graphql/graphql';
 
 const log = new Logger('PedidoService');
 
@@ -11,11 +10,6 @@ export class PedidoService {
   allMenusArticulosQuery: QueryRef<any>;
 
   constructor(private apollo: Apollo) { }
-
-  obtenerMenusArticulos() {
-    this.allMenusArticulosQuery = this.apollo.watchQuery({ query: menusArticulos });
-    return this.allMenusArticulosQuery;
-  }
 
   /*  subscribeToSignup() {
      this.allUsuariosQuery.subscribeToMore({
