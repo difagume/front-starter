@@ -1,7 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
 import { Subscription } from 'rxjs';
-import { CatalogoService } from '../../services/catalogo.service';
 import { PedidoService } from '../../services/pedido.service';
 
 @Component({
@@ -11,13 +9,11 @@ import { PedidoService } from '../../services/pedido.service';
 })
 
 export class PedidoComponent implements OnInit, OnDestroy {
-  menus: any[];
+  menusArticulos: any[];
   cargando = true;
   private subscriptions = new Subscription();
 
-  constructor(private apollo: Apollo,
-    private pedidoService: PedidoService,
-    private catalogoService: CatalogoService) { }
+  constructor(private pedidoService: PedidoService) { }
 
   ngOnInit() {
     this.obtenerMenus();
@@ -25,11 +21,15 @@ export class PedidoComponent implements OnInit, OnDestroy {
 
   obtenerMenus() {
     this.subscriptions.add(
-      this.catalogoService.allMenus().valueChanges
+      this.pedidoService.obtenerMenusArticulos().valueChanges
         .subscribe(
           ({ data, loading }) => {
             this.cargando = loading;
-            this.menus = data && data['menus'];
+
+            console.log('---> ', data);
+
+
+            this.menusArticulos = data && data['menusArticulos'];
           })
     );
   }

@@ -3,7 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { ArticuloCreateInput, ArticuloUpdateInput, MenuCreateInput, ProductoCreateInput } from '../generated/graphql';
 import {
   AllMenus, AllProductos, articulos, CrearMenu, CrearProducto,
-  CreateArticulo, DeleteArticulo, UpdateArticulo
+  CreateArticulo, DeleteArticulo, MenusArticulos, UpdateArticulo
 } from '../graphql/graphql';
 
 @Injectable(/* {
@@ -39,6 +39,7 @@ export class CatalogoService {
         // Write our data back to the cache.
         store.writeQuery({ query: articulos, data });
       },
+      refetchQueries: [{ query: MenusArticulos }]
     });
   }
 
@@ -54,6 +55,7 @@ export class CatalogoService {
         data.articulos.splice(indice, 1);
         store.writeQuery({ query: articulos, data });
       },
+      refetchQueries: [{ query: MenusArticulos }]
     });
   }
 
@@ -72,7 +74,8 @@ export class CatalogoService {
       variables: {
         data: articulo,
         id: id
-      }
+      },
+      refetchQueries: [{ query: MenusArticulos }]
     });
   }
 
@@ -101,6 +104,7 @@ export class CatalogoService {
         data.menus.push(createMenu);
         store.writeQuery({ query: AllMenus, data });
       },
+      refetchQueries: [{ query: MenusArticulos }]
     });
   }
 }
