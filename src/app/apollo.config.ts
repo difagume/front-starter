@@ -69,7 +69,7 @@ export class GraphQLModule {
             if (graphQLErrors) {
                 graphQLErrors.map(({ message, name, locations, path }) => {
                     // console.log(`[GraphQL error]: Message: ${message}, Name: ${name}, Location: ${locations}, Path: ${path}`);
-                    swal(message, '', 'error');
+                    // swal(message, '', 'error');
 
                     if (name === 'AuthError') { this.logout(); }
                 });

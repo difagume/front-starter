@@ -1312,9 +1312,12 @@ export interface ArticuloDetalleUpdateManyWithoutArticuloInput {
   create?: ArticuloDetalleCreateWithoutArticuloInput[] | null;
   delete?: ArticuloDetalleWhereUniqueInput[] | null;
   connect?: ArticuloDetalleWhereUniqueInput[] | null;
+  set?: ArticuloDetalleWhereUniqueInput[] | null;
   disconnect?: ArticuloDetalleWhereUniqueInput[] | null;
   update?: ArticuloDetalleUpdateWithWhereUniqueWithoutArticuloInput[] | null;
   upsert?: ArticuloDetalleUpsertWithWhereUniqueWithoutArticuloInput[] | null;
+  deleteMany?: ArticuloDetalleScalarWhereInput[] | null;
+  updateMany?: ArticuloDetalleUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface ArticuloDetalleUpdateWithWhereUniqueWithoutArticuloInput {
@@ -1351,6 +1354,46 @@ export interface ArticuloDetalleUpsertWithWhereUniqueWithoutArticuloInput {
   where: ArticuloDetalleWhereUniqueInput;
   update: ArticuloDetalleUpdateWithoutArticuloDataInput;
   create: ArticuloDetalleCreateWithoutArticuloInput;
+}
+
+export interface ArticuloDetalleScalarWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  cantidad?: number | null;
+  cantidad_not?: number | null;
+  cantidad_in?: number[] | null;
+  cantidad_not_in?: number[] | null;
+  cantidad_lt?: number | null;
+  cantidad_lte?: number | null;
+  cantidad_gt?: number | null;
+  cantidad_gte?: number | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: ArticuloDetalleScalarWhereInput[] | null;
+  OR?: ArticuloDetalleScalarWhereInput[] | null;
+  NOT?: ArticuloDetalleScalarWhereInput[] | null;
+}
+
+export interface ArticuloDetalleUpdateManyWithWhereNestedInput {
+  where: ArticuloDetalleScalarWhereInput;
+  data: ArticuloDetalleUpdateManyDataInput;
+}
+
+export interface ArticuloDetalleUpdateManyDataInput {
+  cantidad?: number | null;
+  activo?: boolean | null;
 }
 
 export interface ArticuloUpdateManyMutationInput {
@@ -1586,9 +1629,12 @@ export interface FacturaUpdateManyWithoutClienteInput {
   create?: FacturaCreateWithoutClienteInput[] | null;
   delete?: FacturaWhereUniqueInput[] | null;
   connect?: FacturaWhereUniqueInput[] | null;
+  set?: FacturaWhereUniqueInput[] | null;
   disconnect?: FacturaWhereUniqueInput[] | null;
   update?: FacturaUpdateWithWhereUniqueWithoutClienteInput[] | null;
   upsert?: FacturaUpsertWithWhereUniqueWithoutClienteInput[] | null;
+  deleteMany?: FacturaScalarWhereInput[] | null;
+  updateMany?: FacturaUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface FacturaUpdateWithWhereUniqueWithoutClienteInput {
@@ -1634,9 +1680,12 @@ export interface OrdenUpdateManyWithoutMeseroInput {
   create?: OrdenCreateWithoutMeseroInput[] | null;
   delete?: OrdenWhereUniqueInput[] | null;
   connect?: OrdenWhereUniqueInput[] | null;
+  set?: OrdenWhereUniqueInput[] | null;
   disconnect?: OrdenWhereUniqueInput[] | null;
   update?: OrdenUpdateWithWhereUniqueWithoutMeseroInput[] | null;
   upsert?: OrdenUpsertWithWhereUniqueWithoutMeseroInput[] | null;
+  deleteMany?: OrdenScalarWhereInput[] | null;
+  updateMany?: OrdenUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface OrdenUpdateWithWhereUniqueWithoutMeseroInput {
@@ -1656,9 +1705,12 @@ export interface OrdenDetalleUpdateManyWithoutOrdenInput {
   create?: OrdenDetalleCreateWithoutOrdenInput[] | null;
   delete?: OrdenDetalleWhereUniqueInput[] | null;
   connect?: OrdenDetalleWhereUniqueInput[] | null;
+  set?: OrdenDetalleWhereUniqueInput[] | null;
   disconnect?: OrdenDetalleWhereUniqueInput[] | null;
   update?: OrdenDetalleUpdateWithWhereUniqueWithoutOrdenInput[] | null;
   upsert?: OrdenDetalleUpsertWithWhereUniqueWithoutOrdenInput[] | null;
+  deleteMany?: OrdenDetalleScalarWhereInput[] | null;
+  updateMany?: OrdenDetalleUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface OrdenDetalleUpdateWithWhereUniqueWithoutOrdenInput {
@@ -1699,6 +1751,58 @@ export interface OrdenDetalleUpsertWithWhereUniqueWithoutOrdenInput {
   where: OrdenDetalleWhereUniqueInput;
   update: OrdenDetalleUpdateWithoutOrdenDataInput;
   create: OrdenDetalleCreateWithoutOrdenInput;
+}
+
+export interface OrdenDetalleScalarWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  cantidad?: number | null;
+  cantidad_not?: number | null;
+  cantidad_in?: number[] | null;
+  cantidad_not_in?: number[] | null;
+  cantidad_lt?: number | null;
+  cantidad_lte?: number | null;
+  cantidad_gt?: number | null;
+  cantidad_gte?: number | null;
+  valor_unitario?: number | null;
+  valor_unitario_not?: number | null;
+  valor_unitario_in?: number[] | null;
+  valor_unitario_not_in?: number[] | null;
+  valor_unitario_lt?: number | null;
+  valor_unitario_lte?: number | null;
+  valor_unitario_gt?: number | null;
+  valor_unitario_gte?: number | null;
+  gratis?: boolean | null;
+  gratis_not?: boolean | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: OrdenDetalleScalarWhereInput[] | null;
+  OR?: OrdenDetalleScalarWhereInput[] | null;
+  NOT?: OrdenDetalleScalarWhereInput[] | null;
+}
+
+export interface OrdenDetalleUpdateManyWithWhereNestedInput {
+  where: OrdenDetalleScalarWhereInput;
+  data: OrdenDetalleUpdateManyDataInput;
+}
+
+export interface OrdenDetalleUpdateManyDataInput {
+  cantidad?: number | null;
+  valor_unitario?: number | null;
+  gratis?: boolean | null;
+  activo?: boolean | null;
 }
 
 export interface FacturaUpdateOneWithoutOrdenInput {
@@ -1755,6 +1859,51 @@ export interface OrdenUpsertWithWhereUniqueWithoutMeseroInput {
   create: OrdenCreateWithoutMeseroInput;
 }
 
+export interface OrdenScalarWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  fecha?: DateTime | null;
+  fecha_not?: DateTime | null;
+  fecha_in?: DateTime[] | null;
+  fecha_not_in?: DateTime[] | null;
+  fecha_lt?: DateTime | null;
+  fecha_lte?: DateTime | null;
+  fecha_gt?: DateTime | null;
+  fecha_gte?: DateTime | null;
+  estado?: OrdenEstado | null;
+  estado_not?: OrdenEstado | null;
+  estado_in?: OrdenEstado[] | null;
+  estado_not_in?: OrdenEstado[] | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: OrdenScalarWhereInput[] | null;
+  OR?: OrdenScalarWhereInput[] | null;
+  NOT?: OrdenScalarWhereInput[] | null;
+}
+
+export interface OrdenUpdateManyWithWhereNestedInput {
+  where: OrdenScalarWhereInput;
+  data: OrdenUpdateManyDataInput;
+}
+
+export interface OrdenUpdateManyDataInput {
+  fecha?: DateTime | null;
+  estado?: OrdenEstado | null;
+  activo?: boolean | null;
+}
+
 export interface UsuarioUpsertWithoutFacturasInput {
   update: UsuarioUpdateWithoutFacturasDataInput;
   create: UsuarioCreateWithoutFacturasInput;
@@ -1800,9 +1949,12 @@ export interface FacturaUpdateManyWithoutCajeroInput {
   create?: FacturaCreateWithoutCajeroInput[] | null;
   delete?: FacturaWhereUniqueInput[] | null;
   connect?: FacturaWhereUniqueInput[] | null;
+  set?: FacturaWhereUniqueInput[] | null;
   disconnect?: FacturaWhereUniqueInput[] | null;
   update?: FacturaUpdateWithWhereUniqueWithoutCajeroInput[] | null;
   upsert?: FacturaUpsertWithWhereUniqueWithoutCajeroInput[] | null;
+  deleteMany?: FacturaScalarWhereInput[] | null;
+  updateMany?: FacturaUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface FacturaUpdateWithWhereUniqueWithoutCajeroInput {
@@ -1827,6 +1979,98 @@ export interface FacturaUpsertWithWhereUniqueWithoutCajeroInput {
   where: FacturaWhereUniqueInput;
   update: FacturaUpdateWithoutCajeroDataInput;
   create: FacturaCreateWithoutCajeroInput;
+}
+
+export interface FacturaScalarWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  numero?: string | null;
+  numero_not?: string | null;
+  numero_in?: string[] | null;
+  numero_not_in?: string[] | null;
+  numero_lt?: string | null;
+  numero_lte?: string | null;
+  numero_gt?: string | null;
+  numero_gte?: string | null;
+  numero_contains?: string | null;
+  numero_not_contains?: string | null;
+  numero_starts_with?: string | null;
+  numero_not_starts_with?: string | null;
+  numero_ends_with?: string | null;
+  numero_not_ends_with?: string | null;
+  fecha?: DateTime | null;
+  fecha_not?: DateTime | null;
+  fecha_in?: DateTime[] | null;
+  fecha_not_in?: DateTime[] | null;
+  fecha_lt?: DateTime | null;
+  fecha_lte?: DateTime | null;
+  fecha_gt?: DateTime | null;
+  fecha_gte?: DateTime | null;
+  subtotal?: number | null;
+  subtotal_not?: number | null;
+  subtotal_in?: number[] | null;
+  subtotal_not_in?: number[] | null;
+  subtotal_lt?: number | null;
+  subtotal_lte?: number | null;
+  subtotal_gt?: number | null;
+  subtotal_gte?: number | null;
+  iva?: number | null;
+  iva_not?: number | null;
+  iva_in?: number[] | null;
+  iva_not_in?: number[] | null;
+  iva_lt?: number | null;
+  iva_lte?: number | null;
+  iva_gt?: number | null;
+  iva_gte?: number | null;
+  total?: number | null;
+  total_not?: number | null;
+  total_in?: number[] | null;
+  total_not_in?: number[] | null;
+  total_lt?: number | null;
+  total_lte?: number | null;
+  total_gt?: number | null;
+  total_gte?: number | null;
+  forma_pago?: FormaPago | null;
+  forma_pago_not?: FormaPago | null;
+  forma_pago_in?: FormaPago[] | null;
+  forma_pago_not_in?: FormaPago[] | null;
+  estado?: FacturaEstado | null;
+  estado_not?: FacturaEstado | null;
+  estado_in?: FacturaEstado[] | null;
+  estado_not_in?: FacturaEstado[] | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: FacturaScalarWhereInput[] | null;
+  OR?: FacturaScalarWhereInput[] | null;
+  NOT?: FacturaScalarWhereInput[] | null;
+}
+
+export interface FacturaUpdateManyWithWhereNestedInput {
+  where: FacturaScalarWhereInput;
+  data: FacturaUpdateManyDataInput;
+}
+
+export interface FacturaUpdateManyDataInput {
+  numero?: string | null;
+  fecha?: DateTime | null;
+  subtotal?: number | null;
+  iva?: number | null;
+  total?: number | null;
+  forma_pago?: FormaPago | null;
+  estado?: FacturaEstado | null;
+  activo?: boolean | null;
 }
 
 export interface UsuarioUpsertWithoutOrdenesInput {
@@ -1922,9 +2166,12 @@ export interface ArticuloUpdateManyWithoutMenuInput {
   create?: ArticuloCreateWithoutMenuInput[] | null;
   delete?: ArticuloWhereUniqueInput[] | null;
   connect?: ArticuloWhereUniqueInput[] | null;
+  set?: ArticuloWhereUniqueInput[] | null;
   disconnect?: ArticuloWhereUniqueInput[] | null;
   update?: ArticuloUpdateWithWhereUniqueWithoutMenuInput[] | null;
   upsert?: ArticuloUpsertWithWhereUniqueWithoutMenuInput[] | null;
+  deleteMany?: ArticuloScalarWhereInput[] | null;
+  updateMany?: ArticuloUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface ArticuloUpdateWithWhereUniqueWithoutMenuInput {
@@ -1944,6 +2191,70 @@ export interface ArticuloUpsertWithWhereUniqueWithoutMenuInput {
   where: ArticuloWhereUniqueInput;
   update: ArticuloUpdateWithoutMenuDataInput;
   create: ArticuloCreateWithoutMenuInput;
+}
+
+export interface ArticuloScalarWhereInput {
+  id?: string | null;
+  id_not?: string | null;
+  id_in?: string[] | null;
+  id_not_in?: string[] | null;
+  id_lt?: string | null;
+  id_lte?: string | null;
+  id_gt?: string | null;
+  id_gte?: string | null;
+  id_contains?: string | null;
+  id_not_contains?: string | null;
+  id_starts_with?: string | null;
+  id_not_starts_with?: string | null;
+  id_ends_with?: string | null;
+  id_not_ends_with?: string | null;
+  nombre?: string | null;
+  nombre_not?: string | null;
+  nombre_in?: string[] | null;
+  nombre_not_in?: string[] | null;
+  nombre_lt?: string | null;
+  nombre_lte?: string | null;
+  nombre_gt?: string | null;
+  nombre_gte?: string | null;
+  nombre_contains?: string | null;
+  nombre_not_contains?: string | null;
+  nombre_starts_with?: string | null;
+  nombre_not_starts_with?: string | null;
+  nombre_ends_with?: string | null;
+  nombre_not_ends_with?: string | null;
+  valor?: number | null;
+  valor_not?: number | null;
+  valor_in?: number[] | null;
+  valor_not_in?: number[] | null;
+  valor_lt?: number | null;
+  valor_lte?: number | null;
+  valor_gt?: number | null;
+  valor_gte?: number | null;
+  tiempo_preparacion?: DateTime | null;
+  tiempo_preparacion_not?: DateTime | null;
+  tiempo_preparacion_in?: DateTime[] | null;
+  tiempo_preparacion_not_in?: DateTime[] | null;
+  tiempo_preparacion_lt?: DateTime | null;
+  tiempo_preparacion_lte?: DateTime | null;
+  tiempo_preparacion_gt?: DateTime | null;
+  tiempo_preparacion_gte?: DateTime | null;
+  activo?: boolean | null;
+  activo_not?: boolean | null;
+  AND?: ArticuloScalarWhereInput[] | null;
+  OR?: ArticuloScalarWhereInput[] | null;
+  NOT?: ArticuloScalarWhereInput[] | null;
+}
+
+export interface ArticuloUpdateManyWithWhereNestedInput {
+  where: ArticuloScalarWhereInput;
+  data: ArticuloUpdateManyDataInput;
+}
+
+export interface ArticuloUpdateManyDataInput {
+  nombre?: string | null;
+  valor?: number | null;
+  tiempo_preparacion?: DateTime | null;
+  activo?: boolean | null;
 }
 
 export interface MenuUpdateManyMutationInput {
@@ -2064,9 +2375,12 @@ export interface ArticuloDetalleUpdateManyWithoutProductoInput {
   create?: ArticuloDetalleCreateWithoutProductoInput[] | null;
   delete?: ArticuloDetalleWhereUniqueInput[] | null;
   connect?: ArticuloDetalleWhereUniqueInput[] | null;
+  set?: ArticuloDetalleWhereUniqueInput[] | null;
   disconnect?: ArticuloDetalleWhereUniqueInput[] | null;
   update?: ArticuloDetalleUpdateWithWhereUniqueWithoutProductoInput[] | null;
   upsert?: ArticuloDetalleUpsertWithWhereUniqueWithoutProductoInput[] | null;
+  deleteMany?: ArticuloDetalleScalarWhereInput[] | null;
+  updateMany?: ArticuloDetalleUpdateManyWithWhereNestedInput[] | null;
 }
 
 export interface ArticuloDetalleUpdateWithWhereUniqueWithoutProductoInput {
