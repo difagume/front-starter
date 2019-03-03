@@ -19,6 +19,9 @@ import { AppRoutes } from './app.routing';
 import { AppComponent } from './app.component';
 
 import { NgxPermissionsModule } from 'ngx-permissions';
+import { ToastrModule } from 'ngx-toastr';
+
+import localeEC from '@angular/common/locales/es-EC';
 
 import {
   MenuComponent,
@@ -35,10 +38,13 @@ import {
 import { AuthenticationGuard } from './core/authentication/authentication.guard';
 import { ErrorInterceptorProvider } from './core/helpers/error.interceptor';
 import { GraphQLModule } from './apollo.config';
+import { registerLocaleData } from '@angular/common';
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
+
+registerLocaleData(localeEC, 'es-EC');
 
 @NgModule({
   declarations: [
@@ -66,13 +72,14 @@ export function createTranslateLoader(http: HttpClient) {
         provide: TranslateLoader,
         useFactory: (createTranslateLoader),
         deps: [HttpClient]
-      }
+      },
     }),
     LoadingBarRouterModule,
     NgbModule.forRoot(),
     SidebarModule.forRoot(),
     AgmCoreModule.forRoot({ apiKey: 'YOURAPIKEY' }),
-    GraphQLModule
+    GraphQLModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     AuthenticationService,

@@ -1,7 +1,9 @@
+import { formatDate } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../core';
-import { Articulo, OrdenCreateInput, OrdenDetalleCreateInput, ArticuloCreateOneInput } from '../../generated/graphql';
+import { Articulo, OrdenCreateInput, OrdenDetalleCreateInput } from '../../generated/graphql';
 import { PedidoService } from '../../services/pedido.service';
 
 @Component({
@@ -21,7 +23,8 @@ export class PedidoComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(private pedidoService: PedidoService,
-    private authenticationService: AuthenticationService) { }
+    private authenticationService: AuthenticationService,
+    private toastr: ToastrService) { }
 
   ngOnInit() {
     this.obtenerMenus();
@@ -61,7 +64,7 @@ export class PedidoComponent implements OnInit, OnDestroy {
         valor_unitario: articulo.valor,
         orden: {
           create: {
-            fecha: '2019/02/27',
+            fecha: formatDate(new Date(), 'yyyy/MM/dd', 'es-EC'),
             mesero: {
               connect: { id: this.authenticationService.credentials.id }
             }
@@ -72,7 +75,7 @@ export class PedidoComponent implements OnInit, OnDestroy {
       this.ordenDetalle.push(pedido);
     }
     console.log('detalle --> ', this.ordenDetalle);
-
+    this.toastr.success('Agregado al pedido!', articulo.nombre);
   }
 
   ngOnDestroy() {

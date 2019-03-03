@@ -32,7 +32,8 @@
               "node_modules/@swimlane/ngx-datatable/release/index.css",
               "src/assets/fonts/data-table/icons.css",
               "src/assets/styles/app.scss",
-              "node_modules/@ng-select/ng-select/themes/default.theme.css"
+              "node_modules/@ng-select/ng-select/themes/default.theme.css",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
