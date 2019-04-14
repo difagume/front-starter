@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from '../../core';
-import { Articulo, OrdenCreateInput, OrdenDetalleCreateInput } from '../../generated/graphql';
+import { Articulo, OrdenCreateInput, OrdenDetalleCreateInput, OrdenDetalle } from '../../generated/graphql';
 import { PedidoService } from '../../services/pedido.service';
 
 @Component({
@@ -19,7 +19,10 @@ export class PedidoComponent implements OnInit, OnDestroy {
     fecha: new Date(),
     mesero: { connect: { id: this.authenticationService.credentials.id } }
   };
-  ordenDetalle: OrdenDetalleCreateInput[] = [];
+  crearOrdenDetalle: OrdenDetalleCreateInput[] = [];
+  ordenDetalle: OrdenDetalle[] = [];
+  subtotal = 0.0;
+  total = 0.0;
   private subscriptions = new Subscription();
 
   constructor(private pedidoService: PedidoService,
@@ -37,7 +40,7 @@ export class PedidoComponent implements OnInit, OnDestroy {
           ({ data, loading }) => {
             this.cargando = loading;
 
-            // console.log('---> ', data);
+            console.log('---> ', data);
 
             this.menusArticulos = data && data['menusArticulos'];
           })
@@ -48,15 +51,19 @@ export class PedidoComponent implements OnInit, OnDestroy {
     let articuloEncontrado = false;
     // Busco si ya esta agregado
     this.ordenDetalle.map(a => {
-      if (a.descripcion.connect.id === articulo.id) {
+      if (a.descripcion.id === articulo.id) {
         // console.log('existe id:', a.descripcion.connect.id);
         a.cantidad = a.cantidad + 1;
+
+        this.subtotal = this.subtotal + a.valor_unitario;
+        this.total = this.subtotal * 1.12;
+
         articuloEncontrado = true;
       }
     });
 
     if (!articuloEncontrado) {
-      const pedido: OrdenDetalleCreateInput = {
+      /* const pedido: OrdenDetalleCreateInput = {
         cantidad: 1,
         descripcion: {
           connect: { id: articulo.id }
@@ -70,12 +77,54 @@ export class PedidoComponent implements OnInit, OnDestroy {
             }
           }
         }
+      }; */
+
+      const pedido: OrdenDetalle = {
+        cantidad: 1,
+        descripcion: {
+          id: articulo.id, nombre: articulo.nombre, activo: true, valor: articulo.valor, menu: articulo.menu
+        },
+        valor_unitario: articulo.valor, id: null, gratis: false, activo: true, orden: null
       };
+
+      this.subtotal = this.subtotal + articulo.valor;
+      this.total = this.subtotal * 1.12;
 
       this.ordenDetalle.push(pedido);
     }
     console.log('detalle --> ', this.ordenDetalle);
-    this.toastr.success('Agregado al pedido!', articulo.nombre);
+    this.toastr.success('Agregado al pedido!', articulo.nombre, { timeOut: 2000 });
+  }
+
+  agregarArticulo(idArticulo) {
+    this.ordenDetalle.map(a => {
+      if (a.descripcion.id === idArticulo) {
+        a.cantidad = a.cantidad + 1;
+
+        this.subtotal = this.subtotal + a.valor_unitario;
+        this.total = this.subtotal * 1.12;
+      }
+    });
+  }
+
+  restarArticulo(idArticulo) {
+    for (let index = 0; index < this.ordenDetalle.length; index++) {
+      const articulo = this.ordenDetalle[index];
+      if (articulo.descripcion.id === idArticulo) {
+        if (articulo.cantidad === 1) {
+          this.ordenDetalle.splice(index, 1);
+
+          this.subtotal = this.subtotal - articulo.valor_unitario;
+          this.total = this.subtotal * 1.12;
+          break;
+        } else {
+          articulo.cantidad = articulo.cantidad - 1;
+          this.subtotal = this.subtotal - articulo.valor_unitario;
+          this.total = this.subtotal * 1.12;
+          break;
+        }
+      }
+    }
   }
 
   ngOnDestroy() {

@@ -8,7 +8,7 @@ import { ApolloLink, from } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getOperationAST } from 'graphql';
-import { URL_SERVICIOS, WS_SERVICIOS } from './config';
+import { environment } from '../environments/environment';
 import { AuthenticationService } from './core';
 declare let swal: any;
 
@@ -31,11 +31,11 @@ export class GraphQLModule {
         const headers = new HttpHeaders().set('Authorization', authorization); */
 
         // URI del servidor graphql-yoga donde escucha las peticiones de graphql
-        const http = httpLink.create({ uri: URL_SERVICIOS });
+        const http = httpLink.create({ uri: environment.URL_HTTP });
 
         // Subscriciones
         const ws = new WebSocketLink({
-            uri: WS_SERVICIOS,
+            uri: environment.URL_WS,
             options: {
                 reconnect: true,
                 connectionParams: {
@@ -69,7 +69,7 @@ export class GraphQLModule {
             if (graphQLErrors) {
                 graphQLErrors.map(({ message, name, locations, path }) => {
                     // console.log(`[GraphQL error]: Message: ${message}, Name: ${name}, Location: ${locations}, Path: ${path}`);
-                    // swal(message, '', 'error');
+                    swal(message, '', 'error'); // <-- No deshabilitar
 
                     if (name === 'AuthError') { this.logout(); }
                 });
@@ -97,7 +97,7 @@ export class GraphQLModule {
 
         // Sin headers
         /* apollo.create({
-          link: httpLink.create({ uri: `${URL_SERVICIOS}/graphql` }),
+          link: httpLink.create({ uri: `${environment.URL_HTTP}/graphql` }),
           cache: new InMemoryCache(),
         }); */
     }

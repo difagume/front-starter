@@ -32,7 +32,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private apollo: Apollo, private modalService: NgbModal) { }
 
   ngOnInit() {
-    this.idProducto = 'cjnhpli2t000l0822cggy3bu1';
+    this.idProducto = 'cjoz19406001f0773u4purr4b';
     this.querySubscription = this.apollo
       .watchQuery({
         query: Productos,

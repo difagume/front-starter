@@ -19,7 +19,7 @@
                   </div>
                   <div class="mr-auto">
                     <h5>{{articulo.nombre}}</h5>
-                    <small>--------------</small>
+                    <small>Tiempo preparación: {{articulo.tiempo_preparacion | date:'HH:mm':'+0000'}}</small>
                   </div>
                   <div class="block">
                     <button (click)="agregarPedido(articulo)"
@@ -43,7 +43,81 @@
   Cargando...
 </div>
 
-<div class="text-center" *ngIf="ordenDetalle.length > 0">
-  <button class="btn btn-primary waves-effect">Ver pedido</button>
+<div class="text-center">
+
+  <div class="card">
+    <div class="card-body">
+      <p class=" card-titleff-headers text-uppercase mb-3 fw-600">Detalle del Pedido</p>
+      <div class="table-responsive">
+        <table class="table table-striped mb-0">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Artículo</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Valor</th>
+              <th scope="col"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let art of ordenDetalle; let i=index">
+              <th scope="row">{{i+1}}</th>
+              <td>{{art.descripcion.nombre}}</td>
+              <td>{{art.cantidad}}</td>
+              <td>{{(art.cantidad * art.valor_unitario) | currency}}</td>
+              <td>
+                <!-- <div class="btn-group" role="group" aria-label=""> -->
+                <svg (click)="restarArticulo(art.descripcion.id)" viewBox="0 0 24 24" class="valign-middle "
+                  preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"
+                  style="width: 24px; height: 24px; overflow: visible; cursor: pointer;">
+                  <path
+                    d="M12 22.75c5.937 0 10.75-4.813 10.75-10.75S17.937 1.25 12 1.25 1.25 6.063 1.25 12 6.063 22.75 12 22.75zm0-1.5c-5.11 0-9.25-4.14-9.25-9.25S6.89 2.75 12 2.75s9.25 4.14 9.25 9.25-4.14 9.25-9.25 9.25z">
+                  </path>
+                  <path
+                    d="M7.58 12.75h9.266c.414 0 .75-.336.75-.75s-.336-.75-.75-.75H7.58c-.414 0-.75.336-.75.75s.336.75.75.75z">
+                  </path>
+                </svg>
+
+                <!-- <button type="button" class="btn btn-info btn-sm mr-1 mb-1 waves-effect">-</button>
+                <button type="button" class="btn btn-success btn-sm mr-1 mb-1 waves-effect">+</button>
+                 -->
+
+                <svg (click)="agregarArticulo(art.descripcion.id)" viewBox="0 0 24 24" class="valign-middle "
+                  preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false"
+                  style="width: 24px; height: 24px; overflow: visible; cursor: pointer; margin-left: 1rem!important;">
+                  <path
+                    d="M12 22.75c5.937 0 10.75-4.813 10.75-10.75S17.937 1.25 12 1.25 1.25 6.063 1.25 12 6.063 22.75 12 22.75zm0-1.5c-5.11 0-9.25-4.14-9.25-9.25S6.89 2.75 12 2.75s9.25 4.14 9.25 9.25-4.14 9.25-9.25 9.25z">
+                  </path>
+                  <path
+                    d="M11.214 11.25V7.366c0-.434.352-.786.786-.786.434 0 .786.352.786.786v3.884h3.86c.414 0 .75.336.75.75s-.336.75-.75.75h-3.86v3.882c0 .434-.352.786-.786.786-.434 0-.786-.352-.786-.786V12.75H7.38c-.414 0-.75-.336-.75-.75s.336-.75.75-.75h3.834z">
+                  </path>
+                </svg>
+                <!-- </div> -->
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body" style="padding-left: 62px;padding-right: 91px;">
+      <div style="display: flex!important;">
+        <h6>Subtotal</h6>
+        <p class="card-text dottedUnderline" style="flex-grow: 1!important;">.</p>
+        <h6>{{subtotal | currency}}</h6>
+      </div>
+      <div style="display: flex!important;">
+        <h5>Total</h5>
+        <p class="card-text dottedUnderline" style="flex-grow: 1!important;">.</p>
+        <h5>{{total | currency}}</h5>
+      </div>
+    </div>
+  </div>
+
+  <br>
+
+  <button class="btn btn-primary waves-effect">Hacer pedido</button>
   <!-- <span class="badge badge-danger">4</span> -->
 </div>

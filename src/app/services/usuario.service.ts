@@ -15,7 +15,7 @@ export class UsuarioService {
     private apollo: Apollo) { }
 
   /*   actualizarUsuario(usuario: Usuario) {
-      const url = `${URL_SERVICIOS}/usuario/${usuario.id}?token=${this.authenticationService.credentials.token}`;
+      const url = `${environment.URL_HTTP}/usuario/${usuario.id}?token=${this.authenticationService.credentials.token}`;
       return this.http.put(url, usuario);
     } */
 
@@ -49,7 +49,7 @@ export class UsuarioService {
   }
 
   /* eliminarUsuario(usuario: Usuario) {
-    const url = `${URL_SERVICIOS}/usuario/eliminar/${usuario.id}?token=${this.authenticationService.credentials.token}`;
+    const url = `${environment.URL_HTTP}/usuario/eliminar/${usuario.id}?token=${this.authenticationService.credentials.token}`;
     return this.http.put(url, usuario);
   } */
 
