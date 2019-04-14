@@ -76,3 +76,10 @@ https://www.apollographql.com/docs/angular/features/error-handling.html
 ## src/app/generated/graphql.ts
 https://github.com/kamilkisiela/apollo-angular-services
 npm run graphql
+
+# Publicar en Firebase
+Project Console: https://console.firebase.google.com/project/front-admin-53919/overview
+Hosting URL: https://front-admin-53919.firebaseapp.com
+
+ng build --aot --prod
+firebase deploy

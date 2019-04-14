@@ -6,5 +6,5 @@
 export const environment = {
   production: false,
   URL_HTTP: 'http://localhost:4000',
-  URL_WS: 'ws://localhost:4000'
+  URL_WS: 'wss://localhost:4000'
 };
