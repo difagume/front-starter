@@ -78,8 +78,8 @@ https://github.com/kamilkisiela/apollo-angular-services
 npm run graphql
 
 # Publicar en Firebase
-Project Console: https://console.firebase.google.com/project/front-admin-53919/overview
-Hosting URL: https://front-admin-53919.firebaseapp.com
+Project Console: https://console.firebase.google.com/project/front-decima/overview
+Hosting URL: https://front-decima.firebaseapp.com
 
 ng build --aot --prod
 firebase deploy
